@@ -1,0 +1,69 @@
+{
+  "group": {
+    "id": 305,
+    "name": "location",
+    "desc": "Include to support location measurements",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 305
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Tm",
+        "type": "string",
+        "label": "Tm",
+        "desc": "UTC 24 hour time stamp to millisecond hhmmss.sssZ format",
+        "units": "hhmmss.sssZ",
+        "size": 6
+      },
+      {
+        "name": "Date",
+        "type": "string",
+        "label": "Date",
+        "desc": "UTC Date string YYYYMMDD format",
+        "units": "YYYYMMDD",
+        "size": 4
+      },
+      {
+        "name": "Loc",
+        "type": "string",
+        "label": "Location",
+        "desc": "Location string (40 chars max)",
+        "units": "text",
+        "size": 20
+      },
+      {
+        "name": "Lat",
+        "type": "int32",
+        "label": "Lat",
+        "desc": "Latitude with seven degrees of precision",
+        "units": "Degrees",
+        "sf": -7
+      },
+      {
+        "name": "Long",
+        "type": "int32",
+        "label": "Long",
+        "desc": "Longitude with seven degrees of precision",
+        "units": "Degrees",
+        "sf": -7
+      },
+      {
+        "name": "Alt",
+        "type": "int32",
+        "label": "Altitude",
+        "desc": "Altitude measurement in meters",
+        "units": "meters"
+      }
+    ]
+  }
+}

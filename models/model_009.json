@@ -1,0 +1,420 @@
+{
+  "group": {
+    "id": 9,
+    "name": "model_9.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 9
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "CertUID",
+        "type": "uint16",
+        "label": "Cert_UID",
+        "desc": "User ID for this certificate"
+      },
+      {
+        "name": "CertRole",
+        "type": "uint16",
+        "label": "Cert_Role",
+        "desc": "Role for this certificate"
+      },
+      {
+        "name": "Fmt",
+        "type": "enum16",
+        "label": "Format",
+        "desc": "Format of this certificate"
+      },
+      {
+        "name": "Typ",
+        "type": "enum16",
+        "label": "Type",
+        "desc": "Type of this certificate"
+      },
+      {
+        "name": "TotLn",
+        "type": "uint16",
+        "label": "Total Length",
+        "desc": "Total Length of the Certificate"
+      },
+      {
+        "name": "FrgLn",
+        "type": "uint16",
+        "label": "Fragment length",
+        "desc": "Length of this fragment"
+      },
+      {
+        "name": "Frg1",
+        "type": "uint16",
+        "label": "Frag1",
+        "desc": "First word of this fragment"
+      },
+      {
+        "name": "Frg2",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg3",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg4",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg5",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg6",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg7",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg8",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg9",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg10",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg11",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg12",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg13",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg14",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg15",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg16",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg17",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg18",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg19",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg20",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg21",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg22",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg23",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg24",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg25",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg26",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg27",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg28",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg29",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg30",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg31",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg32",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg33",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg34",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg35",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg36",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg37",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg38",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg39",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg40",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg41",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg42",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg43",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg44",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg45",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg46",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg47",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg48",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg49",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg50",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg51",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg52",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg53",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg54",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg55",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg56",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg57",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg58",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg59",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg60",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg61",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg62",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg63",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg64",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg65",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg66",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg67",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg68",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg69",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg70",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg71",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg72",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg73",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg74",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg75",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg78",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg79",
+        "type": "uint16"
+      },
+      {
+        "name": "Frg80",
+        "type": "uint16",
+        "label": "Frag80",
+        "desc": "Last word of this fragment"
+      },
+      {
+        "name": "Ts",
+        "type": "uint32",
+        "label": "Timestamp",
+        "desc": "Timestamp value is the number of seconds since January 1, 2000"
+      },
+      {
+        "name": "Ms",
+        "type": "uint16",
+        "label": "Milliseconds",
+        "desc": "Millisecond counter 0-999"
+      },
+      {
+        "name": "Seq",
+        "type": "uint16",
+        "label": "Sequence",
+        "desc": "Sequence number of request"
+      },
+      {
+        "name": "UID",
+        "type": "uint16",
+        "label": "UID",
+        "desc": "User ID for the request signature"
+      },
+      {
+        "name": "Role",
+        "type": "uint16",
+        "label": "Role",
+        "desc": "Signing key used 0-5"
+      },
+      {
+        "name": "Alg",
+        "type": "enum16",
+        "label": "Algorithm",
+        "desc": "Algorithm used to compute the digital signature"
+      },
+      {
+        "name": "N",
+        "type": "uint16",
+        "label": "N",
+        "desc": "Number of registers to follow for the certificate"
+      },
+      {
+        "name": "Cert",
+        "type": "uint16"
+      }
+    ]
+  }
+}

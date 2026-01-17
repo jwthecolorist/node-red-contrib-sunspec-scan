@@ -1,0 +1,164 @@
+{
+  "group": {
+    "id": 64111,
+    "name": "model_64111",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64111
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Port",
+        "type": "uint16",
+        "label": "Port Number"
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf"
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf"
+      },
+      {
+        "name": "P_SF",
+        "type": "sunssf"
+      },
+      {
+        "name": "AH_SF",
+        "type": "sunssf"
+      },
+      {
+        "name": "KWH_SF",
+        "type": "sunssf"
+      },
+      {
+        "name": "BattV",
+        "type": "uint16",
+        "label": "Battery Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "ArrayV",
+        "type": "uint16",
+        "label": "Array Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "OutputA",
+        "type": "uint16",
+        "label": "Output Current",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "InputA",
+        "type": "uint16",
+        "label": "Array Current",
+        "units": "A",
+        "sf": "P_SF"
+      },
+      {
+        "name": "ChargerSt",
+        "type": "enum16",
+        "label": "Operating State"
+      },
+      {
+        "name": "OutputW",
+        "type": "uint16",
+        "label": "Output Wattage",
+        "units": "W",
+        "sf": "P_SF"
+      },
+      {
+        "name": "TodayMinBatV",
+        "type": "uint16",
+        "label": "Today's Minimum Battery Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "TodayMaxBatV",
+        "type": "uint16",
+        "label": "Today's Maximum Battery Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "VOCV",
+        "type": "uint16",
+        "label": "VOC",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "TodayMaxVOC",
+        "type": "uint16",
+        "label": "Today's Maximum VOC",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "TodaykWhOutput",
+        "type": "uint16",
+        "label": "Today's kWh",
+        "units": "kWh",
+        "sf": "KWH_SF"
+      },
+      {
+        "name": "TodayAHOutput",
+        "type": "uint16",
+        "label": "Today's AH",
+        "units": "AH",
+        "sf": "AH_SF"
+      },
+      {
+        "name": "LifeTimeKWHOut",
+        "type": "uint16",
+        "label": "Lifetime kWh",
+        "units": "kWh",
+        "sf": "P_SF"
+      },
+      {
+        "name": "LifeTimeAHOut",
+        "type": "uint16",
+        "label": "Lifetime kAH",
+        "units": "kAH",
+        "sf": "KWH_SF"
+      },
+      {
+        "name": "LifeTimeMaxOut",
+        "type": "uint16",
+        "label": "Lifetime Maximum Output Wattage",
+        "units": "W",
+        "sf": "P_SF"
+      },
+      {
+        "name": "LifeTimeMaxBatt",
+        "type": "uint16",
+        "label": "Lifetime Maximum Battery Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "LifeTimeMaxVOC",
+        "type": "uint16",
+        "label": "Lifetime Maximum VOC Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      }
+    ]
+  }
+}

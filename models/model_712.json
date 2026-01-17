@@ -1,0 +1,124 @@
+{
+  "group": {
+    "id": 712,
+    "name": "DERWattVar.Crv.Pt",
+    "desc": "Stored curve points.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER Watt-Var model ID.",
+        "value": 712
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER Watt-Var model length."
+      },
+      {
+        "name": "Ena",
+        "type": "enum16",
+        "label": "DER Watt-Var Module Enable",
+        "desc": "DER Watt-Var control enable."
+      },
+      {
+        "name": "AdptCrvReq",
+        "type": "uint16",
+        "label": "Set Active Curve Request",
+        "desc": "Set active curve. 0 = No active curve."
+      },
+      {
+        "name": "AdptCrvRslt",
+        "type": "enum16",
+        "label": "Set Active Curve Result",
+        "desc": "Result of last set active curve operation."
+      },
+      {
+        "name": "NPt",
+        "type": "uint16",
+        "label": "Number Of Points",
+        "desc": "Number of curve points supported."
+      },
+      {
+        "name": "NCrv",
+        "type": "uint16",
+        "label": "Stored Curve Count",
+        "desc": "Number of stored curves supported."
+      },
+      {
+        "name": "RvrtTms",
+        "type": "uint32",
+        "label": "Reversion Timeout",
+        "desc": "Reversion time in seconds.  0 = No reversion time.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtRem",
+        "type": "uint32",
+        "label": "Reversion Time Left",
+        "desc": "Reversion time remaining in seconds.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtCrv",
+        "type": "uint16",
+        "label": "Reversion Curve",
+        "desc": "Default curve after reversion timeout."
+      },
+      {
+        "name": "W_SF",
+        "type": "sunssf",
+        "label": "Active Power Scale Factor",
+        "desc": "Scale factor for curve active power points."
+      },
+      {
+        "name": "DeptRef_SF",
+        "type": "sunssf",
+        "label": "Var Scale Factor",
+        "desc": "Scale factor for curve var points."
+      },
+      {
+        "name": "ActPt",
+        "type": "uint16",
+        "label": "Active Points",
+        "desc": "Number of active points."
+      },
+      {
+        "name": "DeptRef",
+        "type": "enum16",
+        "label": "Dependent Reference",
+        "desc": "Curve dependent reference."
+      },
+      {
+        "name": "Pri",
+        "type": "enum16",
+        "label": "Power Priority",
+        "desc": "Power priority."
+      },
+      {
+        "name": "ReadOnly",
+        "type": "enum16",
+        "label": "Curve Access",
+        "desc": "Curve read-write access."
+      },
+      {
+        "name": "W",
+        "type": "int16",
+        "label": "Active Power Point",
+        "desc": "Curve active power point as percentage.",
+        "units": "WMaxPct",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Var",
+        "type": "int16",
+        "label": "Reactive Power Point",
+        "desc": "Curve reactive power point as set in DeptRef point.",
+        "units": "VarPct",
+        "sf": "DeptRef_SF"
+      }
+    ]
+  }
+}

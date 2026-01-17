@@ -1,0 +1,208 @@
+{
+  "group": {
+    "id": 64001,
+    "name": "model_64001",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 64001
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Cmd",
+        "type": "enum16",
+        "label": "Command Code"
+      },
+      {
+        "name": "HWRev",
+        "type": "uint16",
+        "label": "Hardware Revision"
+      },
+      {
+        "name": "RSFWRev",
+        "type": "uint16",
+        "label": "RS FW Revision"
+      },
+      {
+        "name": "OSFWRev",
+        "type": "uint16",
+        "label": "OS FW Revision"
+      },
+      {
+        "name": "ProdRev",
+        "type": "string",
+        "label": "Product Revision",
+        "size": 2
+      },
+      {
+        "name": "Boots",
+        "type": "uint16",
+        "label": "Boot Count"
+      },
+      {
+        "name": "Switch",
+        "type": "bitfield16",
+        "label": "DIP Switches"
+      },
+      {
+        "name": "Sensors",
+        "type": "uint16",
+        "label": "Num Detected Sensors"
+      },
+      {
+        "name": "Talking",
+        "type": "uint16",
+        "label": "Num Communicating Sensors"
+      },
+      {
+        "name": "Status",
+        "type": "bitfield16",
+        "label": "System Status"
+      },
+      {
+        "name": "Config",
+        "type": "bitfield16",
+        "label": "System Configuration"
+      },
+      {
+        "name": "LEDblink",
+        "type": "uint16",
+        "label": "LED Blink Threshold",
+        "units": "Pct"
+      },
+      {
+        "name": "LEDon",
+        "type": "uint16",
+        "label": "LED On Threshold",
+        "units": "Pct"
+      },
+      {
+        "name": "Reserved",
+        "type": "uint16"
+      },
+      {
+        "name": "Loc",
+        "type": "string",
+        "label": "Location String",
+        "size": 16
+      },
+      {
+        "name": "S1ID",
+        "type": "enum16",
+        "label": "Sensor 1 Unit ID"
+      },
+      {
+        "name": "S1Addr",
+        "type": "uint16",
+        "label": "Sensor 1 Address"
+      },
+      {
+        "name": "S1OSVer",
+        "type": "uint16",
+        "label": "Sensor 1 OS Version"
+      },
+      {
+        "name": "S1Ver",
+        "type": "string",
+        "label": "Sensor 1 Product Version",
+        "size": 2
+      },
+      {
+        "name": "S1Serial",
+        "type": "string",
+        "label": "Sensor 1 Serial Num",
+        "size": 5
+      },
+      {
+        "name": "S2ID",
+        "type": "enum16",
+        "label": "Sensor 2 Unit ID"
+      },
+      {
+        "name": "S2Addr",
+        "type": "uint16",
+        "label": "Sensor 2 Address"
+      },
+      {
+        "name": "S2OSVer",
+        "type": "uint16",
+        "label": "Sensor 2 OS Version"
+      },
+      {
+        "name": "S2Ver",
+        "type": "string",
+        "label": "Sensor 2 Product Version",
+        "size": 2
+      },
+      {
+        "name": "S2Serial",
+        "type": "string",
+        "label": "Sensor 2 Serial Num",
+        "size": 5
+      },
+      {
+        "name": "S3ID",
+        "type": "enum16",
+        "label": "Sensor 3 Unit ID"
+      },
+      {
+        "name": "S3Addr",
+        "type": "uint16",
+        "label": "Sensor 3 Address"
+      },
+      {
+        "name": "S3OSVer",
+        "type": "uint16",
+        "label": "Sensor 3 OS Version"
+      },
+      {
+        "name": "S3Ver",
+        "type": "string",
+        "label": "Sensor 3 Product Version",
+        "size": 2
+      },
+      {
+        "name": "S3Serial",
+        "type": "string",
+        "label": "Sensor 3 Serial Num",
+        "size": 5
+      },
+      {
+        "name": "S4ID",
+        "type": "enum16",
+        "label": "Sensor 4 Unit ID"
+      },
+      {
+        "name": "S4Addr",
+        "type": "uint16",
+        "label": "Sensor 4 Address"
+      },
+      {
+        "name": "S4OSVer",
+        "type": "uint16",
+        "label": "Sensor 4 OS Version"
+      },
+      {
+        "name": "S4Ver",
+        "type": "string",
+        "label": "Sensor 4 Product Version",
+        "size": 2
+      },
+      {
+        "name": "S4Serial",
+        "type": "string",
+        "label": "Sensor 4 Serial Num",
+        "size": 5
+      }
+    ]
+  }
+}

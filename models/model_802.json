@@ -1,0 +1,392 @@
+{
+  "group": {
+    "id": 802,
+    "name": "battery",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 802
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "AHRtg",
+        "type": "uint16",
+        "label": "Nameplate Charge Capacity",
+        "desc": "Nameplate charge capacity in amp-hours.",
+        "units": "Ah",
+        "sf": "AHRtg_SF"
+      },
+      {
+        "name": "WHRtg",
+        "type": "uint16",
+        "label": "Nameplate Energy Capacity",
+        "desc": "Nameplate energy capacity in DC watt-hours.",
+        "units": "Wh",
+        "sf": "WHRtg_SF"
+      },
+      {
+        "name": "WChaRteMax",
+        "type": "uint16",
+        "label": "Nameplate Max Charge Rate",
+        "desc": "Maximum rate of energy transfer into the storage device in DC watts.",
+        "units": "W",
+        "sf": "WChaDisChaMax_SF"
+      },
+      {
+        "name": "WDisChaRteMax",
+        "type": "uint16",
+        "label": "Nameplate Max Discharge Rate",
+        "desc": "Maximum rate of energy transfer out of the storage device in DC watts.",
+        "units": "W",
+        "sf": "WChaDisChaMax_SF"
+      },
+      {
+        "name": "DisChaRte",
+        "type": "uint16",
+        "label": "Self Discharge Rate",
+        "desc": "Self discharge rate.  Percentage of capacity (WHRtg) discharged per day.",
+        "units": "%WHRtg",
+        "sf": "DisChaRte_SF"
+      },
+      {
+        "name": "SoCMax",
+        "type": "uint16",
+        "label": "Nameplate Max SoC",
+        "desc": "Manufacturer maximum state of charge, expressed as a percentage.",
+        "units": "%WHRtg",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "SoCMin",
+        "type": "uint16",
+        "label": "Nameplate Min SoC",
+        "desc": "Manufacturer minimum state of charge, expressed as a percentage.",
+        "units": "%WHRtg",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "SocRsvMax",
+        "type": "uint16",
+        "label": "Max Reserve Percent",
+        "desc": "Setpoint for maximum reserve for storage as a percentage of the nominal maximum storage.",
+        "units": "%WHRtg",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "SoCRsvMin",
+        "type": "uint16",
+        "label": "Min Reserve Percent",
+        "desc": "Setpoint for minimum reserve for storage as a percentage of the nominal maximum storage.",
+        "units": "%WHRtg",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "SoC",
+        "type": "uint16",
+        "label": "State of Charge",
+        "desc": "State of charge, expressed as a percentage.",
+        "units": "%WHRtg",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "DoD",
+        "type": "uint16",
+        "label": "Depth of Discharge",
+        "desc": "Depth of discharge, expressed as a percentage.",
+        "units": "%",
+        "sf": "DoD_SF"
+      },
+      {
+        "name": "SoH",
+        "type": "uint16",
+        "label": "State of Health",
+        "desc": "Percentage of battery life remaining.",
+        "units": "%",
+        "sf": "SoH_SF"
+      },
+      {
+        "name": "NCyc",
+        "type": "uint32",
+        "label": "Cycle Count",
+        "desc": "Number of cycles executed in the battery."
+      },
+      {
+        "name": "ChaSt",
+        "type": "enum16",
+        "label": "Charge Status",
+        "desc": "Charge status of storage device. Enumeration."
+      },
+      {
+        "name": "LocRemCtl",
+        "type": "enum16",
+        "label": "Control Mode",
+        "desc": "Battery control mode. Enumeration."
+      },
+      {
+        "name": "Hb",
+        "type": "uint16",
+        "label": "Battery Heartbeat",
+        "desc": "Value is incremented every second with periodic resets to zero."
+      },
+      {
+        "name": "CtrlHb",
+        "type": "uint16",
+        "label": "Controller Heartbeat",
+        "desc": "Value is incremented every second with periodic resets to zero."
+      },
+      {
+        "name": "AlmRst",
+        "type": "uint16",
+        "label": "Alarm Reset",
+        "desc": "Used to reset any latched alarms.  1 = Reset."
+      },
+      {
+        "name": "Typ",
+        "type": "enum16",
+        "label": "Battery Type",
+        "desc": "Type of battery. Enumeration."
+      },
+      {
+        "name": "State",
+        "type": "enum16",
+        "label": "State of the Battery Bank",
+        "desc": "State of the battery bank.  Enumeration."
+      },
+      {
+        "name": "StateVnd",
+        "type": "enum16",
+        "label": "Vendor Battery Bank State",
+        "desc": "Vendor specific battery bank state.  Enumeration."
+      },
+      {
+        "name": "WarrDt",
+        "type": "uint32",
+        "label": "Warranty Date",
+        "desc": "Date the device warranty expires."
+      },
+      {
+        "name": "Evt1",
+        "type": "bitfield32",
+        "label": "Battery Event 1 Bitfield",
+        "desc": "Alarms and warnings.  Bit flags."
+      },
+      {
+        "name": "Evt2",
+        "type": "bitfield32",
+        "label": "Battery Event 2 Bitfield",
+        "desc": "Alarms and warnings.  Bit flags."
+      },
+      {
+        "name": "EvtVnd1",
+        "type": "bitfield32",
+        "label": "Vendor Event Bitfield 1",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "EvtVnd2",
+        "type": "bitfield32",
+        "label": "Vendor Event Bitfield 2",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "V",
+        "type": "uint16",
+        "label": "External Battery Voltage",
+        "desc": "DC Bus Voltage.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "VMax",
+        "type": "uint16",
+        "label": "Max Battery Voltage",
+        "desc": "Instantaneous maximum battery voltage.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "VMin",
+        "type": "uint16",
+        "label": "Min Battery Voltage",
+        "desc": "Instantaneous minimum battery voltage.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "CellVMax",
+        "type": "uint16",
+        "label": "Max Cell Voltage",
+        "desc": "Maximum voltage for all cells in the bank.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "CellVMaxStr",
+        "type": "uint16",
+        "label": "Max Cell Voltage String",
+        "desc": "String containing the cell with maximum voltage."
+      },
+      {
+        "name": "CellVMaxMod",
+        "type": "uint16",
+        "label": "Max Cell Voltage Module",
+        "desc": "Module containing the cell with maximum voltage."
+      },
+      {
+        "name": "CellVMin",
+        "type": "uint16",
+        "label": "Min Cell Voltage",
+        "desc": "Minimum voltage for all cells in the bank.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "CellVMinStr",
+        "type": "uint16",
+        "label": "Min Cell Voltage String",
+        "desc": "String containing the cell with minimum voltage."
+      },
+      {
+        "name": "CellVMinMod",
+        "type": "uint16",
+        "label": "Min Cell Voltage Module",
+        "desc": "Module containing the cell with minimum voltage."
+      },
+      {
+        "name": "CellVAvg",
+        "type": "uint16",
+        "label": "Average Cell Voltage",
+        "desc": "Average cell voltage for all cells in the bank.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "A",
+        "type": "int16",
+        "label": "Total DC Current",
+        "desc": "Total DC current flowing to/from the battery bank.",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "AChaMax",
+        "type": "uint16",
+        "label": "Max Charge Current",
+        "desc": "Instantaneous maximum DC charge current.",
+        "units": "A",
+        "sf": "AMax_SF"
+      },
+      {
+        "name": "ADisChaMax",
+        "type": "uint16",
+        "label": "Max Discharge Current",
+        "desc": "Instantaneous maximum DC discharge current.",
+        "units": "A",
+        "sf": "AMax_SF"
+      },
+      {
+        "name": "W",
+        "type": "int16",
+        "label": "Total Power",
+        "desc": "Total power flowing to/from the battery bank.",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "ReqInvState",
+        "type": "enum16",
+        "label": "Inverter State Request",
+        "desc": "Request from battery to start or stop the inverter.  Enumeration."
+      },
+      {
+        "name": "ReqW",
+        "type": "int16",
+        "label": "Battery Power Request",
+        "desc": "AC Power requested by battery.",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "SetOp",
+        "type": "enum16",
+        "label": "Set Operation",
+        "desc": "Instruct the battery bank to perform an operation such as connecting.  Enumeration."
+      },
+      {
+        "name": "SetInvState",
+        "type": "enum16",
+        "label": "Set Inverter State",
+        "desc": "Set the current state of the inverter."
+      },
+      {
+        "name": "AHRtg_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for charge capacity."
+      },
+      {
+        "name": "WHRtg_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for energy capacity."
+      },
+      {
+        "name": "WChaDisChaMax_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for maximum charge and discharge rate."
+      },
+      {
+        "name": "DisChaRte_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for self discharge rate."
+      },
+      {
+        "name": "SoC_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for state of charge values."
+      },
+      {
+        "name": "DoD_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for depth of discharge."
+      },
+      {
+        "name": "SoH_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for state of health."
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for DC bus voltage."
+      },
+      {
+        "name": "CellV_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for cell voltage."
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for DC current."
+      },
+      {
+        "name": "AMax_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for instantaneous DC charge/discharge current."
+      },
+      {
+        "name": "W_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for AC power request."
+      }
+    ]
+  }
+}

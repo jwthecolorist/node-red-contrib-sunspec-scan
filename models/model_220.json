@@ -1,0 +1,236 @@
+{
+  "group": {
+    "id": 220,
+    "name": "ac_meter_secure.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 220
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "A",
+        "type": "int16",
+        "label": "Amps",
+        "desc": "Total AC Current",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf",
+        "desc": "Current scale factor"
+      },
+      {
+        "name": "PhV",
+        "type": "int16",
+        "label": "Voltage",
+        "desc": "Average phase or line voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "desc": "Voltage scale factor"
+      },
+      {
+        "name": "Hz",
+        "type": "int16",
+        "label": "Hz",
+        "desc": "Frequency",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "desc": "Frequency scale factor"
+      },
+      {
+        "name": "W",
+        "type": "int16",
+        "label": "Watts",
+        "desc": "Total Real Power",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "W_SF",
+        "type": "sunssf",
+        "desc": "Real Power scale factor"
+      },
+      {
+        "name": "VA",
+        "type": "int16",
+        "label": "VA",
+        "desc": "AC Apparent Power",
+        "units": "VA",
+        "sf": "VA_SF"
+      },
+      {
+        "name": "VA_SF",
+        "type": "sunssf",
+        "desc": "Apparent Power scale factor"
+      },
+      {
+        "name": "VAR",
+        "type": "int16",
+        "label": "VAR",
+        "desc": "Reactive Power",
+        "units": "var",
+        "sf": "VAR_SF"
+      },
+      {
+        "name": "VAR_SF",
+        "type": "sunssf",
+        "desc": "Reactive Power scale factor"
+      },
+      {
+        "name": "PF",
+        "type": "int16",
+        "label": "PF",
+        "desc": "Power Factor",
+        "units": "Pct",
+        "sf": "PF_SF"
+      },
+      {
+        "name": "PF_SF",
+        "type": "sunssf",
+        "desc": "Power Factor scale factor"
+      },
+      {
+        "name": "TotWhExp",
+        "type": "acc32",
+        "label": "Total Watt-hours Exported",
+        "desc": "Total Real Energy Exported",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotWhImp",
+        "type": "acc32",
+        "label": "Total Watt-hours Imported",
+        "desc": "Total Real Energy Imported",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotWh_SF",
+        "type": "sunssf",
+        "desc": "Real Energy scale factor"
+      },
+      {
+        "name": "TotVAhExp",
+        "type": "acc32",
+        "label": "Total VA-hours Exported",
+        "desc": "Total Apparent Energy Exported",
+        "units": "VAh",
+        "sf": "TotVAh_SF"
+      },
+      {
+        "name": "TotVAhImp",
+        "type": "acc32",
+        "label": "Total VA-hours Imported",
+        "desc": "Total Apparent Energy Imported",
+        "units": "VAh",
+        "sf": "TotVAh_SF"
+      },
+      {
+        "name": "TotVAh_SF",
+        "type": "sunssf",
+        "desc": "Apparent Energy scale factor"
+      },
+      {
+        "name": "TotVArhImpQ1",
+        "type": "acc32",
+        "label": "Total VAR-hours Imported Q1",
+        "desc": "Total Reactive Energy Imported Quadrant 1",
+        "units": "varh",
+        "sf": "TotVArh_SF"
+      },
+      {
+        "name": "TotVArhImpQ2",
+        "type": "acc32",
+        "label": "Total VAr-hours Imported Q2",
+        "desc": "Total Reactive Power Imported Quadrant 2",
+        "units": "varh",
+        "sf": "TotVArh_SF"
+      },
+      {
+        "name": "TotVArhExpQ3",
+        "type": "acc32",
+        "label": "Total VAr-hours Exported Q3",
+        "desc": "Total Reactive Power Exported Quadrant 3",
+        "units": "varh",
+        "sf": "TotVArh_SF"
+      },
+      {
+        "name": "TotVArhExpQ4",
+        "type": "acc32",
+        "label": "Total VAr-hours Exported Q4",
+        "desc": "Total Reactive Power Exported Quadrant 4",
+        "units": "varh",
+        "sf": "TotVArh_SF"
+      },
+      {
+        "name": "TotVArh_SF",
+        "type": "sunssf",
+        "desc": "Reactive Energy scale factor"
+      },
+      {
+        "name": "Evt",
+        "type": "bitfield32",
+        "label": "Events",
+        "desc": "Meter Event Flags"
+      },
+      {
+        "name": "Rsrvd",
+        "type": "pad"
+      },
+      {
+        "name": "Ts",
+        "type": "uint32",
+        "label": "Timestamp",
+        "desc": "Timestamp value is the number of seconds since January 1, 2000"
+      },
+      {
+        "name": "Ms",
+        "type": "uint16",
+        "label": "Milliseconds",
+        "desc": "Millisecond counter 0-999"
+      },
+      {
+        "name": "Seq",
+        "type": "uint16",
+        "label": "Sequence",
+        "desc": "Sequence number of request"
+      },
+      {
+        "name": "Alg",
+        "type": "enum16",
+        "label": "Algorithm",
+        "desc": "Algorithm used to compute the digital signature"
+      },
+      {
+        "name": "N",
+        "type": "uint16",
+        "label": "N",
+        "desc": "Number of registers comprising the digital signature."
+      },
+      {
+        "name": "DS",
+        "type": "uint16"
+      }
+    ]
+  }
+}

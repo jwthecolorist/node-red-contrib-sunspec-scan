@@ -1,0 +1,44 @@
+{
+  "group": {
+    "id": 10,
+    "name": "model_10",
+    "desc": "To be included first for a complete interface description",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 10
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "St",
+        "type": "enum16",
+        "label": "Interface Status",
+        "desc": "Overall interface status"
+      },
+      {
+        "name": "Ctl",
+        "type": "uint16",
+        "label": "Interface Control",
+        "desc": "Overall interface control (TBD)"
+      },
+      {
+        "name": "Typ",
+        "type": "enum16",
+        "label": "Physical Access Type",
+        "desc": "Enumerated value.  Type of physical media"
+      },
+      {
+        "name": "Pad",
+        "type": "pad"
+      }
+    ]
+  }
+}

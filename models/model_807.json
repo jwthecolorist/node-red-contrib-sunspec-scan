@@ -1,0 +1,346 @@
+{
+  "group": {
+    "id": 807,
+    "name": "flow_battery_string.module",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 807
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Idx",
+        "type": "uint16",
+        "label": "String Index",
+        "desc": "Index of the string within the bank."
+      },
+      {
+        "name": "NMod",
+        "type": "uint16",
+        "label": "Module Count",
+        "desc": "Number of modules in this string."
+      },
+      {
+        "name": "NModCon",
+        "type": "uint16",
+        "label": "Connected Module Count",
+        "desc": "Number of electrically connected modules in this string."
+      },
+      {
+        "name": "ModVMax",
+        "type": "uint16",
+        "label": "Max Module Voltage",
+        "desc": "Maximum voltage for all modules in the string.",
+        "units": "V",
+        "sf": "ModV_SF"
+      },
+      {
+        "name": "ModVMaxMod",
+        "type": "uint16",
+        "label": "Max Module Voltage Module",
+        "desc": "Module with the maximum voltage."
+      },
+      {
+        "name": "ModVMin",
+        "type": "uint16",
+        "label": "Min Module Voltage",
+        "desc": "Minimum voltage for all modules in the string.",
+        "units": "V",
+        "sf": "ModV_SF"
+      },
+      {
+        "name": "ModVMinMod",
+        "type": "uint16",
+        "label": "Min Module Voltage Module",
+        "desc": "Module with the minimum voltage."
+      },
+      {
+        "name": "ModVAvg",
+        "type": "uint16",
+        "label": "Average Module Voltage",
+        "desc": "Average voltage for all modules in the string.",
+        "units": "V",
+        "sf": "ModV_SF"
+      },
+      {
+        "name": "CellVMax",
+        "type": "uint16",
+        "label": "Max Cell Voltage",
+        "desc": "Maximum voltage for all cells in the string.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "CellVMaxMod",
+        "type": "uint16",
+        "label": "Max Cell Voltage Module",
+        "desc": "Module containing the cell with the maximum voltage."
+      },
+      {
+        "name": "CellVMaxStk",
+        "type": "uint16",
+        "label": "Max Cell Voltage Stack",
+        "desc": "Stack containing the cell with the maximum voltage."
+      },
+      {
+        "name": "CellVMin",
+        "type": "uint16",
+        "label": "Min Cell Voltage",
+        "desc": "Minimum voltage for all cells in the string.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "CellVMinMod",
+        "type": "uint16",
+        "label": "Min Cell Voltage Module",
+        "desc": "Module containing the cell with the minimum voltage."
+      },
+      {
+        "name": "CellVMinStk",
+        "type": "uint16",
+        "label": "Min Cell Voltage Stack",
+        "desc": "Stack containing the cell with the minimum voltage."
+      },
+      {
+        "name": "CellVAvg",
+        "type": "uint16",
+        "label": "Average Cell Voltage",
+        "desc": "Average voltage for all cells in the string.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "TmpMax",
+        "type": "int16",
+        "label": "Max Temperature",
+        "desc": "Maximum electrolyte temperature for all modules in the string.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "TmpMaxMod",
+        "type": "uint16",
+        "label": "Max Temperature Module",
+        "desc": "Module with the maximum temperature."
+      },
+      {
+        "name": "TmpMin",
+        "type": "int16",
+        "label": "Min Temperature",
+        "desc": "Minimum electrolyte temperature for all modules in the string.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "TmpMinMod",
+        "type": "uint16",
+        "label": "Min Temperature Module",
+        "desc": "Module with the minimum temperature."
+      },
+      {
+        "name": "TmpAvg",
+        "type": "int16",
+        "label": "Average Temperature",
+        "desc": "Average electrolyte temperature for all modules in the string.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "Evt1",
+        "type": "bitfield32",
+        "label": "String Event 1",
+        "desc": "Alarms, warnings and status values.  Bit flags."
+      },
+      {
+        "name": "Evt2",
+        "type": "bitfield32",
+        "label": "String Event 2",
+        "desc": "Alarms, warnings and status values.  Bit flags."
+      },
+      {
+        "name": "EvtVnd1",
+        "type": "bitfield32",
+        "label": "Vendor Event Bitfield 1",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "EvtVnd2",
+        "type": "bitfield32",
+        "label": "Vendor Event Bitfield 2",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "ModV_SF",
+        "type": "sunssf"
+      },
+      {
+        "name": "CellV_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for voltage."
+      },
+      {
+        "name": "Tmp_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for temperature."
+      },
+      {
+        "name": "SoC_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for state of charge."
+      },
+      {
+        "name": "OCV_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for open circuit voltage."
+      },
+      {
+        "name": "Pad1",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "ModIdx",
+        "type": "uint16",
+        "label": "Module Index",
+        "desc": "Index of the module within the string."
+      },
+      {
+        "name": "ModNStk",
+        "type": "uint16",
+        "label": "Stack Count",
+        "desc": "Number of stacks in this module."
+      },
+      {
+        "name": "ModSt",
+        "type": "bitfield32",
+        "label": "Module Status",
+        "desc": "Current status of the module."
+      },
+      {
+        "name": "ModSoC",
+        "type": "uint16",
+        "label": "Module State of Charge",
+        "desc": "State of charge for this module.",
+        "units": "%",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "ModOCV",
+        "type": "uint16",
+        "label": "Open Circuit Voltage",
+        "desc": "Open circuit voltage for this module.",
+        "units": "V",
+        "sf": "OCV_SF"
+      },
+      {
+        "name": "ModV",
+        "type": "uint16",
+        "label": "External Voltage",
+        "desc": "External voltage fo this module.",
+        "units": "V",
+        "sf": "ModV_SF"
+      },
+      {
+        "name": "ModCellVMax",
+        "type": "uint16",
+        "label": "Maximum Cell Voltage",
+        "desc": "Maximum voltage for all cells in this module.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModCellVMaxCell",
+        "type": "uint16",
+        "label": "Max Cell Voltage Cell",
+        "desc": "Cell with the maximum cell voltage."
+      },
+      {
+        "name": "ModCellVMin",
+        "type": "uint16",
+        "label": "Minimum Cell Voltage",
+        "desc": "Minimum voltage for all cells in this module.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModCellVMinCell",
+        "type": "uint16",
+        "label": "Min Cell Voltage Cell",
+        "desc": "Cell with the minimum cell voltage."
+      },
+      {
+        "name": "ModCellVAvg",
+        "type": "uint16",
+        "label": "Average Cell Voltage",
+        "desc": "Average voltage for all cells in this module.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModAnoTmp",
+        "type": "uint16",
+        "label": "Anolyte Temperature",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "ModCatTmp",
+        "type": "uint16",
+        "label": "Catholyte Temperature",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "ModConSt",
+        "type": "bitfield32",
+        "label": "Contactor Status"
+      },
+      {
+        "name": "ModEvt1",
+        "type": "bitfield32",
+        "label": "Module Event 1",
+        "desc": "Alarms, warnings and status values.  Bit flags."
+      },
+      {
+        "name": "ModEvt2",
+        "type": "bitfield32",
+        "label": "Module Event 2",
+        "desc": "Alarms, warnings and status values.  Bit flags."
+      },
+      {
+        "name": "ModConFail",
+        "type": "enum16",
+        "label": "Connection Failure Reason"
+      },
+      {
+        "name": "ModSetEna",
+        "type": "enum16",
+        "label": "Enable/Disable Module",
+        "desc": "Enables and disables the module."
+      },
+      {
+        "name": "ModSetCon",
+        "type": "enum16",
+        "label": "Connect/Disconnect Module ",
+        "desc": "Connects and disconnects the module."
+      },
+      {
+        "name": "ModDisRsn",
+        "type": "enum16",
+        "label": "Disabled Reason",
+        "desc": "Reason why the module is currently disabled."
+      }
+    ]
+  }
+}

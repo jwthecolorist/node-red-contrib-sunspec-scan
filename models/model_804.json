@@ -1,0 +1,384 @@
+{
+  "group": {
+    "id": 804,
+    "name": "lithium_ion_string.lithium_ion_string_module",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 804
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Idx",
+        "type": "uint16",
+        "label": "String Index",
+        "desc": "Index of the string within the bank."
+      },
+      {
+        "name": "NMod",
+        "type": "uint16",
+        "label": "Module Count",
+        "desc": "Count of modules in the string."
+      },
+      {
+        "name": "St",
+        "type": "bitfield32",
+        "label": "String Status",
+        "desc": "Current status of the string."
+      },
+      {
+        "name": "ConFail",
+        "type": "enum16",
+        "label": "Connection Failure Reason"
+      },
+      {
+        "name": "NCellBal",
+        "type": "uint16",
+        "label": "String Cell Balancing Count",
+        "desc": "Number of cells currently being balanced in the string."
+      },
+      {
+        "name": "SoC",
+        "type": "uint16",
+        "label": "String State of Charge",
+        "desc": "Battery string state of charge, expressed as a percentage.",
+        "units": "%",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "DoD",
+        "type": "uint16",
+        "label": "String Depth of Discharge",
+        "desc": "Depth of discharge for the string, expressed as a percentage.",
+        "units": "%",
+        "sf": "DoD_SF"
+      },
+      {
+        "name": "NCyc",
+        "type": "uint32",
+        "label": "String Cycle Count",
+        "desc": "Number of discharge cycles executed upon the string."
+      },
+      {
+        "name": "SoH",
+        "type": "uint16",
+        "label": "String State of Health",
+        "desc": "Battery string state of health, expressed as a percentage.",
+        "units": "%",
+        "sf": "SoH_SF"
+      },
+      {
+        "name": "A",
+        "type": "int16",
+        "label": "String Current",
+        "desc": "String current measurement.",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "V",
+        "type": "uint16",
+        "label": "String Voltage",
+        "desc": "String voltage measurement.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "CellVMax",
+        "type": "uint16",
+        "label": "Max Cell Voltage",
+        "desc": "Maximum voltage for all cells in the string.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "CellVMaxMod",
+        "type": "uint16",
+        "label": "Max Cell Voltage Module",
+        "desc": "Module containing the cell with maximum cell voltage."
+      },
+      {
+        "name": "CellVMin",
+        "type": "uint16",
+        "label": "Min Cell Voltage",
+        "desc": "Minimum voltage for all cells in the string.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "CellVMinMod",
+        "type": "uint16",
+        "label": "Min Cell Voltage Module",
+        "desc": "Module containing the cell with minimum cell voltage."
+      },
+      {
+        "name": "CellVAvg",
+        "type": "uint16",
+        "label": "Average Cell Voltage",
+        "desc": "Average voltage for all cells in the string.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModTmpMax",
+        "type": "int16",
+        "label": "Max Module Temperature",
+        "desc": "Maximum temperature for all modules in the string.",
+        "units": "C",
+        "sf": "ModTmp_SF"
+      },
+      {
+        "name": "ModTmpMaxMod",
+        "type": "uint16",
+        "label": "Max Module Temperature Module",
+        "desc": "Module with the maximum temperature."
+      },
+      {
+        "name": "ModTmpMin",
+        "type": "int16",
+        "label": "Min Module Temperature",
+        "desc": "Minimum temperature for all modules in the string.",
+        "units": "C",
+        "sf": "ModTmp_SF"
+      },
+      {
+        "name": "ModTmpMinMod",
+        "type": "uint16",
+        "label": "Min Module Temperature Module",
+        "desc": "Module with the minimum temperature."
+      },
+      {
+        "name": "ModTmpAvg",
+        "type": "int16",
+        "label": "Average Module Temperature",
+        "desc": "Average temperature for all modules in the string.",
+        "units": "C",
+        "sf": "ModTmp_SF"
+      },
+      {
+        "name": "Pad1",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "ConSt",
+        "type": "bitfield32",
+        "label": "Contactor Status",
+        "desc": "Status of the contactor(s) for the string."
+      },
+      {
+        "name": "Evt1",
+        "type": "bitfield32",
+        "label": "String Event 1",
+        "desc": "Alarms, warnings and status values.  Bit flags."
+      },
+      {
+        "name": "Evt2",
+        "type": "bitfield32",
+        "label": "String Event 2",
+        "desc": "Alarms, warnings and status values.  Bit flags."
+      },
+      {
+        "name": "EvtVnd1",
+        "type": "bitfield32",
+        "label": "Vendor Event Bitfield 1",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "EvtVnd2",
+        "type": "bitfield32",
+        "label": "Vendor Event Bitfield 2",
+        "desc": "Vendor defined events."
+      },
+      {
+        "name": "SetEna",
+        "type": "enum16",
+        "label": "Enable/Disable String",
+        "desc": "Enables and disables the string.  Should reset to 0 upon completion."
+      },
+      {
+        "name": "SetCon",
+        "type": "enum16",
+        "label": "Connect/Disconnect String",
+        "desc": "Connects and disconnects the string."
+      },
+      {
+        "name": "SoC_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for string state of charge."
+      },
+      {
+        "name": "SoH_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for string state of health."
+      },
+      {
+        "name": "DoD_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for string depth of discharge."
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for string current."
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for string voltage."
+      },
+      {
+        "name": "CellV_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for cell voltage."
+      },
+      {
+        "name": "ModTmp_SF",
+        "type": "sunssf",
+        "desc": "Scale factor for module temperature."
+      },
+      {
+        "name": "Pad2",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "Pad3",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "Pad4",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "ModNCell",
+        "type": "uint16",
+        "label": "Module Cell Count",
+        "desc": "Count of all cells in the module."
+      },
+      {
+        "name": "ModSoC",
+        "type": "uint16",
+        "label": "Module SoC",
+        "desc": "Module state of charge, expressed as a percentage.",
+        "units": "%",
+        "sf": "SoC_SF"
+      },
+      {
+        "name": "ModSoH",
+        "type": "uint16",
+        "label": "Module SoH",
+        "desc": "Module state of health, expressed as a percentage.",
+        "units": "%",
+        "sf": "SoH_SF"
+      },
+      {
+        "name": "ModCellVMax",
+        "type": "uint16",
+        "label": "Max Cell Voltage",
+        "desc": "Maximum voltage for all cells in the module.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModCellVMaxCell",
+        "type": "uint16",
+        "label": "Max Cell Voltage Cell",
+        "desc": "Cell with maximum voltage."
+      },
+      {
+        "name": "ModCellVMin",
+        "type": "uint16",
+        "label": "Min Cell Voltage",
+        "desc": "Minimum voltage for all cells in the module.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModCellVMinCell",
+        "type": "uint16",
+        "label": "Min Cell Voltage Cell",
+        "desc": "Cell with minimum voltage.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModCellVAvg",
+        "type": "uint16",
+        "label": "Average Cell Voltage",
+        "desc": "Average voltage for all cells in the module.",
+        "units": "V",
+        "sf": "CellV_SF"
+      },
+      {
+        "name": "ModCellTmpMax",
+        "type": "int16",
+        "label": "Max Cell Temperature",
+        "desc": "Maximum temperature for all cells in the module.",
+        "units": "C",
+        "sf": "ModTmp_SF"
+      },
+      {
+        "name": "ModCellTmpMaxCell",
+        "type": "uint16",
+        "label": "Max Cell Temperature Cell",
+        "desc": "Cell with maximum temperature."
+      },
+      {
+        "name": "ModCellTmpMin",
+        "type": "int16",
+        "label": "Min Cell Temperature",
+        "desc": "Minimum temperature for all cells in the module.",
+        "units": "C",
+        "sf": "ModTmp_SF"
+      },
+      {
+        "name": "ModCellTmpMinCell",
+        "type": "uint16",
+        "label": "Min Cell Temperature Cell",
+        "desc": "Cell with minimum temperature."
+      },
+      {
+        "name": "ModCellTmpAvg",
+        "type": "int16",
+        "label": "Average Cell Temperature",
+        "desc": "Average temperature for all cells in the module.",
+        "units": "C",
+        "sf": "ModTmp_SF"
+      },
+      {
+        "name": "Pad5",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "Pad6",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "Pad7",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      }
+    ]
+  }
+}

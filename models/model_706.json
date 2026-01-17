@@ -1,0 +1,132 @@
+{
+  "group": {
+    "id": 706,
+    "name": "DERVoltWatt.Crv.Pt",
+    "desc": "Stored curve points.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER Volt-Watt model ID.",
+        "value": 706
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER Volt-Watt model length."
+      },
+      {
+        "name": "Ena",
+        "type": "enum16",
+        "label": "DER Volt-Watt Module Enable",
+        "desc": "Volt-Watt control enable."
+      },
+      {
+        "name": "AdptCrvReq",
+        "type": "uint16",
+        "label": "Adopt Curve Request",
+        "desc": "Index of curve points to adopt. First curve index is 1."
+      },
+      {
+        "name": "AdptCrvRslt",
+        "type": "enum16",
+        "label": "Adopt Curve Result",
+        "desc": "Result of last adopt curve operation."
+      },
+      {
+        "name": "NPt",
+        "type": "uint16",
+        "label": "Number Of Points",
+        "desc": "Number of curve points supported."
+      },
+      {
+        "name": "NCrv",
+        "type": "uint16",
+        "label": "Stored Curve Count",
+        "desc": "Number of stored curves supported."
+      },
+      {
+        "name": "RvrtTms",
+        "type": "uint32",
+        "label": "Reversion Timeout",
+        "desc": "Reversion time in seconds.  0 = No reversion time.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtRem",
+        "type": "uint32",
+        "label": "Reversion Time Remaining",
+        "desc": "Reversion time remaining in seconds.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtCrv",
+        "type": "uint16",
+        "label": "Reversion Curve",
+        "desc": "Default curve after reversion timeout."
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "label": "Voltage Scale Factor",
+        "desc": "Scale factor for curve voltage points."
+      },
+      {
+        "name": "DeptRef_SF",
+        "type": "sunssf",
+        "label": "Watt Scale Factor",
+        "desc": "Scale factor for curve watt points."
+      },
+      {
+        "name": "RspTms_SF",
+        "type": "sunssf",
+        "label": "Open-Loop Scale Factor",
+        "desc": "Open loop response time scale factor."
+      },
+      {
+        "name": "ActPt",
+        "type": "uint16",
+        "label": "Active Points",
+        "desc": "Number of active points."
+      },
+      {
+        "name": "DeptRef",
+        "type": "enum16",
+        "label": "Dependent Reference",
+        "desc": "Curve dependent reference."
+      },
+      {
+        "name": "RspTms",
+        "type": "uint32",
+        "label": "Open Loop Response Time",
+        "desc": "Open loop response time.",
+        "units": "Secs",
+        "sf": "RspTms_SF"
+      },
+      {
+        "name": "ReadOnly",
+        "type": "enum16",
+        "label": "Curve Access",
+        "desc": "Curve read-write access."
+      },
+      {
+        "name": "V",
+        "type": "uint16",
+        "label": "Voltage Point",
+        "desc": "Curve voltage point as percentage.",
+        "units": "VNomPct",
+        "sf": "V_SF"
+      },
+      {
+        "name": "W",
+        "type": "int16",
+        "label": "Dependent Reference",
+        "desc": "Active power in percent of rated active power.",
+        "units": "DeptRef",
+        "sf": "DeptRef_SF"
+      }
+    ]
+  }
+}

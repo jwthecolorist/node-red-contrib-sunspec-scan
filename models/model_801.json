@@ -1,0 +1,28 @@
+{
+  "group": {
+    "id": 801,
+    "name": "storage",
+    "desc": "This model has been deprecated.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 801
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "DEPRECATED",
+        "type": "enum16",
+        "label": "Deprecated Model",
+        "desc": "This model has been deprecated."
+      }
+    ]
+  }
+}

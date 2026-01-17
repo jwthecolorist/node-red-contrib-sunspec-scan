@@ -1,0 +1,98 @@
+{
+  "group": {
+    "id": 15,
+    "name": "model_15",
+    "desc": "Interface counters",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 15
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Clr",
+        "type": "uint16",
+        "label": "Clear",
+        "desc": "Write a \"1\" to clear all counters"
+      },
+      {
+        "name": "InCnt",
+        "type": "acc32",
+        "label": "Input Count",
+        "desc": "Number of bytes received"
+      },
+      {
+        "name": "InUcCnt",
+        "type": "acc32",
+        "label": "Input Unicast Count",
+        "desc": "Number of Unicast packets received"
+      },
+      {
+        "name": "InNUcCnt",
+        "type": "acc32",
+        "label": "Input Non-Unicast Count",
+        "desc": "Number of non-Unicast packets received"
+      },
+      {
+        "name": "InDscCnt",
+        "type": "acc32",
+        "label": "Input Discarded Count",
+        "desc": "Number of inbound packets received on the interface but discarded"
+      },
+      {
+        "name": "InErrCnt",
+        "type": "acc32",
+        "label": "Input Error Count",
+        "desc": "Number of inbound packets that contain errors (excluding discards)"
+      },
+      {
+        "name": "InUnkCnt",
+        "type": "acc32",
+        "label": "Input Unknown Count",
+        "desc": "Number of inbound packets with unknown protocol"
+      },
+      {
+        "name": "OutCnt",
+        "type": "acc32",
+        "label": "Output Count",
+        "desc": "Total number of bytes transmitted on this interface"
+      },
+      {
+        "name": "OutUcCnt",
+        "type": "acc32",
+        "label": "Output Unicast Count",
+        "desc": "Number of Unicast packets transmitted"
+      },
+      {
+        "name": "OutNUcCnt",
+        "type": "acc32",
+        "label": "Output Non-Unicast Count",
+        "desc": "Number of Non-Unicast packets transmitted"
+      },
+      {
+        "name": "OutDscCnt",
+        "type": "acc32",
+        "label": "Output Discarded Count",
+        "desc": "Number of Discarded output packets"
+      },
+      {
+        "name": "OutErrCnt",
+        "type": "acc32",
+        "label": "Output Error Count",
+        "desc": "Number of outbound error packets"
+      },
+      {
+        "name": "Pad",
+        "type": "pad"
+      }
+    ]
+  }
+}

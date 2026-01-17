@@ -1,0 +1,89 @@
+{
+  "group": {
+    "id": 307,
+    "name": "base_met",
+    "desc": "Base Meteorological Model",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 307
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "TmpAmb",
+        "type": "int16",
+        "label": "Ambient Temperature",
+        "units": "C",
+        "sf": -1
+      },
+      {
+        "name": "RH",
+        "type": "int16",
+        "label": "Relative Humidity",
+        "units": "Pct"
+      },
+      {
+        "name": "Pres",
+        "type": "int16",
+        "label": "Barometric Pressure",
+        "units": "HPa"
+      },
+      {
+        "name": "WndSpd",
+        "type": "int16",
+        "label": "Wind Speed",
+        "units": "mps"
+      },
+      {
+        "name": "WndDir",
+        "type": "int16",
+        "label": "Wind Direction",
+        "units": "deg"
+      },
+      {
+        "name": "Rain",
+        "type": "int16",
+        "label": "Rainfall",
+        "units": "mm"
+      },
+      {
+        "name": "Snw",
+        "type": "int16",
+        "label": "Snow Depth",
+        "units": "mm"
+      },
+      {
+        "name": "PPT",
+        "type": "int16",
+        "label": "Precipitation Type",
+        "desc": "\u00a0Precipitation Type (WMO 4680 SYNOP code reference)"
+      },
+      {
+        "name": "ElecFld",
+        "type": "int16",
+        "label": "Electric Field",
+        "units": "Vm"
+      },
+      {
+        "name": "SurWet",
+        "type": "int16",
+        "label": "Surface Wetness",
+        "units": "kO"
+      },
+      {
+        "name": "SoilWet",
+        "type": "int16",
+        "label": "Soil Wetness",
+        "units": "Pct"
+      }
+    ]
+  }
+}

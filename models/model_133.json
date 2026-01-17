@@ -1,0 +1,268 @@
+{
+  "group": {
+    "id": 133,
+    "name": "schedule.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 133
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "ActSchd",
+        "type": "bitfield32",
+        "label": "ActSchd",
+        "desc": "Bitfield of active schedules"
+      },
+      {
+        "name": "ModEna",
+        "type": "bitfield16",
+        "label": "ModEna",
+        "desc": "Is basic scheduling active."
+      },
+      {
+        "name": "NSchd",
+        "type": "uint16",
+        "label": "NSchd",
+        "desc": "Number of schedules supported (recommend min. 4, max 32)"
+      },
+      {
+        "name": "NPts",
+        "type": "uint16",
+        "label": "NPts",
+        "desc": "Number of schedule entries supported (maximum of 10)."
+      },
+      {
+        "name": "Pad",
+        "type": "pad",
+        "label": "Pad",
+        "desc": "Pad register."
+      },
+      {
+        "name": "ActPts",
+        "type": "uint16",
+        "label": "ActPts",
+        "desc": "Number of active entries in schedule."
+      },
+      {
+        "name": "StrTms",
+        "type": "uint32",
+        "label": "StrTms",
+        "desc": "Schedule start in seconds since 2000 JAN 01 00:00:00 UTC.",
+        "units": "Secs"
+      },
+      {
+        "name": "RepPer",
+        "type": "uint16",
+        "label": "RepPer",
+        "desc": "The repetition count for time-based schedules (0=repeat forever)"
+      },
+      {
+        "name": "IntvTyp",
+        "type": "enum16",
+        "label": "SchdTyp",
+        "desc": "The repetition frequency for time-based schedules: no repeat=0"
+      },
+      {
+        "name": "XTyp",
+        "type": "enum16",
+        "label": "XTyp",
+        "desc": "The meaning of the X-values in the array. "
+      },
+      {
+        "name": "X_SF",
+        "type": "sunssf",
+        "label": "X_SF",
+        "desc": "Scale factor for schedule range values."
+      },
+      {
+        "name": "YTyp",
+        "type": "enum16",
+        "label": "YTyp",
+        "desc": "The meaning of the Y-values in the array."
+      },
+      {
+        "name": "Y_SF",
+        "type": "sunssf",
+        "label": "Y_SF",
+        "desc": "Scale factor for schedule target values."
+      },
+      {
+        "name": "X1",
+        "type": "int32",
+        "label": "X1",
+        "desc": "Entry 1 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y1",
+        "type": "int32",
+        "label": "Y1",
+        "desc": "Entry 1 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X2",
+        "type": "int32",
+        "label": "X2",
+        "desc": "Entry 2 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y2",
+        "type": "int32",
+        "label": "Y2",
+        "desc": "Entry 2 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X3",
+        "type": "int32",
+        "label": "X3",
+        "desc": "Entry 3 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y3",
+        "type": "int32",
+        "label": "Y3",
+        "desc": "Entry 3 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X4",
+        "type": "int32",
+        "label": "X4",
+        "desc": "Entry 4 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y4",
+        "type": "int32",
+        "label": "Y4",
+        "desc": "Entry 4 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X5",
+        "type": "int32",
+        "label": "X5",
+        "desc": "Entry 15range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y5",
+        "type": "int32",
+        "label": "Y5",
+        "desc": "Entry 5 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X6",
+        "type": "int32",
+        "label": "X6",
+        "desc": "Entry 6 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y6",
+        "type": "int32",
+        "label": "Y6",
+        "desc": "Entry 6 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X7",
+        "type": "int32",
+        "label": "X7",
+        "desc": "Entry 7 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y7",
+        "type": "int32",
+        "label": "Y7",
+        "desc": "Entry 7 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X8",
+        "type": "int32",
+        "label": "X8",
+        "desc": "Entry 8 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y8",
+        "type": "int32",
+        "label": "Y8",
+        "desc": "Entry 8 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X9",
+        "type": "int32",
+        "label": "X9",
+        "desc": "Entry 9 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y9",
+        "type": "int32",
+        "label": "Y9",
+        "desc": "Entry 9 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "X10",
+        "type": "int32",
+        "label": "X10",
+        "desc": "Entry 10 range.",
+        "sf": "X_SF"
+      },
+      {
+        "name": "Y10",
+        "type": "int32",
+        "label": "Y10",
+        "desc": "Entry 10 target.",
+        "sf": "Y_SF"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "Nam",
+        "desc": "Optional description for schedule.",
+        "size": 8
+      },
+      {
+        "name": "WinTms",
+        "type": "uint16",
+        "label": "WinTms",
+        "desc": "Time window for schedule entry change.",
+        "units": "Secs"
+      },
+      {
+        "name": "RmpTms",
+        "type": "uint16",
+        "label": "RmpTms",
+        "desc": "Ramp time for moving from current target to new target.",
+        "units": "Secs"
+      },
+      {
+        "name": "ActIndx",
+        "type": "uint16",
+        "label": "ActIndx",
+        "desc": "Index of active entry in the active schedule."
+      }
+    ]
+  }
+}

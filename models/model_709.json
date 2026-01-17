@@ -1,0 +1,136 @@
+{
+  "group": {
+    "id": 709,
+    "name": "DERTripLF.Crv.MomCess.Pt",
+    "desc": "Momentary cessation curve points.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER low frequency trip model ID.",
+        "value": 709
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER low frequency trip model length."
+      },
+      {
+        "name": "Ena",
+        "type": "enum16",
+        "label": "DER Trip LF Module Enable",
+        "desc": "DER low frequency trip control enable."
+      },
+      {
+        "name": "AdptCrvReq",
+        "type": "uint16",
+        "label": "Adopt Curve Request",
+        "desc": "Index of curve points to adopt. First curve index is 1."
+      },
+      {
+        "name": "AdptCrvRslt",
+        "type": "enum16",
+        "label": "Adopt Curve Result",
+        "desc": "Result of last adopt curve operation."
+      },
+      {
+        "name": "NPt",
+        "type": "uint16",
+        "label": "Number Of Points",
+        "desc": "Number of curve points supported."
+      },
+      {
+        "name": "NCrvSet",
+        "type": "uint16",
+        "label": "Stored Curve Count",
+        "desc": "Number of stored curves supported."
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "label": "Frequency Scale Factor",
+        "desc": "Scale factor for curve frequency points."
+      },
+      {
+        "name": "Tms_SF",
+        "type": "sunssf",
+        "label": "Time Point Scale Factor",
+        "desc": "Scale factor for curve time points."
+      },
+      {
+        "name": "ReadOnly",
+        "type": "enum16",
+        "label": "Curve Access",
+        "desc": "Curve read-write access."
+      },
+      {
+        "name": "ActPt",
+        "type": "uint16",
+        "label": "Number Of Active Points",
+        "desc": "Number of active points in must trip curve."
+      },
+      {
+        "name": "Hz",
+        "type": "uint32",
+        "label": "Frequency Point",
+        "desc": "Curve frequency point.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "Tms",
+        "type": "uint32",
+        "label": "Time Point",
+        "desc": "Curve time point in seconds.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "ActPt",
+        "type": "uint16",
+        "label": "Number Of Active Points",
+        "desc": "Number of active points in may trip curve."
+      },
+      {
+        "name": "Hz",
+        "type": "uint32",
+        "label": "Frequency Point",
+        "desc": "Curve frequency point.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "Tms",
+        "type": "uint32",
+        "label": "Time Point",
+        "desc": "Curve time point in seconds.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "ActPt",
+        "type": "uint16",
+        "label": "Number Of Active Points",
+        "desc": "Number of active points in the momentary cessation curve."
+      },
+      {
+        "name": "Hz",
+        "type": "uint32",
+        "label": "Frequency Point",
+        "desc": "Curve frequency point.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "Tms",
+        "type": "uint32",
+        "label": "Time Point",
+        "desc": "Curve time point in seconds.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      }
+    ]
+  }
+}

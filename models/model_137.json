@@ -1,0 +1,422 @@
+{
+  "group": {
+    "id": 137,
+    "name": "lvrtc.curve",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 137
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "ActCrv",
+        "type": "uint16",
+        "label": "ActCrv",
+        "desc": "Index of active curve. 0=no active curve."
+      },
+      {
+        "name": "ModEna",
+        "type": "bitfield16",
+        "label": "ModEna",
+        "desc": "LVRT control mode. Enable active curve.  Bitfield value."
+      },
+      {
+        "name": "WinTms",
+        "type": "uint16",
+        "label": "WinTms",
+        "desc": "Time window for LVRT change.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtTms",
+        "type": "uint16",
+        "label": "RvrtTms",
+        "desc": "Timeout period for LVRT curve selection.",
+        "units": "Secs"
+      },
+      {
+        "name": "RmpTms",
+        "type": "uint16",
+        "label": "RmpTms",
+        "desc": "Ramp time for moving from current mode to new mode.",
+        "units": "Secs"
+      },
+      {
+        "name": "NCrv",
+        "type": "uint16",
+        "label": "NCrv",
+        "desc": "Number of curves supported (recommend 4)."
+      },
+      {
+        "name": "NPt",
+        "type": "uint16",
+        "label": "NPt",
+        "desc": "Number of curve points supported (maximum of 20)."
+      },
+      {
+        "name": "Tms_SF",
+        "type": "sunssf",
+        "label": "Tms_SF",
+        "desc": "Scale factor for duration."
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "label": "V_SF",
+        "desc": "Scale factor for percent VRef."
+      },
+      {
+        "name": "Pad",
+        "type": "pad"
+      },
+      {
+        "name": "ActPt",
+        "type": "uint16",
+        "label": "ActPt",
+        "desc": "Number of active points in array."
+      },
+      {
+        "name": "Tms1",
+        "type": "uint16",
+        "label": "Tms1",
+        "desc": "Point 1 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V1",
+        "type": "uint16",
+        "label": "V1",
+        "desc": "Point 1 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms2",
+        "type": "uint16",
+        "label": "Tms2",
+        "desc": "Point 2 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V2",
+        "type": "uint16",
+        "label": "V2",
+        "desc": "Point 2 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms3",
+        "type": "uint16",
+        "label": "Tms3",
+        "desc": "Point 3 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V3",
+        "type": "uint16",
+        "label": "V3",
+        "desc": "Point 3 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms4",
+        "type": "uint16",
+        "label": "Tms4",
+        "desc": "Point 4 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V4",
+        "type": "uint16",
+        "label": "V4",
+        "desc": "Point 4 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms5",
+        "type": "uint16",
+        "label": "Tms5",
+        "desc": "Point 5 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V5",
+        "type": "uint16",
+        "label": "V5",
+        "desc": "Point 5 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms6",
+        "type": "uint16",
+        "label": "Tms6",
+        "desc": "Point 6 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V6",
+        "type": "uint16",
+        "label": "V6",
+        "desc": "Point 6 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms7",
+        "type": "uint16",
+        "label": "Tms7",
+        "desc": "Point 7 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V7",
+        "type": "uint16",
+        "label": "V7",
+        "desc": "Point 7 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms8",
+        "type": "uint16",
+        "label": "Tms8",
+        "desc": "Point 8 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V8",
+        "type": "uint16",
+        "label": "V8",
+        "desc": "Point 8 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms9",
+        "type": "uint16",
+        "label": "Tms9",
+        "desc": "Point 9 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V9",
+        "type": "uint16",
+        "label": "V9",
+        "desc": "Point 9 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms10",
+        "type": "uint16",
+        "label": "Tms10",
+        "desc": "Point 10 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V10",
+        "type": "uint16",
+        "label": "V10",
+        "desc": "Point 10 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms11",
+        "type": "uint16",
+        "label": "Tms11",
+        "desc": "Point 11 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V11",
+        "type": "uint16",
+        "label": "V11",
+        "desc": "Point 11 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms12",
+        "type": "uint16",
+        "label": "Tms12",
+        "desc": "Point 12 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V12",
+        "type": "uint16",
+        "label": "V12",
+        "desc": "Point 12 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms13",
+        "type": "uint16",
+        "label": "Tms13",
+        "desc": "Point 13 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V13",
+        "type": "uint16",
+        "label": "V13",
+        "desc": "Point 13 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms14",
+        "type": "uint16",
+        "label": "Tms14",
+        "desc": "Point 14 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V14",
+        "type": "uint16",
+        "label": "V14",
+        "desc": "Point 14 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms15",
+        "type": "uint16",
+        "label": "Tms15",
+        "desc": "Point 15 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V15",
+        "type": "uint16",
+        "label": "V15",
+        "desc": "Point 15 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms16",
+        "type": "uint16",
+        "label": "Tms16",
+        "desc": "Point 16 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V16",
+        "type": "uint16",
+        "label": "V16",
+        "desc": "Point 16 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms17",
+        "type": "uint16",
+        "label": "Tms17",
+        "desc": "Point 17 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V17",
+        "type": "uint16",
+        "label": "V17",
+        "desc": "Point 17 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms18",
+        "type": "uint16",
+        "label": "Tms18",
+        "desc": "Point 18 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V18",
+        "type": "uint16",
+        "label": "V18",
+        "desc": "Point 18 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms19",
+        "type": "uint16",
+        "label": "Tms19",
+        "desc": "Point 19 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V19",
+        "type": "uint16",
+        "label": "V19",
+        "desc": "Point 19 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Tms20",
+        "type": "uint16",
+        "label": "Tms20",
+        "desc": "Point 20 must remain connected duration.",
+        "units": "Secs",
+        "sf": "Tms_SF"
+      },
+      {
+        "name": "V20",
+        "type": "uint16",
+        "label": "V20",
+        "desc": "Point 20 must remain connected voltage.",
+        "units": "% VRef",
+        "sf": "V_SF"
+      },
+      {
+        "name": "CrvNam",
+        "type": "string",
+        "label": "CrvNam",
+        "desc": "Optional description for curve.",
+        "size": 8
+      },
+      {
+        "name": "ReadOnly",
+        "type": "enum16",
+        "label": "ReadOnly",
+        "desc": "Enumerated value indicates if curve is read-only or can be modified."
+      }
+    ]
+  }
+}

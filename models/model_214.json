@@ -1,0 +1,419 @@
+{
+  "group": {
+    "id": 214,
+    "name": "ac_meter_abc_float",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 214
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "A",
+        "type": "float32",
+        "label": "Amps",
+        "desc": "Total AC Current",
+        "units": "A"
+      },
+      {
+        "name": "AphA",
+        "type": "float32",
+        "label": "Amps PhaseA",
+        "desc": "Phase A Current",
+        "units": "A"
+      },
+      {
+        "name": "AphB",
+        "type": "float32",
+        "label": "Amps PhaseB",
+        "desc": "Phase B Current",
+        "units": "A"
+      },
+      {
+        "name": "AphC",
+        "type": "float32",
+        "label": "Amps PhaseC",
+        "desc": "Phase C Current",
+        "units": "A"
+      },
+      {
+        "name": "PhV",
+        "type": "float32",
+        "label": "Voltage LN",
+        "desc": "Line to Neutral AC Voltage (average of active phases)",
+        "units": "V"
+      },
+      {
+        "name": "PhVphA",
+        "type": "float32",
+        "label": "Phase Voltage AN",
+        "desc": "Phase Voltage AN",
+        "units": "V"
+      },
+      {
+        "name": "PhVphB",
+        "type": "float32",
+        "label": "Phase Voltage BN",
+        "desc": "Phase Voltage BN",
+        "units": "V"
+      },
+      {
+        "name": "PhVphC",
+        "type": "float32",
+        "label": "Phase Voltage CN",
+        "desc": "Phase Voltage CN",
+        "units": "V"
+      },
+      {
+        "name": "PPV",
+        "type": "float32",
+        "label": "Voltage LL",
+        "desc": "Line to Line AC Voltage (average of active phases)",
+        "units": "V"
+      },
+      {
+        "name": "PPVphAB",
+        "type": "float32",
+        "label": "Phase Voltage AB",
+        "desc": "Phase Voltage AB",
+        "units": "V"
+      },
+      {
+        "name": "PPVphBC",
+        "type": "float32",
+        "label": "Phase Voltage BC",
+        "desc": "Phase Voltage BC",
+        "units": "V"
+      },
+      {
+        "name": "PPVphCA",
+        "type": "float32",
+        "label": "Phase Voltage CA",
+        "desc": "Phase Voltage CA",
+        "units": "V"
+      },
+      {
+        "name": "Hz",
+        "type": "float32",
+        "label": "Hz",
+        "desc": "Frequency",
+        "units": "Hz"
+      },
+      {
+        "name": "W",
+        "type": "float32",
+        "label": "Watts",
+        "desc": "Total Real Power",
+        "units": "W"
+      },
+      {
+        "name": "WphA",
+        "type": "float32",
+        "label": "Watts phase A",
+        "units": "W"
+      },
+      {
+        "name": "WphB",
+        "type": "float32",
+        "label": "Watts phase B",
+        "units": "W"
+      },
+      {
+        "name": "WphC",
+        "type": "float32",
+        "label": "Watts phase C",
+        "units": "W"
+      },
+      {
+        "name": "VA",
+        "type": "float32",
+        "label": "VA",
+        "desc": "AC Apparent Power",
+        "units": "VA"
+      },
+      {
+        "name": "VAphA",
+        "type": "float32",
+        "label": "VA phase A",
+        "units": "VA"
+      },
+      {
+        "name": "VAphB",
+        "type": "float32",
+        "label": "VA phase B",
+        "units": "VA"
+      },
+      {
+        "name": "VAphC",
+        "type": "float32",
+        "label": "VA phase C",
+        "units": "VA"
+      },
+      {
+        "name": "VAR",
+        "type": "float32",
+        "label": "VAR",
+        "desc": "Reactive Power",
+        "units": "var"
+      },
+      {
+        "name": "VARphA",
+        "type": "float32",
+        "label": "VAR phase A",
+        "units": "var"
+      },
+      {
+        "name": "VARphB",
+        "type": "float32",
+        "label": "VAR phase B",
+        "units": "var"
+      },
+      {
+        "name": "VARphC",
+        "type": "float32",
+        "label": "VAR phase C",
+        "units": "var"
+      },
+      {
+        "name": "PF",
+        "type": "float32",
+        "label": "PF",
+        "desc": "Power Factor",
+        "units": "PF"
+      },
+      {
+        "name": "PFphA",
+        "type": "float32",
+        "label": "PF phase A",
+        "units": "PF"
+      },
+      {
+        "name": "PFphB",
+        "type": "float32",
+        "label": "PF phase B",
+        "units": "PF"
+      },
+      {
+        "name": "PFphC",
+        "type": "float32",
+        "label": "PF phase C",
+        "units": "PF"
+      },
+      {
+        "name": "TotWhExp",
+        "type": "float32",
+        "label": "Total Watt-hours Exported",
+        "desc": "Total Real Energy Exported",
+        "units": "Wh"
+      },
+      {
+        "name": "TotWhExpPhA",
+        "type": "float32",
+        "label": "Total Watt-hours Exported phase A",
+        "units": "Wh"
+      },
+      {
+        "name": "TotWhExpPhB",
+        "type": "float32",
+        "label": "Total Watt-hours Exported phase B",
+        "units": "Wh"
+      },
+      {
+        "name": "TotWhExpPhC",
+        "type": "float32",
+        "label": "Total Watt-hours Exported phase C",
+        "units": "Wh"
+      },
+      {
+        "name": "TotWhImp",
+        "type": "float32",
+        "label": "Total Watt-hours Imported",
+        "desc": "Total Real Energy Imported",
+        "units": "Wh"
+      },
+      {
+        "name": "TotWhImpPhA",
+        "type": "float32",
+        "label": "Total Watt-hours Imported phase A",
+        "units": "Wh"
+      },
+      {
+        "name": "TotWhImpPhB",
+        "type": "float32",
+        "label": "Total Watt-hours Imported phase B",
+        "units": "Wh"
+      },
+      {
+        "name": "TotWhImpPhC",
+        "type": "float32",
+        "label": "Total Watt-hours Imported phase C",
+        "units": "Wh"
+      },
+      {
+        "name": "TotVAhExp",
+        "type": "float32",
+        "label": "Total VA-hours Exported",
+        "desc": "Total Apparent Energy Exported",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVAhExpPhA",
+        "type": "float32",
+        "label": "Total VA-hours Exported phase A",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVAhExpPhB",
+        "type": "float32",
+        "label": "Total VA-hours Exported phase B",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVAhExpPhC",
+        "type": "float32",
+        "label": "Total VA-hours Exported phase C",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVAhImp",
+        "type": "float32",
+        "label": "Total VA-hours Imported",
+        "desc": "Total Apparent Energy Imported",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVAhImpPhA",
+        "type": "float32",
+        "label": "Total VA-hours Imported phase A",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVAhImpPhB",
+        "type": "float32",
+        "label": "Total VA-hours Imported phase B",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVAhImpPhC",
+        "type": "float32",
+        "label": "Total VA-hours Imported phase C",
+        "units": "VAh"
+      },
+      {
+        "name": "TotVArhImpQ1",
+        "type": "float32",
+        "label": "Total VAR-hours Imported Q1",
+        "desc": "Total Reactive Energy Imported Quadrant 1",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhImpQ1phA",
+        "type": "float32",
+        "label": "Total VAr-hours Imported Q1 phase A",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhImpQ1phB",
+        "type": "float32",
+        "label": "Total VAr-hours Imported Q1 phase B",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhImpQ1phC",
+        "type": "float32",
+        "label": "Total VAr-hours Imported Q1 phase C",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhImpQ2",
+        "type": "float32",
+        "label": "Total VAr-hours Imported Q2",
+        "desc": "Total Reactive Power Imported Quadrant 2",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhImpQ2phA",
+        "type": "float32",
+        "label": "Total VAr-hours Imported Q2 phase A",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhImpQ2phB",
+        "type": "float32",
+        "label": "Total VAr-hours Imported Q2 phase B",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhImpQ2phC",
+        "type": "float32",
+        "label": "Total VAr-hours Imported Q2 phase C",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ3",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q3",
+        "desc": "Total Reactive Power Exported Quadrant 3",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ3phA",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q3 phase A",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ3phB",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q3 phase B",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ3phC",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q3 phase C",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ4",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q4",
+        "desc": "Total Reactive Power Exported Quadrant 4",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ4phA",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q4 Imported phase A",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ4phB",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q4 Imported phase B",
+        "units": "varh"
+      },
+      {
+        "name": "TotVArhExpQ4phC",
+        "type": "float32",
+        "label": "Total VAr-hours Exported Q4 Imported phase C",
+        "units": "varh"
+      },
+      {
+        "name": "Evt",
+        "type": "bitfield32",
+        "label": "Events",
+        "desc": "Meter Event Flags"
+      }
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "group": {
+    "id": 19,
+    "name": "model_19",
+    "desc": "Include this model to configure a Point-to-Point Protocol link",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 19
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "Name",
+        "desc": "Interface name",
+        "size": 4
+      },
+      {
+        "name": "Rte",
+        "type": "uint32",
+        "label": "Rate",
+        "desc": "Interface baud rate in bits per second",
+        "units": "bps"
+      },
+      {
+        "name": "Bits",
+        "type": "uint16",
+        "label": "Bits",
+        "desc": "Number of data bits per character"
+      },
+      {
+        "name": "Pty",
+        "type": "enum16",
+        "label": "Parity",
+        "desc": "Bitmask value.  Parity setting"
+      },
+      {
+        "name": "Dup",
+        "type": "enum16",
+        "label": "Duplex",
+        "desc": "Enumerated value.  Duplex mode"
+      },
+      {
+        "name": "Flw",
+        "type": "enum16",
+        "label": "Flow Control",
+        "desc": "Flow Control Method"
+      },
+      {
+        "name": "Auth",
+        "type": "enum16",
+        "label": "Authentication",
+        "desc": "Enumerated value.  Authentication method"
+      },
+      {
+        "name": "UsrNam",
+        "type": "string",
+        "label": "Username",
+        "desc": "Username for authentication",
+        "size": 12
+      },
+      {
+        "name": "Pw",
+        "type": "string",
+        "label": "Password",
+        "desc": "Password for authentication",
+        "size": 6
+      },
+      {
+        "name": "Pad",
+        "type": "pad"
+      }
+    ]
+  }
+}

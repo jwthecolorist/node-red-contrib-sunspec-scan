@@ -1,0 +1,128 @@
+{
+  "group": {
+    "id": 401,
+    "name": "string_combiner_current.string",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 401
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "DCA_SF",
+        "type": "sunssf",
+        "desc": "Current scale factor"
+      },
+      {
+        "name": "DCAhr_SF",
+        "type": "sunssf",
+        "desc": "Amp-hour scale factor"
+      },
+      {
+        "name": "DCV_SF",
+        "type": "sunssf",
+        "desc": "Voltage scale factor"
+      },
+      {
+        "name": "DCAMax",
+        "type": "uint16",
+        "label": "Rating",
+        "desc": "Maximum DC Current Rating",
+        "units": "A",
+        "sf": "DCA_SF"
+      },
+      {
+        "name": "N",
+        "type": "count",
+        "label": "N",
+        "desc": "Number of Inputs"
+      },
+      {
+        "name": "Evt",
+        "type": "bitfield32",
+        "label": "Event",
+        "desc": "Bitmask value.  Events"
+      },
+      {
+        "name": "EvtVnd",
+        "type": "bitfield32",
+        "label": "Vendor Event",
+        "desc": "Bitmask value.  Vendor defined events"
+      },
+      {
+        "name": "DCA",
+        "type": "int16",
+        "label": "Amps",
+        "desc": "Total measured current",
+        "units": "A",
+        "sf": "DCA_SF"
+      },
+      {
+        "name": "DCAhr",
+        "type": "uint32",
+        "label": "Amp-hours",
+        "desc": "Total metered Amp-hours",
+        "units": "Ah",
+        "sf": "DCAhr_SF"
+      },
+      {
+        "name": "DCV",
+        "type": "uint16",
+        "label": "Voltage",
+        "desc": "Output Voltage",
+        "units": "V",
+        "sf": "DCV_SF"
+      },
+      {
+        "name": "Tmp",
+        "type": "int16",
+        "label": "Temp",
+        "desc": "Internal operating temperature",
+        "units": "C"
+      },
+      {
+        "name": "InID",
+        "type": "uint16",
+        "label": "ID",
+        "desc": "Uniquely identifies this input set"
+      },
+      {
+        "name": "InEvt",
+        "type": "bitfield32",
+        "label": "Input Event",
+        "desc": "String Input Event Flags"
+      },
+      {
+        "name": "InEvtVnd",
+        "type": "bitfield32",
+        "label": "Input Event Vendor",
+        "desc": "String Input Vendor Event Flags"
+      },
+      {
+        "name": "InDCA",
+        "type": "int16",
+        "label": "Amps",
+        "desc": "String Input Current",
+        "units": "A",
+        "sf": "DCA_SF"
+      },
+      {
+        "name": "InDCAhr",
+        "type": "uint32",
+        "label": "Amp-hours",
+        "desc": "String Input Amp-Hours",
+        "units": "Ah",
+        "sf": "DCAhr_SF"
+      }
+    ]
+  }
+}

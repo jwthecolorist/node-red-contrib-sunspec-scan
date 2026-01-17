@@ -1,0 +1,32 @@
+{
+  "group": {
+    "id": 808,
+    "name": "flow_battery_module.stack",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 808
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "ModuleTBD",
+        "type": "uint16",
+        "label": "Module Points To Be Determined"
+      },
+      {
+        "name": "StackTBD",
+        "type": "uint16",
+        "label": "Stack Points To Be Determined"
+      }
+    ]
+  }
+}

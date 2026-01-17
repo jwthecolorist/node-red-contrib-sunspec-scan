@@ -1,0 +1,68 @@
+{
+  "group": {
+    "id": 1,
+    "name": "common",
+    "desc": "All SunSpec compliant devices must include this as the first model",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 1
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Mn",
+        "type": "string",
+        "label": "Manufacturer",
+        "desc": "Well known value registered with SunSpec for compliance",
+        "size": 16
+      },
+      {
+        "name": "Md",
+        "type": "string",
+        "label": "Model",
+        "desc": "Manufacturer specific value (32 chars)",
+        "size": 16
+      },
+      {
+        "name": "Opt",
+        "type": "string",
+        "label": "Options",
+        "desc": "Manufacturer specific value (16 chars)",
+        "size": 8
+      },
+      {
+        "name": "Vr",
+        "type": "string",
+        "label": "Version",
+        "desc": "Manufacturer specific value (16 chars)",
+        "size": 8
+      },
+      {
+        "name": "SN",
+        "type": "string",
+        "label": "Serial Number",
+        "desc": "Manufacturer specific value (32 chars)",
+        "size": 16
+      },
+      {
+        "name": "DA",
+        "type": "uint16",
+        "label": "Device Address",
+        "desc": "Modbus device address"
+      },
+      {
+        "name": "Pad",
+        "type": "pad",
+        "desc": "Force even alignment"
+      }
+    ]
+  }
+}

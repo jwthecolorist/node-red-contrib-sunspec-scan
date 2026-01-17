@@ -1,0 +1,175 @@
+{
+  "group": {
+    "id": 714,
+    "name": "DERMeasureDC.Prt",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER DC measurement model ID.",
+        "value": 714
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER DC measurement model length."
+      },
+      {
+        "name": "PrtAlrms",
+        "type": "bitfield32",
+        "label": "Port Alarms",
+        "desc": "Bitfield of ports with active alarms. Bit is 1 if port has an active alarm. Bit 0 is first port."
+      },
+      {
+        "name": "NPrt",
+        "type": "uint16",
+        "label": "Number Of Ports",
+        "desc": "Number of DC ports."
+      },
+      {
+        "name": "DCA",
+        "type": "int16",
+        "label": "DC Current",
+        "desc": "Total DC current for all ports.",
+        "units": "A",
+        "sf": "DCA_SF"
+      },
+      {
+        "name": "DCW",
+        "type": "int16",
+        "label": "DC Power",
+        "desc": "Total DC power for all ports.",
+        "units": "W",
+        "sf": "DCW_SF"
+      },
+      {
+        "name": "DCWhInj",
+        "type": "uint64",
+        "label": "DC Energy Injected",
+        "desc": "Total cumulative DC energy injected for all ports.",
+        "units": "Wh",
+        "sf": "DCWH_SF"
+      },
+      {
+        "name": "DCWhAbs",
+        "type": "uint64",
+        "label": "DC Energy Absorbed",
+        "desc": "Total cumulative DC energy absorbed for all ports.",
+        "units": "Wh",
+        "sf": "DCWH_SF"
+      },
+      {
+        "name": "DCA_SF",
+        "type": "sunssf",
+        "label": "DC Current Scale Factor",
+        "desc": "DC current scale factor."
+      },
+      {
+        "name": "DCV_SF",
+        "type": "sunssf",
+        "label": "DC Voltage Scale Factor",
+        "desc": "DC voltage scale factor."
+      },
+      {
+        "name": "DCW_SF",
+        "type": "sunssf",
+        "label": "DC Power Scale Factor",
+        "desc": "DC power scale factor."
+      },
+      {
+        "name": "DCWH_SF",
+        "type": "sunssf",
+        "label": "DC Energy Scale Factor",
+        "desc": "DC energy scale factor."
+      },
+      {
+        "name": "Tmp_SF",
+        "type": "sunssf",
+        "label": "Temperature Scale Factor",
+        "desc": "Temperature Scale Factor."
+      },
+      {
+        "name": "PrtTyp",
+        "type": "enum16",
+        "label": "Port Type",
+        "desc": "Port type."
+      },
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Port ID",
+        "desc": "Port ID."
+      },
+      {
+        "name": "IDStr",
+        "type": "string",
+        "label": "Port ID String",
+        "desc": "Port ID string.",
+        "size": 8
+      },
+      {
+        "name": "DCA",
+        "type": "int16",
+        "label": "DC Current",
+        "desc": "DC current for the port.",
+        "units": "A",
+        "sf": "DCA_SF"
+      },
+      {
+        "name": "DCV",
+        "type": "uint16",
+        "label": "DC Voltage",
+        "desc": "DC voltage for the port.",
+        "units": "V",
+        "sf": "DCV_SF"
+      },
+      {
+        "name": "DCW",
+        "type": "int16",
+        "label": "DC Power",
+        "desc": "DC power for the port.",
+        "units": "W",
+        "sf": "DCW_SF"
+      },
+      {
+        "name": "DCWhInj",
+        "type": "uint64",
+        "label": "DC Energy Injected",
+        "desc": "Total cumulative DC energy injected for the port.",
+        "units": "Wh",
+        "sf": "DCWH_SF"
+      },
+      {
+        "name": "DCWhAbs",
+        "type": "uint64",
+        "label": "DC Energy Absorbed",
+        "desc": "Total cumulative DC energy absorbed for the port.",
+        "units": "Wh",
+        "sf": "DCWH_SF"
+      },
+      {
+        "name": "Tmp",
+        "type": "int16",
+        "label": "DC Port Temperature",
+        "desc": "DC port temperature.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "DCSta",
+        "type": "enum16",
+        "label": "DC Port Status",
+        "desc": "DC port status."
+      },
+      {
+        "name": "DCAlrm",
+        "type": "bitfield32",
+        "label": "DC Port Alarm",
+        "desc": "DC port alarm."
+      }
+    ]
+  }
+}

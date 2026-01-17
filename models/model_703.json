@@ -1,0 +1,101 @@
+{
+  "group": {
+    "id": 703,
+    "name": "DEREnterService",
+    "desc": "Enter service model.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Enter service model ID.",
+        "value": 703
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Enter service model length.",
+        "value": 17
+      },
+      {
+        "name": "ES",
+        "type": "enum16",
+        "label": "Permit Enter Service",
+        "desc": "Permit enter service."
+      },
+      {
+        "name": "ESVHi",
+        "type": "uint16",
+        "label": "Enter Service Voltage High",
+        "desc": "Enter service voltage high threshold as percent of normal voltage.",
+        "units": "Pct",
+        "sf": "V_SF"
+      },
+      {
+        "name": "ESVLo",
+        "type": "uint16",
+        "label": "Enter Service Voltage Low",
+        "desc": "Enter service voltage low threshold as percent of normal voltage.",
+        "units": "Pct",
+        "sf": "V_SF"
+      },
+      {
+        "name": "ESHzHi",
+        "type": "uint32",
+        "label": "Enter Service Frequency High",
+        "desc": "Enter service frequency high threshold.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "ESHzLo",
+        "type": "uint32",
+        "label": "Enter Service Frequency Low",
+        "desc": "Enter service frequency low threshold.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "ESDlyTms",
+        "type": "uint32",
+        "label": "Enter Service Delay Time",
+        "desc": "Enter service delay time in seconds.",
+        "units": "Secs"
+      },
+      {
+        "name": "ESRndTms",
+        "type": "uint32",
+        "label": "Enter Service Random Delay",
+        "desc": "Enter service random delay in seconds.",
+        "units": "Secs"
+      },
+      {
+        "name": "ESRmpTms",
+        "type": "uint32",
+        "label": "Enter Service Ramp Time",
+        "desc": "Enter service ramp time in seconds.",
+        "units": "Secs"
+      },
+      {
+        "name": "ESDlyRemTms",
+        "type": "uint32",
+        "label": "Enter Service Delay Remaining",
+        "desc": "Enter service delay time remaining in seconds.",
+        "units": "Secs"
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "label": "Voltage Scale Factor",
+        "desc": "Voltage percentage scale factor."
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "label": "Frequency Scale Factor",
+        "desc": "Frequency scale factor."
+      }
+    ]
+  }
+}

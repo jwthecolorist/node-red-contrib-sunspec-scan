@@ -1,0 +1,488 @@
+{
+  "group": {
+    "id": 134,
+    "name": "freq_watt.curve",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 134
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "ActCrv",
+        "type": "uint16",
+        "label": "ActCrv",
+        "desc": "Index of active curve. 0=no active curve."
+      },
+      {
+        "name": "ModEna",
+        "type": "bitfield16",
+        "label": "ModEna",
+        "desc": "Is curve-based Frequency-Watt control active."
+      },
+      {
+        "name": "WinTms",
+        "type": "uint16",
+        "label": "WinTms",
+        "desc": "Time window for freq-watt change.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtTms",
+        "type": "uint16",
+        "label": "RvrtTms",
+        "desc": "Timeout period for freq-watt curve selection.",
+        "units": "Secs"
+      },
+      {
+        "name": "RmpTms",
+        "type": "uint16",
+        "label": "RmpTms",
+        "desc": "Ramp time for moving from current mode to new mode.",
+        "units": "Secs"
+      },
+      {
+        "name": "NCrv",
+        "type": "uint16",
+        "label": "NCrv",
+        "desc": "Number of curves supported (recommend min. 4)."
+      },
+      {
+        "name": "NPt",
+        "type": "uint16",
+        "label": "NPt",
+        "desc": "Number of curve points supported (maximum of 10)."
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "label": "Hz_SF",
+        "desc": "Scale factor for frequency.",
+        "units": "SF"
+      },
+      {
+        "name": "W_SF",
+        "type": "sunssf",
+        "label": "W_SF",
+        "desc": "Scale factor for percent WRef.",
+        "units": "SF"
+      },
+      {
+        "name": "RmpIncDec_SF",
+        "type": "sunssf",
+        "label": "RmpIncDec_SF",
+        "desc": "Scale factor for increment and decrement ramps.",
+        "units": "SF"
+      },
+      {
+        "name": "ActPt",
+        "type": "uint16",
+        "label": "ActPt",
+        "desc": "Number of active points in array."
+      },
+      {
+        "name": "Hz1",
+        "type": "uint16",
+        "label": "Hz1",
+        "desc": "Point 1 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W1",
+        "type": "int16",
+        "label": "W1",
+        "desc": "Point 1 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz2",
+        "type": "uint16",
+        "label": "Hz2",
+        "desc": "Point 2 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W2",
+        "type": "int16",
+        "label": "W2",
+        "desc": "Point 2 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz3",
+        "type": "uint16",
+        "label": "Hz3",
+        "desc": "Point 3 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W3",
+        "type": "int16",
+        "label": "W3",
+        "desc": "Point 3 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz4",
+        "type": "uint16",
+        "label": "Hz4",
+        "desc": "Point 4 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W4",
+        "type": "int16",
+        "label": "W4",
+        "desc": "Point 4 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz5",
+        "type": "uint16",
+        "label": "Hz5",
+        "desc": "Point 5 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W5",
+        "type": "int16",
+        "label": "W5",
+        "desc": "Point 5 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz6",
+        "type": "uint16",
+        "label": "Hz6",
+        "desc": "Point 6 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W6",
+        "type": "int16",
+        "label": "W6",
+        "desc": "Point 6 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz7",
+        "type": "uint16",
+        "label": "Hz7",
+        "desc": "Point 7 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W7",
+        "type": "int16",
+        "label": "W7",
+        "desc": "Point 7 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz8",
+        "type": "uint16",
+        "label": "Hz8",
+        "desc": "Point 8 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W8",
+        "type": "int16",
+        "label": "W8",
+        "desc": "Point 8 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz9",
+        "type": "uint16",
+        "label": "Hz9",
+        "desc": "Point 9 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W9",
+        "type": "int16",
+        "label": "W9",
+        "desc": "Point 9 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz10",
+        "type": "uint16",
+        "label": "Hz10",
+        "desc": "Point 10 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W10",
+        "type": "int16",
+        "label": "W10",
+        "desc": "Point 10 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz11",
+        "type": "uint16",
+        "label": "Hz11",
+        "desc": "Point 11 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W11",
+        "type": "int16",
+        "label": "W11",
+        "desc": "Point 11 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz12",
+        "type": "uint16",
+        "label": "Hz12",
+        "desc": "Point 12 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W12",
+        "type": "int16",
+        "label": "W12",
+        "desc": "Point 12 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz13",
+        "type": "uint16",
+        "label": "Hz13",
+        "desc": "Point 13 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W13",
+        "type": "int16",
+        "label": "W13",
+        "desc": "Point 13 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz14",
+        "type": "uint16",
+        "label": "Hz14",
+        "desc": "Point 14 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W14",
+        "type": "int16",
+        "label": "W14",
+        "desc": "Point 14 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz15",
+        "type": "uint16",
+        "label": "Hz15",
+        "desc": "Point 15 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W15",
+        "type": "int16",
+        "label": "W15",
+        "desc": "Point 15 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz16",
+        "type": "uint16",
+        "label": "Hz16",
+        "desc": "Point 16 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W16",
+        "type": "int16",
+        "label": "W16",
+        "desc": "Point 16 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz17",
+        "type": "uint16",
+        "label": "Hz17",
+        "desc": "Point 17 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W17",
+        "type": "int16",
+        "label": "W17",
+        "desc": "Point 17 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz18",
+        "type": "uint16",
+        "label": "Hz18",
+        "desc": "Point 18 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W18",
+        "type": "int16",
+        "label": "W18",
+        "desc": "Point 18 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz19",
+        "type": "uint16",
+        "label": "Hz19",
+        "desc": "Point 19 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W19",
+        "type": "int16",
+        "label": "W19",
+        "desc": "Point 19 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Hz20",
+        "type": "uint16",
+        "label": "Hz20",
+        "desc": "Point 20 Hertz.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "W20",
+        "type": "int16",
+        "label": "W20",
+        "desc": "Point 20 Watts.",
+        "units": "% WRef",
+        "sf": "W_SF"
+      },
+      {
+        "name": "CrvNam",
+        "type": "string",
+        "label": "CrvNam",
+        "desc": "Optional description for curve. (Max 16 chars)",
+        "size": 8
+      },
+      {
+        "name": "RmpPT1Tms",
+        "type": "uint16",
+        "label": "RmpPT1Tms",
+        "desc": "The time of the PT1 in seconds (time to accomplish a change of 95%).",
+        "units": "Secs"
+      },
+      {
+        "name": "RmpDecTmm",
+        "type": "uint16",
+        "label": "RmpDecTmm",
+        "desc": "The maximum rate at which the power value may be reduced in response to changes in the frequency value.",
+        "units": "% WMax/min",
+        "sf": "RmpIncDec_SF"
+      },
+      {
+        "name": "RmpIncTmm",
+        "type": "uint16",
+        "label": "RmpIncTmm",
+        "desc": "The maximum rate at which the power value may be increased in response to changes in the frequency value.",
+        "units": "% WMax/min",
+        "sf": "RmpIncDec_SF"
+      },
+      {
+        "name": "RmpRsUp",
+        "type": "uint16",
+        "label": "RmpRsUp",
+        "desc": "The maximum rate at which the power may be increased after releasing the frozen value of snap shot function. ",
+        "units": "% WMax/min",
+        "sf": "RmpIncDec_SF"
+      },
+      {
+        "name": "SnptW",
+        "type": "bitfield16",
+        "label": "SnptW",
+        "desc": "1=enable snapshot/capture mode"
+      },
+      {
+        "name": "WRef",
+        "type": "uint16",
+        "label": "WRef",
+        "desc": "Reference active power (default = WMax).",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "WRefStrHz",
+        "type": "uint16",
+        "label": "WRefStrHz",
+        "desc": "Frequency deviation from nominal frequency at the time of the snapshot to start constraining power output.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "WRefStopHz",
+        "type": "uint16",
+        "label": "WRefStopHz",
+        "desc": "Frequency deviation from nominal frequency at which to release the power output.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "ReadOnly",
+        "type": "enum16",
+        "label": "ReadOnly",
+        "desc": "Enumerated value indicates if curve is read-only or can be modified."
+      }
+    ]
+  }
+}

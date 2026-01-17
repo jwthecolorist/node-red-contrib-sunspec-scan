@@ -1,0 +1,46 @@
+{
+  "group": {
+    "id": 304,
+    "name": "inclinometer.incl",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 304
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Inclx",
+        "type": "int32",
+        "label": "X",
+        "desc": "X-Axis inclination",
+        "units": "Degrees",
+        "sf": -2
+      },
+      {
+        "name": "Incly",
+        "type": "int32",
+        "label": "Y",
+        "desc": "Y-Axis inclination",
+        "units": "Degrees",
+        "sf": -2
+      },
+      {
+        "name": "Inclz",
+        "type": "int32",
+        "label": "Z",
+        "desc": "Z-Axis inclination",
+        "units": "Degrees",
+        "sf": -2
+      }
+    ]
+  }
+}

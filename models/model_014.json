@@ -1,0 +1,74 @@
+{
+  "group": {
+    "id": 14,
+    "name": "model_14",
+    "desc": "Include this block to allow for a proxy server",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 14
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "name",
+        "desc": "Interface name (8 chars)",
+        "size": 4
+      },
+      {
+        "name": "Cap",
+        "type": "bitfield16",
+        "label": "Capabilities",
+        "desc": "Bitmask value.  Proxy configuration capabilities"
+      },
+      {
+        "name": "Cfg",
+        "type": "enum16",
+        "label": "Config",
+        "desc": "Enumerated value.  Set proxy address type"
+      },
+      {
+        "name": "Typ",
+        "type": "bitfield16",
+        "label": "Type",
+        "desc": "Enumerate value.  Proxy server type"
+      },
+      {
+        "name": "Addr",
+        "type": "string",
+        "label": "Address",
+        "desc": "IPv4 or IPv6 proxy hostname or dotted address (40 chars)",
+        "size": 20
+      },
+      {
+        "name": "Port",
+        "type": "uint16",
+        "label": "Port",
+        "desc": "Proxy port number"
+      },
+      {
+        "name": "User",
+        "type": "string",
+        "label": "Username",
+        "desc": "Proxy user name",
+        "size": 12
+      },
+      {
+        "name": "Pw",
+        "type": "string",
+        "label": "Password",
+        "desc": "Proxy password",
+        "size": 12
+      }
+    ]
+  }
+}

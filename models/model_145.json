@@ -1,0 +1,84 @@
+{
+  "group": {
+    "id": 145,
+    "name": "ext_settings",
+    "desc": "Inverter controls extended settings ",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 145
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "NomRmpUpRte",
+        "type": "uint16",
+        "label": "Ramp Up Rate",
+        "desc": "Ramp up rate as a percentage of max current.",
+        "units": "Pct",
+        "sf": "Rmp_SF"
+      },
+      {
+        "name": "NomRmpDnRte",
+        "type": "uint16",
+        "label": "NomRmpDnRte",
+        "desc": "Ramp down rate as a percentage of max current.",
+        "units": "Pct",
+        "sf": "Rmp_SF"
+      },
+      {
+        "name": "EmgRmpUpRte",
+        "type": "uint16",
+        "label": "Emergency Ramp Up Rate",
+        "desc": "Emergency ramp up rate as a percentage of max current.",
+        "units": "Pct",
+        "sf": "Rmp_SF"
+      },
+      {
+        "name": "EmgRmpDnRte",
+        "type": "uint16",
+        "label": "Emergency Ramp Down Rate",
+        "desc": "Emergency ramp down rate as a percentage of max current.",
+        "units": "Pct",
+        "sf": "Rmp_SF"
+      },
+      {
+        "name": "ConnRmpUpRte",
+        "type": "uint16",
+        "label": "Connect Ramp Up Rate",
+        "desc": "Connect ramp up rate as a percentage of max current.",
+        "units": "Pct",
+        "sf": "Rmp_SF"
+      },
+      {
+        "name": "ConnRmpDnRte",
+        "type": "uint16",
+        "label": "Connect Ramp Down Rate",
+        "desc": "Connect ramp down rate as a percentage of max current.",
+        "units": "Pct",
+        "sf": "Rmp_SF"
+      },
+      {
+        "name": "AGra",
+        "type": "uint16",
+        "label": "Default Ramp Rate",
+        "desc": "Ramp rate specified in percent of max current.",
+        "units": "Pct",
+        "sf": "Rmp_SF"
+      },
+      {
+        "name": "Rmp_SF",
+        "type": "sunssf",
+        "label": "Ramp Rate Scale Factor",
+        "desc": "Ramp Rate Scale Factor"
+      }
+    ]
+  }
+}

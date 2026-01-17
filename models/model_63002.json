@@ -1,0 +1,40 @@
+{
+  "group": {
+    "id": 63002,
+    "name": "model_63002.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 63002
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "sunssf_1",
+        "type": "sunssf"
+      },
+      {
+        "name": "int16_1",
+        "type": "int16",
+        "sf": "sunssf_1"
+      },
+      {
+        "name": "int16_2",
+        "type": "int16",
+        "sf": "sunssf_2"
+      },
+      {
+        "name": "sunssf_2",
+        "type": "sunssf"
+      }
+    ]
+  }
+}

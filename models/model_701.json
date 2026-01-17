@@ -1,0 +1,543 @@
+{
+  "group": {
+    "id": 701,
+    "name": "DERMeasureAC",
+    "desc": "DER AC measurement model.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER AC measurement model ID.",
+        "value": 701
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER AC measurement model length.",
+        "value": 153
+      },
+      {
+        "name": "ACType",
+        "type": "enum16",
+        "label": "AC Wiring Type",
+        "desc": "AC wiring type."
+      },
+      {
+        "name": "St",
+        "type": "enum16",
+        "label": "Operating State",
+        "desc": "Operating state of the DER."
+      },
+      {
+        "name": "InvSt",
+        "type": "enum16",
+        "label": "Inverter State",
+        "desc": "Enumerated value.  Inverter state."
+      },
+      {
+        "name": "ConnSt",
+        "type": "enum16",
+        "label": "Grid Connection State",
+        "desc": "Grid connection state of the DER."
+      },
+      {
+        "name": "Alrm",
+        "type": "bitfield32",
+        "label": "Alarm Bitfield",
+        "desc": "Active alarms for the DER."
+      },
+      {
+        "name": "DERMode",
+        "type": "bitfield32",
+        "label": "DER Operational Characteristics",
+        "desc": "Current operational characteristics of the DER."
+      },
+      {
+        "name": "W",
+        "type": "int16",
+        "label": "Active Power",
+        "desc": "Total active power. Active power is positive for DER generation and negative for absorption.",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "VA",
+        "type": "int16",
+        "label": "Apparent Power",
+        "desc": "Total apparent power.",
+        "units": "VA",
+        "sf": "VA_SF"
+      },
+      {
+        "name": "Var",
+        "type": "int16",
+        "label": "Reactive Power",
+        "desc": "Total reactive power.",
+        "units": "Var",
+        "sf": "Var_SF"
+      },
+      {
+        "name": "PF",
+        "type": "int16",
+        "label": "Power Factor",
+        "desc": "Power factor. The sign of power factor should be the sign of active power.",
+        "sf": "PF_SF"
+      },
+      {
+        "name": "A",
+        "type": "int16",
+        "label": "Total AC Current",
+        "desc": "Total AC current.",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "LLV",
+        "type": "uint16",
+        "label": "Voltage LL",
+        "desc": "Line to line AC voltage as an average of active phases.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "LNV",
+        "type": "uint16",
+        "label": "Voltage LN",
+        "desc": "Line to neutral AC voltage as an average of active phases.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "Hz",
+        "type": "uint32",
+        "label": "Frequency",
+        "desc": "AC frequency.",
+        "units": "Hz",
+        "sf": "Hz_SF"
+      },
+      {
+        "name": "TotWhInj",
+        "type": "uint64",
+        "label": "Total Energy Injected",
+        "desc": "Total active energy injected (Quadrants 1 & 4).",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotWhAbs",
+        "type": "uint64",
+        "label": "Total Energy Absorbed",
+        "desc": "Total active energy absorbed (Quadrants 2 & 3).",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotVarhInj",
+        "type": "uint64",
+        "label": "Total Reactive Energy Inj",
+        "desc": "Total reactive energy injected (Quadrants 1 & 2).",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "TotVarhAbs",
+        "type": "uint64",
+        "label": "Total Reactive Energy Abs",
+        "desc": "Total reactive energy absorbed (Quadrants 3 & 4).",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "TmpAmb",
+        "type": "int16",
+        "label": "Ambient Temperature",
+        "desc": "Ambient temperature.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "TmpCab",
+        "type": "int16",
+        "label": "Cabinet Temperature",
+        "desc": "Cabinet temperature.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "TmpSnk",
+        "type": "int16",
+        "label": "Heat Sink Temperature",
+        "desc": "Heat sink temperature.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "TmpTrns",
+        "type": "int16",
+        "label": "Transformer Temperature",
+        "desc": "Transformer temperature.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "TmpSw",
+        "type": "int16",
+        "label": "IGBT/MOSFET Temperature",
+        "desc": "IGBT/MOSFET temperature.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "TmpOt",
+        "type": "int16",
+        "label": "Other Temperature",
+        "desc": "Other temperature.",
+        "units": "C",
+        "sf": "Tmp_SF"
+      },
+      {
+        "name": "WL1",
+        "type": "int16",
+        "label": "Watts L1",
+        "desc": "Active power L1.",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "VAL1",
+        "type": "int16",
+        "label": "VA L1",
+        "desc": "Apparent power L1.",
+        "units": "VA",
+        "sf": "VA_SF"
+      },
+      {
+        "name": "VarL1",
+        "type": "int16",
+        "label": "Var L1",
+        "desc": "Reactive power L1.",
+        "units": "Var",
+        "sf": "Var_SF"
+      },
+      {
+        "name": "PFL1",
+        "type": "int16",
+        "label": "PF L1",
+        "desc": "Power factor phase L1.",
+        "sf": "PF_SF"
+      },
+      {
+        "name": "AL1",
+        "type": "int16",
+        "label": "Amps L1",
+        "desc": "Current phase L1.",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "VL1L2",
+        "type": "uint16",
+        "label": "Phase Voltage L1-L2",
+        "desc": "Phase voltage L1-L2.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "VL1",
+        "type": "uint16",
+        "label": "Phase Voltage L1-N",
+        "desc": "Phase voltage L1-N.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "TotWhInjL1",
+        "type": "uint64",
+        "label": "Total Watt-Hours Inj L1",
+        "desc": "Total active energy injected L1.",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotWhAbsL1",
+        "type": "uint64",
+        "label": "Total Watt-Hours Abs L1",
+        "desc": "Total active energy absorbed L1.",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotVarhInjL1",
+        "type": "uint64",
+        "label": "Total Var-Hours Inj L1",
+        "desc": "Total reactive energy injected L1.",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "TotVarhAbsL1",
+        "type": "uint64",
+        "label": "Total Var-Hours Abs L1",
+        "desc": "Total reactive energy absorbed L1.",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "WL2",
+        "type": "int16",
+        "label": "Watts L2",
+        "desc": "Active power L2.",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "VAL2",
+        "type": "int16",
+        "label": "VA L2",
+        "desc": "Apparent power L2.",
+        "units": "VA",
+        "sf": "VA_SF"
+      },
+      {
+        "name": "VarL2",
+        "type": "int16",
+        "label": "Var L2",
+        "desc": "Reactive power L2.",
+        "units": "Var",
+        "sf": "Var_SF"
+      },
+      {
+        "name": "PFL2",
+        "type": "int16",
+        "label": "PF L2",
+        "desc": "Power factor L2.",
+        "sf": "PF_SF"
+      },
+      {
+        "name": "AL2",
+        "type": "int16",
+        "label": "Amps L2",
+        "desc": "Current L2.",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "VL2L3",
+        "type": "uint16",
+        "label": "Phase Voltage L2-L3",
+        "desc": "Phase voltage L2-L3.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "VL2",
+        "type": "uint16",
+        "label": "Phase Voltage L2-N",
+        "desc": "Phase voltage L2-N.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "TotWhInjL2",
+        "type": "uint64",
+        "label": "Total Watt-Hours Inj L2",
+        "desc": "Total active energy injected L2.",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotWhAbsL2",
+        "type": "uint64",
+        "label": "Total Watt-Hours Abs L2",
+        "desc": "Total active energy absorbed L2.",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotVarhInjL2",
+        "type": "uint64",
+        "label": "Total Var-Hours Inj L2",
+        "desc": "Total reactive energy injected L2.",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "TotVarhAbsL2",
+        "type": "uint64",
+        "label": "Total Var-Hours Abs L2",
+        "desc": "Total reactive energy absorbed L2.",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "WL3",
+        "type": "int16",
+        "label": "Watts L3",
+        "desc": "Active power L3.",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "VAL3",
+        "type": "int16",
+        "label": "VA L3",
+        "desc": "Apparent power L3.",
+        "units": "VA",
+        "sf": "VA_SF"
+      },
+      {
+        "name": "VarL3",
+        "type": "int16",
+        "label": "Var L3",
+        "desc": "Reactive power L3.",
+        "units": "Var",
+        "sf": "Var_SF"
+      },
+      {
+        "name": "PFL3",
+        "type": "int16",
+        "label": "PF L3",
+        "desc": "Power factor L3.",
+        "sf": "PF_SF"
+      },
+      {
+        "name": "AL3",
+        "type": "int16",
+        "label": "Amps L3",
+        "desc": "Current L3.",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "VL3L1",
+        "type": "uint16",
+        "label": "Phase Voltage L3-L1",
+        "desc": "Phase voltage L3-L1.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "VL3",
+        "type": "uint16",
+        "label": "Phase Voltage L3-N",
+        "desc": "Phase voltage L3-N.",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "TotWhInjL3",
+        "type": "uint64",
+        "label": "Total Watt-Hours Inj L3",
+        "desc": "Total active energy injected L3.",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotWhAbsL3",
+        "type": "uint64",
+        "label": "Total Watt-Hours Abs L3",
+        "desc": "Total active energy absorbed L3.",
+        "units": "Wh",
+        "sf": "TotWh_SF"
+      },
+      {
+        "name": "TotVarhInjL3",
+        "type": "uint64",
+        "label": "Total Var-Hours Inj L3",
+        "desc": "Total reactive energy injected L3.",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "TotVarhAbsL3",
+        "type": "uint64",
+        "label": "Total Var-Hours Abs L3",
+        "desc": "Total reactive energy absorbed L3.",
+        "units": "Varh",
+        "sf": "TotVarh_SF"
+      },
+      {
+        "name": "ThrotPct",
+        "type": "uint16",
+        "label": "Throttling In Pct",
+        "desc": "Throttling in pct of maximum active power.",
+        "units": "Pct"
+      },
+      {
+        "name": "ThrotSrc",
+        "type": "bitfield32",
+        "label": "Throttle Source Information",
+        "desc": "Active throttling source."
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf",
+        "label": "Current Scale Factor",
+        "desc": "Current scale factor."
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "label": "Voltage Scale Factor",
+        "desc": "Voltage scale factor."
+      },
+      {
+        "name": "Hz_SF",
+        "type": "sunssf",
+        "label": "Frequency Scale Factor",
+        "desc": "Frequency scale factor."
+      },
+      {
+        "name": "W_SF",
+        "type": "sunssf",
+        "label": "Active Power Scale Factor",
+        "desc": "Active power scale factor."
+      },
+      {
+        "name": "PF_SF",
+        "type": "sunssf",
+        "label": "Power Factor Scale Factor",
+        "desc": "Power factor scale factor."
+      },
+      {
+        "name": "VA_SF",
+        "type": "sunssf",
+        "label": "Apparent Power Scale Factor",
+        "desc": "Apparent power scale factor."
+      },
+      {
+        "name": "Var_SF",
+        "type": "sunssf",
+        "label": "Reactive Power Scale Factor",
+        "desc": "Reactive power scale factor."
+      },
+      {
+        "name": "TotWh_SF",
+        "type": "sunssf",
+        "label": "Active Energy Scale Factor",
+        "desc": "Active energy scale factor."
+      },
+      {
+        "name": "TotVarh_SF",
+        "type": "sunssf",
+        "label": "Reactive Energy Scale Factor",
+        "desc": "Reactive energy scale factor."
+      },
+      {
+        "name": "Tmp_SF",
+        "type": "sunssf",
+        "label": "Temperature Scale Factor",
+        "desc": "Temperature scale factor."
+      },
+      {
+        "name": "MnAlrmInfo",
+        "type": "string",
+        "label": "Manufacturer Alarm Info",
+        "desc": "Manufacturer alarm information. Valid if MANUFACTURER_ALRM indication is active.",
+        "size": 32
+      }
+    ]
+  }
+}

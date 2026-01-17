@@ -1,0 +1,80 @@
+{
+  "group": {
+    "id": 7,
+    "name": "model_7.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 7
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "RqSeq",
+        "type": "uint16",
+        "label": "Request Sequence",
+        "desc": "Sequence number from the request"
+      },
+      {
+        "name": "Sts",
+        "type": "enum16",
+        "label": "Status",
+        "desc": "Status of last write operation"
+      },
+      {
+        "name": "Ts",
+        "type": "uint32",
+        "label": "Timestamp",
+        "desc": "Timestamp value is the number of seconds since January 1, 2000"
+      },
+      {
+        "name": "Ms",
+        "type": "uint16",
+        "label": "Milliseconds",
+        "desc": "Millisecond counter 0-999"
+      },
+      {
+        "name": "Seq",
+        "type": "uint16",
+        "label": "Sequence",
+        "desc": "Sequence number of response"
+      },
+      {
+        "name": "Alm",
+        "type": "enum16",
+        "label": "Alarm",
+        "desc": "Bitmask alarm code"
+      },
+      {
+        "name": "Rsrvd",
+        "type": "pad"
+      },
+      {
+        "name": "Alg",
+        "type": "enum16",
+        "label": "Algorithm",
+        "desc": "Algorithm used to compute the digital signature"
+      },
+      {
+        "name": "N",
+        "type": "uint16",
+        "label": "N",
+        "desc": "Number of registers comprising the digital signature."
+      },
+      {
+        "name": "DS",
+        "type": "uint16",
+        "label": "DS",
+        "desc": "Digital Signature"
+      }
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "group": {
+    "id": 8,
+    "name": "model_8.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 8
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Fmt",
+        "type": "enum16",
+        "label": "Format",
+        "desc": "X.509 format of the certificate. DER or PEM."
+      },
+      {
+        "name": "N",
+        "type": "uint16",
+        "label": "N",
+        "desc": "Number of registers to follow for the certificate"
+      },
+      {
+        "name": "Cert",
+        "type": "uint16",
+        "label": "Cert",
+        "desc": "X.509 Certificate of the device"
+      }
+    ]
+  }
+}

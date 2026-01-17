@@ -1,0 +1,162 @@
+{
+  "group": {
+    "id": 502,
+    "name": "solar_module",
+    "desc": "A solar module model supporting DC-DC converter",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 502
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "A_SF",
+        "type": "sunssf",
+        "desc": "Current scale factor"
+      },
+      {
+        "name": "V_SF",
+        "type": "sunssf",
+        "desc": "Voltage scale factor"
+      },
+      {
+        "name": "W_SF",
+        "type": "sunssf",
+        "desc": "Power scale factor"
+      },
+      {
+        "name": "Wh_SF",
+        "type": "sunssf",
+        "desc": "Energy scale factor"
+      },
+      {
+        "name": "Stat",
+        "type": "enum16",
+        "label": "Status",
+        "desc": "Enumerated value.  Module Status Code"
+      },
+      {
+        "name": "StatVend",
+        "type": "enum16",
+        "label": "Vendor Status",
+        "desc": "Module Vendor Status Code"
+      },
+      {
+        "name": "Evt",
+        "type": "bitfield32",
+        "label": "Events",
+        "desc": "Bitmask value.  Module Event Flags"
+      },
+      {
+        "name": "EvtVend",
+        "type": "bitfield32",
+        "label": "Vendor Module Event Flags",
+        "desc": "Vendor specific flags"
+      },
+      {
+        "name": "Ctl",
+        "type": "enum16",
+        "label": "Control",
+        "desc": "Module Control"
+      },
+      {
+        "name": "CtlVend",
+        "type": "enum32",
+        "label": "Vendor Control",
+        "desc": "Vendor Module Control"
+      },
+      {
+        "name": "CtlVal",
+        "type": "int32",
+        "label": "Control Value",
+        "desc": "Module Control Value"
+      },
+      {
+        "name": "Tms",
+        "type": "uint32",
+        "label": "Timestamp",
+        "desc": "Time in seconds since 2000 epoch",
+        "units": "Secs"
+      },
+      {
+        "name": "OutA",
+        "type": "int16",
+        "label": "Output Current",
+        "desc": "Output Current",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "OutV",
+        "type": "int16",
+        "label": "Output Voltage",
+        "desc": "Output Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "OutWh",
+        "type": "acc32",
+        "label": "Output Energy",
+        "desc": "Output Energy",
+        "units": "Wh",
+        "sf": "Wh_SF"
+      },
+      {
+        "name": "OutPw",
+        "type": "int16",
+        "label": "Output Power",
+        "desc": "Output Power",
+        "units": "W",
+        "sf": "W_SF"
+      },
+      {
+        "name": "Tmp",
+        "type": "int16",
+        "label": "Temp",
+        "desc": "Module Temperature",
+        "units": "C"
+      },
+      {
+        "name": "InA",
+        "type": "int16",
+        "label": "Input Current",
+        "desc": "Input Current",
+        "units": "A",
+        "sf": "A_SF"
+      },
+      {
+        "name": "InV",
+        "type": "int16",
+        "label": "Input Voltage",
+        "desc": "Input Voltage",
+        "units": "V",
+        "sf": "V_SF"
+      },
+      {
+        "name": "InWh",
+        "type": "acc32",
+        "label": "Input Energy",
+        "desc": "Input Energy",
+        "units": "Wh",
+        "sf": "Wh_SF"
+      },
+      {
+        "name": "InW",
+        "type": "int16",
+        "label": "Input Power",
+        "desc": "Input Power",
+        "units": "W",
+        "sf": "W_SF"
+      }
+    ]
+  }
+}

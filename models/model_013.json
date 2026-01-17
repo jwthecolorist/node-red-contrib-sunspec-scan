@@ -1,0 +1,126 @@
+{
+  "group": {
+    "id": 13,
+    "name": "model_13",
+    "desc": "Include to support an IPv6 protocol stack on this interface",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 13
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "Name",
+        "desc": "Interface name",
+        "size": 4
+      },
+      {
+        "name": "CfgSt",
+        "type": "enum16",
+        "label": "Config Status",
+        "desc": "Enumerated value.  Configuration status"
+      },
+      {
+        "name": "ChgSt",
+        "type": "bitfield16",
+        "label": "Change Status",
+        "desc": "Bitmask value.  A configuration change is pending"
+      },
+      {
+        "name": "Cap",
+        "type": "bitfield16",
+        "label": "Config Capability",
+        "desc": "Bitmask value. Identify capable sources of configuration"
+      },
+      {
+        "name": "Cfg",
+        "type": "enum16",
+        "label": "IPv6 Config",
+        "desc": "Enumerated value.  Configuration method used."
+      },
+      {
+        "name": "Ctl",
+        "type": "enum16",
+        "label": "Control",
+        "desc": "Bitmask value.  Configure use of services"
+      },
+      {
+        "name": "Addr",
+        "type": "string",
+        "label": "IP",
+        "desc": "IPv6 numeric address as a dotted string xxxx.xxxx.xxxx.xxxx",
+        "size": 20
+      },
+      {
+        "name": "CIDR",
+        "type": "string",
+        "label": "CIDR",
+        "desc": "Classless Inter-Domain Routing Number",
+        "size": 20
+      },
+      {
+        "name": "Gw",
+        "type": "string",
+        "label": "Gateway",
+        "desc": "IPv6 numeric address as a dotted string xxxx.xxxx.xxxx.xxxx",
+        "size": 20
+      },
+      {
+        "name": "DNS1",
+        "type": "string",
+        "label": "DNS1",
+        "desc": "IPv6 numeric DNS address as a dotted string xxxx.xxxx.xxxx.xxxx",
+        "size": 20
+      },
+      {
+        "name": "DNS2",
+        "type": "string",
+        "label": "DNS2",
+        "desc": "IPv6 numeric DNS address as a dotted string xxxx.xxxx.xxxx.xxxx",
+        "size": 20
+      },
+      {
+        "name": "NTP1",
+        "type": "string",
+        "label": "NTP1",
+        "desc": "IPv6 numeric NTP address as a name or dotted string xxxx.xxxx.xxxx.xxxx",
+        "size": 20
+      },
+      {
+        "name": "NTP2",
+        "type": "string",
+        "label": "NTP2",
+        "desc": "IPv6 numeric NTP address as a name or dotted string xxxx.xxxx.xxxx.xxxx",
+        "size": 20
+      },
+      {
+        "name": "DomNam",
+        "type": "string",
+        "label": "Domain",
+        "desc": "Domain name (24 chars max)",
+        "size": 12
+      },
+      {
+        "name": "HostNam",
+        "type": "string",
+        "label": "Host Name",
+        "desc": "Host name (24 chars max)",
+        "size": 12
+      },
+      {
+        "name": "Pad",
+        "type": "pad"
+      }
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "group": {
+    "id": 18,
+    "name": "model_18",
+    "desc": "Include this model to support a cellular interface link",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 18
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "Name",
+        "desc": "Interface name",
+        "size": 4
+      },
+      {
+        "name": "IMEI",
+        "type": "uint32",
+        "label": "IMEI",
+        "desc": "International Mobile Equipment Identifier for the interface"
+      },
+      {
+        "name": "APN",
+        "type": "string",
+        "label": "APN",
+        "desc": "Access Point Name for the interface",
+        "size": 4
+      },
+      {
+        "name": "Num",
+        "type": "string",
+        "label": "Number",
+        "desc": "Phone number for the interface",
+        "size": 6
+      },
+      {
+        "name": "Pin",
+        "type": "string",
+        "label": "PIN",
+        "desc": "Personal Identification Number for the interface",
+        "size": 6
+      }
+    ]
+  }
+}

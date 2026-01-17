@@ -1,0 +1,73 @@
+{
+  "group": {
+    "id": 713,
+    "name": "DERStorageCapacity",
+    "desc": "DER storage capacity.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER storage capacity model ID.",
+        "value": 713
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER storage capacity model length.",
+        "value": 7
+      },
+      {
+        "name": "WHRtg",
+        "type": "uint16",
+        "label": "Energy Rating",
+        "desc": "Energy rating of the DER storage.",
+        "units": "WH",
+        "sf": "WH_SF"
+      },
+      {
+        "name": "WHAvail",
+        "type": "uint16",
+        "label": "Energy Available",
+        "desc": "Energy available of the DER storage (WHAvail = WHRtg * SoC * SoH)",
+        "units": "WH",
+        "sf": "WH_SF"
+      },
+      {
+        "name": "SoC",
+        "type": "uint16",
+        "label": "State of Charge",
+        "desc": "State of charge of the DER storage.",
+        "units": "Pct",
+        "sf": "Pct_SF"
+      },
+      {
+        "name": "SoH",
+        "type": "uint16",
+        "label": "State of Health",
+        "desc": "State of health of the DER storage.",
+        "units": "Pct",
+        "sf": "Pct_SF"
+      },
+      {
+        "name": "Sta",
+        "type": "enum16",
+        "label": "Status",
+        "desc": "Storage status."
+      },
+      {
+        "name": "WH_SF",
+        "type": "sunssf",
+        "label": "Energy Scale Factor",
+        "desc": "Scale factor for energy capacity."
+      },
+      {
+        "name": "Pct_SF",
+        "type": "sunssf",
+        "label": "Percent Scale Factor",
+        "desc": "Scale factor for percentage."
+      }
+    ]
+  }
+}

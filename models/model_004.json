@@ -1,0 +1,284 @@
+{
+  "group": {
+    "id": 4,
+    "name": "model_4.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 4
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "RqSeq",
+        "type": "uint16",
+        "label": "Request Sequence",
+        "desc": "Sequence number from the request"
+      },
+      {
+        "name": "Sts",
+        "type": "enum16",
+        "label": "Status",
+        "desc": "Status of last read operation"
+      },
+      {
+        "name": "X",
+        "type": "uint16",
+        "label": "X",
+        "desc": "Number of values from the request"
+      },
+      {
+        "name": "Val1",
+        "type": "uint16",
+        "label": "Value1",
+        "desc": "Copy of value from register Off1."
+      },
+      {
+        "name": "Val2",
+        "type": "uint16"
+      },
+      {
+        "name": "Val3",
+        "type": "uint16"
+      },
+      {
+        "name": "Val4",
+        "type": "uint16"
+      },
+      {
+        "name": "Val5",
+        "type": "uint16"
+      },
+      {
+        "name": "Val6",
+        "type": "uint16"
+      },
+      {
+        "name": "Val7",
+        "type": "uint16"
+      },
+      {
+        "name": "Val8",
+        "type": "uint16"
+      },
+      {
+        "name": "Val9",
+        "type": "uint16"
+      },
+      {
+        "name": "Val10",
+        "type": "uint16"
+      },
+      {
+        "name": "Val11",
+        "type": "uint16"
+      },
+      {
+        "name": "Val12",
+        "type": "uint16"
+      },
+      {
+        "name": "Val13",
+        "type": "uint16"
+      },
+      {
+        "name": "Val14",
+        "type": "uint16"
+      },
+      {
+        "name": "Val15",
+        "type": "uint16"
+      },
+      {
+        "name": "Val16",
+        "type": "uint16"
+      },
+      {
+        "name": "Val17",
+        "type": "uint16"
+      },
+      {
+        "name": "Val18",
+        "type": "uint16"
+      },
+      {
+        "name": "Val19",
+        "type": "uint16"
+      },
+      {
+        "name": "Val20",
+        "type": "uint16"
+      },
+      {
+        "name": "Val21",
+        "type": "uint16"
+      },
+      {
+        "name": "Val22",
+        "type": "uint16"
+      },
+      {
+        "name": "Val23",
+        "type": "uint16"
+      },
+      {
+        "name": "Val24",
+        "type": "uint16"
+      },
+      {
+        "name": "Val25",
+        "type": "uint16"
+      },
+      {
+        "name": "Val26",
+        "type": "uint16"
+      },
+      {
+        "name": "Val27",
+        "type": "uint16"
+      },
+      {
+        "name": "Val28",
+        "type": "uint16"
+      },
+      {
+        "name": "Val29",
+        "type": "uint16"
+      },
+      {
+        "name": "Val30",
+        "type": "uint16"
+      },
+      {
+        "name": "Val31",
+        "type": "uint16"
+      },
+      {
+        "name": "Val32",
+        "type": "uint16"
+      },
+      {
+        "name": "Val33",
+        "type": "uint16"
+      },
+      {
+        "name": "Val34",
+        "type": "uint16"
+      },
+      {
+        "name": "Val35",
+        "type": "uint16"
+      },
+      {
+        "name": "Val36",
+        "type": "uint16"
+      },
+      {
+        "name": "Val37",
+        "type": "uint16"
+      },
+      {
+        "name": "Val38",
+        "type": "uint16"
+      },
+      {
+        "name": "Val39",
+        "type": "uint16"
+      },
+      {
+        "name": "Val40",
+        "type": "uint16"
+      },
+      {
+        "name": "Val41",
+        "type": "uint16"
+      },
+      {
+        "name": "Val42",
+        "type": "uint16"
+      },
+      {
+        "name": "Val43",
+        "type": "uint16"
+      },
+      {
+        "name": "Val44",
+        "type": "uint16"
+      },
+      {
+        "name": "Val45",
+        "type": "uint16"
+      },
+      {
+        "name": "Val46",
+        "type": "uint16"
+      },
+      {
+        "name": "Val47",
+        "type": "uint16"
+      },
+      {
+        "name": "Val48",
+        "type": "uint16"
+      },
+      {
+        "name": "Val49",
+        "type": "uint16"
+      },
+      {
+        "name": "Val50",
+        "type": "uint16"
+      },
+      {
+        "name": "Ts",
+        "type": "uint32",
+        "label": "Timestamp",
+        "desc": "Timestamp value is the number of seconds since January 1, 2000"
+      },
+      {
+        "name": "Ms",
+        "type": "uint16",
+        "label": "Milliseconds",
+        "desc": "Millisecond counter 0-999"
+      },
+      {
+        "name": "Seq",
+        "type": "uint16",
+        "label": "Sequence",
+        "desc": "Sequence number of response"
+      },
+      {
+        "name": "Alm",
+        "type": "enum16",
+        "label": "Alarm",
+        "desc": "Bitmask alarm code"
+      },
+      {
+        "name": "Alg",
+        "type": "enum16",
+        "label": "Algorithm",
+        "desc": "Algorithm used to compute the digital signature"
+      },
+      {
+        "name": "N",
+        "type": "uint16",
+        "label": "N",
+        "desc": "Number of registers comprising the digital signature."
+      },
+      {
+        "name": "DS",
+        "type": "uint16",
+        "label": "DS",
+        "desc": "Digital Signature"
+      }
+    ]
+  }
+}

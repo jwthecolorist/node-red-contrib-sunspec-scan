@@ -1,0 +1,72 @@
+{
+  "group": {
+    "id": 17,
+    "name": "model_17",
+    "desc": "Include this model for serial interface configuration support",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 17
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "Name",
+        "desc": "Interface name (8 chars)",
+        "size": 4
+      },
+      {
+        "name": "Rte",
+        "type": "uint32",
+        "label": "Rate",
+        "desc": "Interface baud rate in bits per second",
+        "units": "bps"
+      },
+      {
+        "name": "Bits",
+        "type": "uint16",
+        "label": "Bits",
+        "desc": "Number of data bits per character"
+      },
+      {
+        "name": "Pty",
+        "type": "enum16",
+        "label": "Parity",
+        "desc": "Bitmask value.  Parity setting"
+      },
+      {
+        "name": "Dup",
+        "type": "enum16",
+        "label": "Duplex",
+        "desc": "Enumerated value.  Duplex mode"
+      },
+      {
+        "name": "Flw",
+        "type": "enum16",
+        "label": "Flow Control",
+        "desc": "Flow Control Method"
+      },
+      {
+        "name": "Typ",
+        "type": "enum16",
+        "label": "Interface Type",
+        "desc": "Enumerated value.  Interface type"
+      },
+      {
+        "name": "Pcol",
+        "type": "enum16",
+        "label": "Protocol",
+        "desc": "Enumerated value. Serial protocol selection"
+      }
+    ]
+  }
+}

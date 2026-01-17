@@ -1,0 +1,53 @@
+{
+  "group": {
+    "id": 715,
+    "name": "DERCtl",
+    "desc": "DER Control",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER control model ID.",
+        "value": 715
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER control model length.",
+        "value": 7
+      },
+      {
+        "name": "LocRemCtl",
+        "type": "enum16",
+        "label": "Control Mode",
+        "desc": "DER control mode. Enumeration."
+      },
+      {
+        "name": "DERHb",
+        "type": "uint32",
+        "label": "DER Heartbeat",
+        "desc": "Value is incremented every second by the DER with periodic resets to zero."
+      },
+      {
+        "name": "ControllerHb",
+        "type": "uint32",
+        "label": "Controller Heartbeat",
+        "desc": "Value is incremented every second by the controller with periodic resets to zero."
+      },
+      {
+        "name": "AlarmReset",
+        "type": "uint16",
+        "label": "Alarm Reset",
+        "desc": "Used to reset any latched alarms. 1 = Reset."
+      },
+      {
+        "name": "OpCtl",
+        "type": "enum16",
+        "label": "Set Operation",
+        "desc": "Commands to PCS. Enumerated value."
+      }
+    ]
+  }
+}

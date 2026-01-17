@@ -1,0 +1,57 @@
+{
+  "group": {
+    "id": 302,
+    "name": "irradiance.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 302
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "GHI",
+        "type": "uint16",
+        "label": "GHI",
+        "desc": "Global Horizontal Irradiance",
+        "units": "W/m2"
+      },
+      {
+        "name": "POAI",
+        "type": "uint16",
+        "label": "POAI",
+        "desc": "Plane-of-Array Irradiance",
+        "units": "W/m2"
+      },
+      {
+        "name": "DFI",
+        "type": "uint16",
+        "label": "DFI",
+        "desc": "Diffuse Irradiance",
+        "units": "W/m2"
+      },
+      {
+        "name": "DNI",
+        "type": "uint16",
+        "label": "DNI",
+        "desc": "Direct Normal Irradiance",
+        "units": "W/m2"
+      },
+      {
+        "name": "OTI",
+        "type": "uint16",
+        "label": "OTI",
+        "desc": "Other Irradiance",
+        "units": "W/m2"
+      }
+    ]
+  }
+}

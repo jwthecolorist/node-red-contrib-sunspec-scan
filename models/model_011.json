@@ -1,0 +1,67 @@
+{
+  "group": {
+    "id": 11,
+    "name": "model_11",
+    "desc": "Include to support a wired ethernet port",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 11
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Spd",
+        "type": "uint16",
+        "label": "Ethernet Link Speed",
+        "desc": "Interface speed in Mb/s",
+        "units": "Mbps"
+      },
+      {
+        "name": "CfgSt",
+        "type": "bitfield16",
+        "label": "Interface Status Flags",
+        "desc": "Bitmask values Interface flags."
+      },
+      {
+        "name": "St",
+        "type": "enum16",
+        "label": "Link State",
+        "desc": "Enumerated value. State information for this interface"
+      },
+      {
+        "name": "MAC",
+        "type": "eui48",
+        "label": "MAC",
+        "desc": "IEEE MAC address of this interface"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "Name",
+        "desc": "Interface name (8 chars)",
+        "size": 4
+      },
+      {
+        "name": "Ctl",
+        "type": "bitfield16",
+        "label": "Control",
+        "desc": "Control flags"
+      },
+      {
+        "name": "FrcSpd",
+        "type": "uint16",
+        "label": "Forced Speed",
+        "desc": "Forced interface speed in Mb/s when AUTO is disabled",
+        "units": "Mbps"
+      }
+    ]
+  }
+}

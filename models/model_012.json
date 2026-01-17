@@ -1,0 +1,126 @@
+{
+  "group": {
+    "id": 12,
+    "name": "model_12",
+    "desc": "Include to support an IPv4 protocol stack on this interface",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 12
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "Nam",
+        "type": "string",
+        "label": "Name",
+        "desc": "Interface name",
+        "size": 4
+      },
+      {
+        "name": "CfgSt",
+        "type": "enum16",
+        "label": "Config Status",
+        "desc": "Enumerated value.  Configuration status"
+      },
+      {
+        "name": "ChgSt",
+        "type": "bitfield16",
+        "label": "Change Status",
+        "desc": "Bitmask value.  A configuration change is pending"
+      },
+      {
+        "name": "Cap",
+        "type": "bitfield16",
+        "label": "Config Capability",
+        "desc": "Bitmask value. Identify capable sources of configuration"
+      },
+      {
+        "name": "Cfg",
+        "type": "enum16",
+        "label": "IPv4 Config",
+        "desc": "Enumerated value.  Configuration method used."
+      },
+      {
+        "name": "Ctl",
+        "type": "enum16",
+        "label": "Control",
+        "desc": "Configure use of services"
+      },
+      {
+        "name": "Addr",
+        "type": "string",
+        "label": "IP",
+        "desc": "IPv4 numeric address as a dotted string xxx.xxx.xxx.xxx",
+        "size": 8
+      },
+      {
+        "name": "Msk",
+        "type": "string",
+        "label": "Netmask",
+        "desc": "IPv4 numeric netmask as a dotted string xxx.xxx.xxx.xxx",
+        "size": 8
+      },
+      {
+        "name": "Gw",
+        "type": "string",
+        "label": "Gateway",
+        "desc": "IPv4 numeric gateway address as a dotted string xxx.xxx.xxx.xxx",
+        "size": 8
+      },
+      {
+        "name": "DNS1",
+        "type": "string",
+        "label": "DNS1",
+        "desc": "IPv4 numeric DNS address as a dotted string xxx.xxx.xxx.xxx",
+        "size": 8
+      },
+      {
+        "name": "DNS2",
+        "type": "string",
+        "label": "DNS2",
+        "desc": "IPv4 numeric DNS address as a dotted string xxx.xxx.xxx.xxx",
+        "size": 8
+      },
+      {
+        "name": "NTP1",
+        "type": "string",
+        "label": "NTP1",
+        "desc": "IPv4 numeric NTP address as a dotted string xxx.xxx.xxx.xxx",
+        "size": 12
+      },
+      {
+        "name": "NTP2",
+        "type": "string",
+        "label": "NTP2",
+        "desc": "IPv4 numeric NTP address as a dotted string xxx.xxx.xxx.xxx",
+        "size": 12
+      },
+      {
+        "name": "DomNam",
+        "type": "string",
+        "label": "Domain",
+        "desc": "Domain name (24 chars max)",
+        "size": 12
+      },
+      {
+        "name": "HostNam",
+        "type": "string",
+        "label": "Host Name",
+        "desc": "Host name (24 chars max)",
+        "size": 12
+      },
+      {
+        "name": "Pad",
+        "type": "pad"
+      }
+    ]
+  }
+}

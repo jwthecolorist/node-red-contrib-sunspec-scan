@@ -1,0 +1,135 @@
+{
+  "group": {
+    "id": 711,
+    "name": "DERFreqDroop.Ctl",
+    "desc": "Stored control sets.",
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "DER Frequency Droop model ID.",
+        "value": 711
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "DER Frequency Droop model length."
+      },
+      {
+        "name": "Ena",
+        "type": "enum16",
+        "label": "DER Frequency Droop Module Enable",
+        "desc": "DER Frequency-Watt (Frequency-Droop) control enable."
+      },
+      {
+        "name": "AdptCtlReq",
+        "type": "uint16",
+        "label": "Set Active Control Request",
+        "desc": "Set active control. 0 = No active control."
+      },
+      {
+        "name": "AdptCtlRslt",
+        "type": "enum16",
+        "label": "Set Active Control Result",
+        "desc": "Result of last set active control operation."
+      },
+      {
+        "name": "NCtl",
+        "type": "uint16",
+        "label": "Stored Control Count",
+        "desc": "Number of stored controls supported."
+      },
+      {
+        "name": "RvrtTms",
+        "type": "uint32",
+        "label": "Reversion Timeout",
+        "desc": "Reversion time in seconds.  0 = No reversion time.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtRem",
+        "type": "uint32",
+        "label": "Reversion Time Left",
+        "desc": "Reversion time remaining in seconds.",
+        "units": "Secs"
+      },
+      {
+        "name": "RvrtCtl",
+        "type": "uint16",
+        "label": "Reversion Control",
+        "desc": "Default control after reversion timeout."
+      },
+      {
+        "name": "Db_SF",
+        "type": "sunssf",
+        "label": "Deadband Scale Factor",
+        "desc": "Deadband scale factor."
+      },
+      {
+        "name": "K_SF",
+        "type": "sunssf",
+        "label": "Frequency Change Scale Factor",
+        "desc": "Frequency change scale factor."
+      },
+      {
+        "name": "RspTms_SF",
+        "type": "sunssf",
+        "label": "Open-Loop Scale Factor",
+        "desc": "Open loop response time scale factor."
+      },
+      {
+        "name": "DbOf",
+        "type": "uint32",
+        "label": "Over-Frequency Deadband",
+        "desc": "The deadband value for over-frequency conditions in Hz.",
+        "units": "Hz",
+        "sf": "Db_SF"
+      },
+      {
+        "name": "DbUf",
+        "type": "uint32",
+        "label": "Under-Frequency Deadband",
+        "desc": "The deadband value for under-frequency conditions in Hz.",
+        "units": "Hz",
+        "sf": "Db_SF"
+      },
+      {
+        "name": "KOf",
+        "type": "uint16",
+        "label": "Over-Frequency Change Ratio",
+        "desc": "Frequency droop per-unit frequency change for over-frequency conditions corresponding to 1 per-unit power output change.",
+        "sf": "K_SF"
+      },
+      {
+        "name": "KUf",
+        "type": "uint16",
+        "label": "Under-Frequency Change Ratio",
+        "desc": "Frequency droop per-unit frequency change for under-frequency conditions corresponding to 1 per-unit power output change.",
+        "sf": "K_SF"
+      },
+      {
+        "name": "RspTms",
+        "type": "uint32",
+        "label": "Open-Loop Response Time",
+        "desc": "The open-loop response time in seconds.",
+        "units": "Secs",
+        "sf": "RspTms_SF"
+      },
+      {
+        "name": "PMin",
+        "type": "int16",
+        "label": "Minimum Active Power",
+        "desc": "The minimum active power output due to DER prime mover constraints, in percent of the DER active power rating. The valid range is -100 to 100. This setting applies only to the frequency droop control.",
+        "units": "Pct"
+      },
+      {
+        "name": "ReadOnly",
+        "type": "enum16",
+        "label": "Control Access",
+        "desc": "Control read-write access."
+      }
+    ]
+  }
+}

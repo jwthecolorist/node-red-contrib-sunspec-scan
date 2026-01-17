@@ -1,0 +1,325 @@
+{
+  "group": {
+    "id": 63001,
+    "name": "model_63001.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 63001
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "sunssf_1",
+        "type": "sunssf"
+      },
+      {
+        "name": "sunssf_2",
+        "type": "sunssf"
+      },
+      {
+        "name": "sunssf_3",
+        "type": "sunssf"
+      },
+      {
+        "name": "sunssf_4",
+        "type": "sunssf"
+      },
+      {
+        "name": "int16_1",
+        "type": "int16",
+        "sf": "sunssf_1"
+      },
+      {
+        "name": "int16_2",
+        "type": "int16",
+        "sf": "sunssf_2"
+      },
+      {
+        "name": "int16_3",
+        "type": "int16",
+        "sf": "sunssf_3"
+      },
+      {
+        "name": "int16_4",
+        "type": "int16",
+        "sf": "sunssf_4"
+      },
+      {
+        "name": "int16_5",
+        "type": "int16"
+      },
+      {
+        "name": "int16_u",
+        "type": "int16"
+      },
+      {
+        "name": "uint16_1",
+        "type": "uint16",
+        "sf": "sunssf_1"
+      },
+      {
+        "name": "uint16_2",
+        "type": "uint16",
+        "sf": "sunssf_2"
+      },
+      {
+        "name": "uint16_3",
+        "type": "uint16",
+        "sf": "sunssf_3"
+      },
+      {
+        "name": "uint16_4",
+        "type": "uint16",
+        "sf": "sunssf_4"
+      },
+      {
+        "name": "uint16_5",
+        "type": "uint16"
+      },
+      {
+        "name": "uint16_u",
+        "type": "uint16"
+      },
+      {
+        "name": "acc16",
+        "type": "acc16"
+      },
+      {
+        "name": "acc16_u",
+        "type": "acc16"
+      },
+      {
+        "name": "enum16",
+        "type": "enum16"
+      },
+      {
+        "name": "enum16_u",
+        "type": "enum16"
+      },
+      {
+        "name": "bitfield16",
+        "type": "bitfield16"
+      },
+      {
+        "name": "bitfield16_u",
+        "type": "bitfield16"
+      },
+      {
+        "name": "int32_1",
+        "type": "int32",
+        "sf": "sunssf_5"
+      },
+      {
+        "name": "int32_2",
+        "type": "int32",
+        "sf": "sunssf_6"
+      },
+      {
+        "name": "int32_3",
+        "type": "int32",
+        "sf": "sunssf_7"
+      },
+      {
+        "name": "int32_4",
+        "type": "int32"
+      },
+      {
+        "name": "int32_5",
+        "type": "int32"
+      },
+      {
+        "name": "int32_u",
+        "type": "int32"
+      },
+      {
+        "name": "uint32_1",
+        "type": "uint32",
+        "sf": "sunssf_5"
+      },
+      {
+        "name": "uint32_2",
+        "type": "uint32",
+        "sf": "sunssf_6"
+      },
+      {
+        "name": "uint32_3",
+        "type": "uint32",
+        "sf": "sunssf_7"
+      },
+      {
+        "name": "uint32_4",
+        "type": "uint32",
+        "sf": 1
+      },
+      {
+        "name": "uint32_5",
+        "type": "uint32"
+      },
+      {
+        "name": "uint32_u",
+        "type": "uint32"
+      },
+      {
+        "name": "acc32",
+        "type": "acc32"
+      },
+      {
+        "name": "acc32_u",
+        "type": "acc32"
+      },
+      {
+        "name": "enum32",
+        "type": "enum32"
+      },
+      {
+        "name": "enum32_u",
+        "type": "enum32"
+      },
+      {
+        "name": "bitfield32",
+        "type": "bitfield32"
+      },
+      {
+        "name": "bitfield32_u",
+        "type": "bitfield32"
+      },
+      {
+        "name": "ipaddr",
+        "type": "ipaddr"
+      },
+      {
+        "name": "ipaddr_u",
+        "type": "ipaddr"
+      },
+      {
+        "name": "int64",
+        "type": "int64"
+      },
+      {
+        "name": "int64_u",
+        "type": "int64"
+      },
+      {
+        "name": "acc64",
+        "type": "acc64"
+      },
+      {
+        "name": "acc64_u",
+        "type": "acc64"
+      },
+      {
+        "name": "ipv6addr",
+        "type": "ipv6addr"
+      },
+      {
+        "name": "ipv6addr_u",
+        "type": "ipv6addr"
+      },
+      {
+        "name": "float32",
+        "type": "float32"
+      },
+      {
+        "name": "float32_u",
+        "type": "float32"
+      },
+      {
+        "name": "string",
+        "type": "string",
+        "size": 16
+      },
+      {
+        "name": "string_u",
+        "type": "string",
+        "size": 16
+      },
+      {
+        "name": "sunssf_5",
+        "type": "sunssf"
+      },
+      {
+        "name": "sunssf_6",
+        "type": "sunssf"
+      },
+      {
+        "name": "sunssf_7",
+        "type": "sunssf"
+      },
+      {
+        "name": "pad_1",
+        "type": "pad"
+      },
+      {
+        "name": "sunssf_8",
+        "type": "sunssf"
+      },
+      {
+        "name": "int16_11",
+        "type": "int16",
+        "sf": "sunssf_8"
+      },
+      {
+        "name": "int16_12",
+        "type": "int16",
+        "sf": "sunssf_9"
+      },
+      {
+        "name": "int16_u",
+        "type": "int16"
+      },
+      {
+        "name": "uint16_11",
+        "type": "uint16",
+        "sf": "sunssf_8"
+      },
+      {
+        "name": "uint16_12",
+        "type": "uint16",
+        "sf": "sunssf_9"
+      },
+      {
+        "name": "uint16_13",
+        "type": "uint16"
+      },
+      {
+        "name": "uint16_u",
+        "type": "uint16"
+      },
+      {
+        "name": "int32",
+        "type": "int32",
+        "sf": "sunssf_1"
+      },
+      {
+        "name": "int32_u",
+        "type": "int32"
+      },
+      {
+        "name": "uint32",
+        "type": "uint32",
+        "sf": "sunssf_9"
+      },
+      {
+        "name": "uint32_u",
+        "type": "uint32"
+      },
+      {
+        "name": "sunssf_9",
+        "type": "sunssf"
+      },
+      {
+        "name": "pad_2",
+        "type": "pad"
+      }
+    ]
+  }
+}

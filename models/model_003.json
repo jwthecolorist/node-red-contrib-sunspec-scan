@@ -1,0 +1,272 @@
+{
+  "group": {
+    "id": 3,
+    "name": "model_3.repeating",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 3
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "X",
+        "type": "uint16",
+        "label": "X",
+        "desc": "Number of registers being requested"
+      },
+      {
+        "name": "Off1",
+        "type": "uint16",
+        "label": "Offset1",
+        "desc": "Offset of value to read"
+      },
+      {
+        "name": "Off2",
+        "type": "uint16"
+      },
+      {
+        "name": "Off3",
+        "type": "uint16"
+      },
+      {
+        "name": "Off4",
+        "type": "uint16"
+      },
+      {
+        "name": "Off5",
+        "type": "uint16"
+      },
+      {
+        "name": "Off6",
+        "type": "uint16"
+      },
+      {
+        "name": "Off7",
+        "type": "uint16"
+      },
+      {
+        "name": "Off8",
+        "type": "uint16"
+      },
+      {
+        "name": "Off9",
+        "type": "uint16"
+      },
+      {
+        "name": "Off10",
+        "type": "uint16"
+      },
+      {
+        "name": "Off11",
+        "type": "uint16"
+      },
+      {
+        "name": "Off12",
+        "type": "uint16"
+      },
+      {
+        "name": "Off13",
+        "type": "uint16"
+      },
+      {
+        "name": "Off14",
+        "type": "uint16"
+      },
+      {
+        "name": "Off15",
+        "type": "uint16"
+      },
+      {
+        "name": "Off16",
+        "type": "uint16"
+      },
+      {
+        "name": "Off17",
+        "type": "uint16"
+      },
+      {
+        "name": "Off18",
+        "type": "uint16"
+      },
+      {
+        "name": "Off19",
+        "type": "uint16"
+      },
+      {
+        "name": "Off20",
+        "type": "uint16"
+      },
+      {
+        "name": "Off21",
+        "type": "uint16"
+      },
+      {
+        "name": "Off22",
+        "type": "uint16"
+      },
+      {
+        "name": "Off23",
+        "type": "uint16"
+      },
+      {
+        "name": "Off24",
+        "type": "uint16"
+      },
+      {
+        "name": "Off25",
+        "type": "uint16"
+      },
+      {
+        "name": "Off26",
+        "type": "uint16"
+      },
+      {
+        "name": "Off27",
+        "type": "uint16"
+      },
+      {
+        "name": "Off28",
+        "type": "uint16"
+      },
+      {
+        "name": "Off29",
+        "type": "uint16"
+      },
+      {
+        "name": "Off30",
+        "type": "uint16"
+      },
+      {
+        "name": "Off31",
+        "type": "uint16"
+      },
+      {
+        "name": "Off32",
+        "type": "uint16"
+      },
+      {
+        "name": "Off33",
+        "type": "uint16"
+      },
+      {
+        "name": "Off34",
+        "type": "uint16"
+      },
+      {
+        "name": "Off35",
+        "type": "uint16"
+      },
+      {
+        "name": "Off36",
+        "type": "uint16"
+      },
+      {
+        "name": "Off37",
+        "type": "uint16"
+      },
+      {
+        "name": "Off38",
+        "type": "uint16"
+      },
+      {
+        "name": "Off39",
+        "type": "uint16"
+      },
+      {
+        "name": "Off40",
+        "type": "uint16"
+      },
+      {
+        "name": "Off41",
+        "type": "uint16"
+      },
+      {
+        "name": "Off42",
+        "type": "uint16"
+      },
+      {
+        "name": "Off43",
+        "type": "uint16"
+      },
+      {
+        "name": "Off44",
+        "type": "uint16"
+      },
+      {
+        "name": "Off45",
+        "type": "uint16"
+      },
+      {
+        "name": "Off46",
+        "type": "uint16"
+      },
+      {
+        "name": "Off47",
+        "type": "uint16"
+      },
+      {
+        "name": "Off48",
+        "type": "uint16"
+      },
+      {
+        "name": "Off49",
+        "type": "uint16"
+      },
+      {
+        "name": "Off50",
+        "type": "uint16"
+      },
+      {
+        "name": "Ts",
+        "type": "uint32",
+        "label": "Timestamp",
+        "desc": "Timestamp value is the number of seconds since January 1, 2000"
+      },
+      {
+        "name": "Ms",
+        "type": "uint16",
+        "label": "Milliseconds",
+        "desc": "Millisecond counter 0-999"
+      },
+      {
+        "name": "Seq",
+        "type": "uint16",
+        "label": "Sequence",
+        "desc": "Sequence number of request"
+      },
+      {
+        "name": "Role",
+        "type": "uint16",
+        "label": "Role",
+        "desc": "Digital Signature ID"
+      },
+      {
+        "name": "Alg",
+        "type": "enum16",
+        "label": "Algorithm",
+        "desc": "Algorithm used to compute the digital signature"
+      },
+      {
+        "name": "N",
+        "type": "uint16",
+        "label": "N",
+        "desc": "Number of registers comprising the digital signature."
+      },
+      {
+        "name": "DS",
+        "type": "uint16",
+        "label": "DS",
+        "desc": "Digital Signature"
+      }
+    ]
+  }
+}

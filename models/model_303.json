@@ -1,0 +1,30 @@
+{
+  "group": {
+    "id": 303,
+    "name": "bom_temp.temp",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 303
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "TmpBOM",
+        "type": "int16",
+        "label": "Temp",
+        "desc": "Back of module temperature measurement",
+        "units": "C",
+        "sf": -1
+      }
+    ]
+  }
+}

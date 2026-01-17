@@ -1,0 +1,32 @@
+{
+  "group": {
+    "id": 806,
+    "name": "flow_battery.battery_string",
+    "desc": null,
+    "points": [
+      {
+        "name": "ID",
+        "type": "uint16",
+        "label": "Model ID",
+        "desc": "Model identifier",
+        "value": 806
+      },
+      {
+        "name": "L",
+        "type": "uint16",
+        "label": "Model Length",
+        "desc": "Model length"
+      },
+      {
+        "name": "BatTBD",
+        "type": "uint16",
+        "label": "Battery Points To Be Determined"
+      },
+      {
+        "name": "BatStTBD",
+        "type": "uint16",
+        "label": "Battery String Points To Be Determined"
+      }
+    ]
+  }
+}
