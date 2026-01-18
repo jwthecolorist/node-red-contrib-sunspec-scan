@@ -1,13 +1,21 @@
 {
-  "name": "red-contrib-sunspec-scan",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "node-red-contrib-sunspec-scan",
+  "version": "1.1.0",
+  "description": "A Node-RED node for scanning, discovering, and reading/writing to SunSpec Modbus devices (inverters, storage, meters). Supports auto-discovery and scaling.",
+  "main": "sunspec-scan.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "node-red",
+    "sunspec",
+    "modbus",
+    "pv",
+    "solar",
+    "inverter",
+    "storage"
+  ],
+  "author": "JW The Colorist",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {

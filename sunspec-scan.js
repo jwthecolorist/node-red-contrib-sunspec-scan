@@ -23,8 +23,11 @@
 
 module.exports = function (RED) {
     const ModbusRTU = require("modbus-serial");
+    const defaultBrowserId = require("default-browser-id");
     const fs = require('fs-extra');
     const path = require('path');
+    const ConnectionManager = require('./connection-manager');
+    const connManager = new ConnectionManager();
     const discovery = require('./discovery');
     const CONST = require('./constants');
     const utils = require('./utils');
@@ -345,6 +348,7 @@ module.exports = function (RED) {
                 addr += 2 + len;
             }
         } catch (e) { console.log("Scan Model Error", e); } finally {
+            client.close();
         }
         return foundModels;
     }
@@ -743,11 +747,28 @@ module.exports = function (RED) {
     }
 
     // --- Write Functionality ---
-    async function writeSinglePoint(node, models, ip, port, unitId, modelId, pointId, value, timeout) {
-        const client = new ModbusRTU();
+    async function writeSinglePoint(node, models, ip, port, unitId, modelId, pointName, value, timeout) {
+        // Use Pooled Connection
+        let client;
         try {
-            await client.connectTCP(ip, { port: port });
-            client.setID(unitId);
+            client = await connManager.getClient(ip, port, unitId, timeout);
+        } catch (connErr) {
+            throw new Error(`Write Connection failed: ${connErr.message}`);
+        }
+
+        try {
+            // Look up Point Definition to check for Unit ID Override
+            let pointDef = null;
+            if (models[modelId] && models[modelId].group && models[modelId].group.points) {
+                pointDef = models[modelId].group.points.find(p => p.name === pointName);
+            }
+
+            // Handle Override or Default Unit ID
+            let targetUnitId = unitId;
+            if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
+
+            // Ensure ID is set (pooled client might have changed it)
+            await client.setID(targetUnitId);
             client.setTimeout(timeout || 2000);
 
             // 1. Resolve Model Address
@@ -771,8 +792,8 @@ module.exports = function (RED) {
             // 2. Get Point Definition
             if (!models[modelId]) throw new Error(`Model definition for ${modelId} missing`);
             const modelDef = models[modelId].group;
-            const pointDef = modelDef.points.find(p => p.name === pointId);
-            if (!pointDef) throw new Error(`Point ${pointId} not found in model`);
+            // pointDef is already defined above
+            if (!pointDef) throw new Error(`Point ${pointName} not found in model`);
 
             // Calculate Offset Dynamically (if missing from def)
             let pointOffset = 0;
@@ -780,7 +801,7 @@ module.exports = function (RED) {
                 pointOffset = pointDef.offset;
             } else {
                 for (const p of modelDef.points) {
-                    if (p.name === pointId) break;
+                    if (p.name === pointName) break;
                     // Skip Header Points (ID and L) as modelAddr is already shifted by 2
                     if (p.name === 'ID' || p.name === 'L') continue;
 
@@ -830,17 +851,17 @@ module.exports = function (RED) {
             }
 
             // 5. Execute Write
-            const addr = modelAddr + pointOffset;
-            await client.writeRegisters(addr, buffer);
+            const finalAddr = modelAddr + pointOffset;
+            // Write
+            await client.writeRegisters(finalAddr, buffer);
+            node.warn(`[SunSpec Write] Success: Wrote ${value} to ${modelId}:${pointName} (@${finalAddr})`);
+            return true;
 
-            // Success
-            return val;
-
-        } catch (e) {
-            throw e;
-        } finally {
-            client.close();
+        } catch (err) {
+            connManager.reportError(ip, port, err);
+            throw err;
         }
+        // DO NOT CLOSE
     }
     // --- Optimized Multi-Read ---
     async function readMultiplePoints(node, models, ip, port, unitId, items, timeout) {
@@ -1038,12 +1059,13 @@ module.exports = function (RED) {
      * @throws {SunSpecPointNotFoundError} If point not found in model
      */
     async function readSinglePoint(node, models, ip, port, unitId, modelId, pointName, timeout) {
-        const client = new ModbusRTU();
-        // Prevent unhandled error events from crashing the process
-        client.on('error', (err) => {
-            // Log but don't throw, as the promise chain will likely reject anyway
-            // console.log(`[SunSpec Worker] Client Error: ${err.message}`);
-        });
+        // Use Pooled Connection
+        let client;
+        try {
+            client = await connManager.getClient(ip, port, unitId, timeout);
+        } catch (connErr) {
+            throw new Error(`Connection failed to ${ip}:${port} - ${connErr.message}`);
+        }
 
         try {
             // Look up Point Definition to check for Unit ID Override
@@ -1052,18 +1074,12 @@ module.exports = function (RED) {
                 pointDef = models[modelId].group.points.find(p => p.name === pointName);
             }
 
-            // Connection with timeout
-            await utils.withTimeout(
-                client.connectTCP(ip, { port: port }),
-                timeout || CONST.CONNECTION_TIMEOUT,
-                'TCP connection'
-            );
-
             // Handle Override or Default Unit ID
             let targetUnitId = unitId;
             if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
 
-            client.setID(targetUnitId);
+            // Ensure ID is set (pooled client might have changed it)
+            await client.setID(targetUnitId);
             client.setTimeout(timeout || CONST.DEFAULT_TIMEOUT);
 
             const cacheKey = `${ip}:${unitId}`;
@@ -1126,11 +1142,7 @@ module.exports = function (RED) {
 
             throw new Error(errorMsg);
         } finally {
-            try {
-                client.close();
-            } catch (e) {
-                // Ignore close errors
-            }
+            // DO NOT CLOSE CLIENT - Leave it for the pool
         }
     }
 
