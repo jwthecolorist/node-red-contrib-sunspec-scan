@@ -1,0 +1,3297 @@
+{
+  "group": {
+    "name": "conext_xw_503",
+    "label": "Conext XW (Port 503)",
+    "points": [
+      {
+        "name": "DeviceName",
+        "label": "Device Name",
+        "type": "string",
+        "access": "rw",
+        "offset": 0,
+        "len": 8
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 8,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 9,
+        "len": 1
+      },
+      {
+        "name": "FGANumber",
+        "label": "FGA Number",
+        "type": "string",
+        "access": "r",
+        "offset": 10,
+        "len": 10
+      },
+      {
+        "name": "UniqueIDNumber",
+        "label": "Unique ID Number",
+        "type": "uint32",
+        "access": "r",
+        "offset": 20,
+        "len": 2
+      },
+      {
+        "name": "FirmwareVersion",
+        "label": "Firmware Version",
+        "type": "uint32",
+        "access": "r",
+        "offset": 30,
+        "len": 2
+      },
+      {
+        "name": "ModbusSlaveAddressPort503",
+        "label": "Modbus Slave Address (Port 503)",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 40,
+        "len": 1
+      },
+      {
+        "name": "DeviceNumber",
+        "label": "Device Number",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 41,
+        "len": 1
+      },
+      {
+        "name": "SystemInstance",
+        "label": "System Instance",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 42,
+        "len": 1
+      },
+      {
+        "name": "HardwareSerialNumber",
+        "label": "Hardware Serial Number",
+        "type": "string",
+        "access": "r",
+        "offset": 43,
+        "len": 16
+      },
+      {
+        "name": "ConfigurationStatus",
+        "label": "Configuration Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 59,
+        "len": 1
+      },
+      {
+        "name": "ConfigurationRefreshCounter",
+        "label": "Configuration Refresh Counter",
+        "type": "uint32",
+        "access": "r",
+        "offset": 60,
+        "len": 2
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 62,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 63,
+        "len": 1
+      },
+      {
+        "name": "DeviceState",
+        "label": "Device State",
+        "type": "uint16",
+        "access": "r",
+        "offset": 64,
+        "len": 1
+      },
+      {
+        "name": "DevicePresent",
+        "label": "Device Present",
+        "type": "uint16",
+        "access": "r",
+        "offset": 65,
+        "len": 1
+      },
+      {
+        "name": "FaultBitmap0",
+        "label": "Fault Bitmap 0",
+        "type": "uint16",
+        "access": "r",
+        "offset": 66,
+        "len": 1
+      },
+      {
+        "name": "FaultBitmap1",
+        "label": "Fault Bitmap 1",
+        "type": "uint16",
+        "access": "r",
+        "offset": 67,
+        "len": 1
+      },
+      {
+        "name": "FaultBitmap2",
+        "label": "Fault Bitmap 2",
+        "type": "uint16",
+        "access": "r",
+        "offset": 68,
+        "len": 1
+      },
+      {
+        "name": "FaultBitmap3",
+        "label": "Fault Bitmap 3",
+        "type": "uint16",
+        "access": "r",
+        "offset": 69,
+        "len": 1
+      },
+      {
+        "name": "WarningBitmap0",
+        "label": "Warning Bitmap 0",
+        "type": "uint16",
+        "access": "r",
+        "offset": 70,
+        "len": 1
+      },
+      {
+        "name": "InverterEnabledStatus",
+        "label": "Inverter Enabled Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 71,
+        "len": 1
+      },
+      {
+        "name": "ChargerEnabledStatus",
+        "label": "Charger Enabled Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 72,
+        "len": 1
+      },
+      {
+        "name": "SellEnabledStatus",
+        "label": "Sell Enabled Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 73,
+        "len": 1
+      },
+      {
+        "name": "ForcedSell",
+        "label": "Forced Sell",
+        "type": "uint16",
+        "access": "r",
+        "offset": 74,
+        "len": 1
+      },
+      {
+        "name": "ActiveFaults",
+        "label": "Active Faults",
+        "type": "uint16",
+        "access": "r",
+        "offset": 75,
+        "len": 1
+      },
+      {
+        "name": "ActiveWarnings",
+        "label": "Active Warnings",
+        "type": "uint16",
+        "access": "r",
+        "offset": 76,
+        "len": 1
+      },
+      {
+        "name": "ChargeModeStatus",
+        "label": "Charge Mode Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 77,
+        "len": 1
+      },
+      {
+        "name": "ConfigurationErrors",
+        "label": "Configuration Errors",
+        "type": "uint32",
+        "access": "r",
+        "offset": 78,
+        "len": 2
+      },
+      {
+        "name": "DCVoltage",
+        "label": "DC Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 80,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "DCCurrent",
+        "label": "DC Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 82,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "DCPower",
+        "label": "DC Power",
+        "type": "sint32",
+        "access": "r",
+        "offset": 84,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "BatteryTemperature",
+        "label": "Battery Temperature",
+        "type": "uint16",
+        "access": "r",
+        "offset": 86,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "degC"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 87,
+        "len": 1
+      },
+      {
+        "name": "InvertDCCurrent",
+        "label": "Invert DC Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 88,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "InvertDCPower",
+        "label": "Invert DC Power",
+        "type": "uint32",
+        "access": "r",
+        "offset": 90,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "ChargeDCCurrent",
+        "label": "Charge DC Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 92,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "ChargeDCPower",
+        "label": "Charge DC Power",
+        "type": "uint32",
+        "access": "r",
+        "offset": 94,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "ChargeDCPowerPercentage",
+        "label": "Charge DC Power Percentage",
+        "type": "uint16",
+        "access": "r",
+        "offset": 96,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "AC1Frequency",
+        "label": "AC1 Frequency",
+        "type": "uint16",
+        "access": "r",
+        "offset": 97,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "AC1Voltage",
+        "label": "AC1 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 98,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC1Current",
+        "label": "AC1 Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 100,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC1Power",
+        "label": "AC1 Power",
+        "type": "sint32",
+        "access": "r",
+        "offset": 102,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "AC1InputPowerVA",
+        "label": "AC1 Input Power (VA)",
+        "type": "uint32",
+        "access": "r",
+        "offset": 104,
+        "len": 2,
+        "units": "VA"
+      },
+      {
+        "name": "AC1InputCurrent",
+        "label": "AC1 Input Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 106,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC1InputPowerW",
+        "label": "AC1 Input Power (W)",
+        "type": "uint32",
+        "access": "r",
+        "offset": 108,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "AC1L1Voltage",
+        "label": "AC1 L1 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 110,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC1L2Current",
+        "label": "AC1 L2 Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 112,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC1L2Voltage",
+        "label": "AC1 L2 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 114,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC1L1Current",
+        "label": "AC1 L1 Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 116,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC1VoltageQualified",
+        "label": "AC1 Voltage Qualified",
+        "type": "uint16",
+        "access": "r",
+        "offset": 118,
+        "len": 1
+      },
+      {
+        "name": "AC1FrequencyQualified",
+        "label": "AC1 Frequency Qualified",
+        "type": "uint16",
+        "access": "r",
+        "offset": 119,
+        "len": 1
+      },
+      {
+        "name": "AC1QualifiedDuration",
+        "label": "AC1 Qualified Duration",
+        "type": "uint32",
+        "access": "r",
+        "offset": 120,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "InverterStatus",
+        "label": "Inverter Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 122,
+        "len": 1
+      },
+      {
+        "name": "ChargerStatus",
+        "label": "Charger Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 123,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 124,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 125,
+        "len": 1
+      },
+      {
+        "name": "AC1Voltage",
+        "label": "AC1 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 126,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC1Current",
+        "label": "AC1 Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 128,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC1Frequency",
+        "label": "AC1 Frequency",
+        "type": "uint16",
+        "access": "r",
+        "offset": 130,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 131,
+        "len": 1
+      },
+      {
+        "name": "AC1OutputPowerW",
+        "label": "AC1 Output Power (W)",
+        "type": "uint32",
+        "access": "r",
+        "offset": 132,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "AC1OutputPowerVA",
+        "label": "AC1 Output Power (VA)",
+        "type": "uint32",
+        "access": "r",
+        "offset": 138,
+        "len": 2,
+        "units": "VA"
+      },
+      {
+        "name": "ACLoadVoltage",
+        "label": "AC Load Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 140,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "ACLoadL1Voltage",
+        "label": "AC Load L1 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 142,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "ACLoadL2Voltage",
+        "label": "AC Load L2 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 144,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "ACLoadL1Current",
+        "label": "AC Load L1 Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 146,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "ACLoadL2Current",
+        "label": "AC Load L2 Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 148,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "ACLoadCurrent",
+        "label": "AC Load Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 150,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "ACLoadFrequency",
+        "label": "AC Load Frequency",
+        "type": "uint16",
+        "access": "r",
+        "offset": 152,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 153,
+        "len": 1
+      },
+      {
+        "name": "ACLoadPower",
+        "label": "AC Load Power",
+        "type": "sint32",
+        "access": "r",
+        "offset": 154,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "ACLoadPowerVA",
+        "label": "AC Load Power (VA)",
+        "type": "sint32",
+        "access": "r",
+        "offset": 160,
+        "len": 2,
+        "units": "VA"
+      },
+      {
+        "name": "AC2Voltage",
+        "label": "AC2 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 162,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC2Current",
+        "label": "AC2 Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 164,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC2Frequency",
+        "label": "AC2 Frequency",
+        "type": "uint16",
+        "access": "r",
+        "offset": 166,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "AC2VoltageQualified",
+        "label": "AC2 Voltage Qualified",
+        "type": "uint16",
+        "access": "r",
+        "offset": 167,
+        "len": 1
+      },
+      {
+        "name": "AC2FrequencyQualified",
+        "label": "AC2 Frequency Qualified",
+        "type": "uint16",
+        "access": "r",
+        "offset": 168,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 169,
+        "len": 1
+      },
+      {
+        "name": "AC2QualifiedDuration",
+        "label": "AC2 Qualified Duration",
+        "type": "uint32",
+        "access": "r",
+        "offset": 170,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "AC2Power",
+        "label": "AC2 Power",
+        "type": "uint32",
+        "access": "r",
+        "offset": 172,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "AC2L1Voltage",
+        "label": "AC2 L1 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 178,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC2L1Current",
+        "label": "AC2 L1 Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 180,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC2L2Voltage",
+        "label": "AC2 L2 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 182,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC2L2Current",
+        "label": "AC2 L2 Current",
+        "type": "sint32",
+        "access": "r",
+        "offset": 184,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "AC2PowerApparent",
+        "label": "AC2 Power - Apparent",
+        "type": "uint32",
+        "access": "r",
+        "offset": 186,
+        "len": 2,
+        "units": "VA"
+      },
+      {
+        "name": "AuxiliaryOutputStatus",
+        "label": "Auxiliary Output Status",
+        "type": "uint16",
+        "access": "r",
+        "offset": 188,
+        "len": 1
+      },
+      {
+        "name": "AuxiliaryOutputOnReason",
+        "label": "Auxiliary Output On Reason",
+        "type": "uint16",
+        "access": "r",
+        "offset": 189,
+        "len": 1
+      },
+      {
+        "name": "AuxiliaryOutputOffReason",
+        "label": "Auxiliary Output Off Reason",
+        "type": "uint16",
+        "access": "r",
+        "offset": 190,
+        "len": 1
+      },
+      {
+        "name": "GridTieSellLevel",
+        "label": "Grid Tie Sell Level",
+        "type": "uint16",
+        "access": "w",
+        "offset": 191,
+        "len": 1
+      },
+      {
+        "name": "SwitchOperatingState",
+        "label": "Switch Operating State",
+        "type": "uint16",
+        "access": "r",
+        "offset": 192,
+        "len": 1
+      },
+      {
+        "name": "SwitchMode",
+        "label": "Switch Mode",
+        "type": "uint16",
+        "access": "r",
+        "offset": 193,
+        "len": 1
+      },
+      {
+        "name": "WarningBitmap1",
+        "label": "Warning Bitmap 1",
+        "type": "uint16",
+        "access": "r",
+        "offset": 194,
+        "len": 1
+      },
+      {
+        "name": "EnergyFromBatteryThisHour",
+        "label": "Energy From Battery This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 208,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryDischargeActiveThisHour",
+        "label": "Battery Discharge Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 210,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyFromBatteryToday",
+        "label": "Energy From Battery Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 212,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryDischargeActiveToday",
+        "label": "Battery Discharge Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 214,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyFromBatteryThisWeek",
+        "label": "Energy From Battery This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 216,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryDischargeActiveThisWeek",
+        "label": "Battery Discharge Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 218,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyFromBatteryThisMonth",
+        "label": "Energy From Battery This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 220,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryDischargeActiveThisMonth",
+        "label": "Battery Discharge Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 222,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyFromBatteryThisYear",
+        "label": "Energy From Battery This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 224,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryDischargeActiveThisYear",
+        "label": "Battery Discharge Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 226,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyFromBatteryLifetime",
+        "label": "Energy From Battery Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 228,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryDischargeActiveLifetime",
+        "label": "Battery Discharge Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 230,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyToBatteryThisHour",
+        "label": "Energy To Battery This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 232,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryChargeActiveThisHour",
+        "label": "Battery Charge Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 234,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyToBatteryToday",
+        "label": "Energy To Battery Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 236,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryChargeActiveToday",
+        "label": "Battery Charge Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 238,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyToBatteryThisWeek",
+        "label": "Energy To Battery This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 240,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryChargeActiveThisWeek",
+        "label": "Battery Charge Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 242,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyToBatteryThisMonth",
+        "label": "Energy To Battery This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 244,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryChargeActiveThisMonth",
+        "label": "Battery Charge Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 246,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyToBatteryThisYear",
+        "label": "Energy To Battery This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 248,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryChargeActiveThisYear",
+        "label": "Battery Charge Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 250,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "EnergyToBatteryLifetime",
+        "label": "Energy To Battery Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 252,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "BatteryChargeActiveLifetime",
+        "label": "Battery Charge Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 254,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridInputEnergyThisHour",
+        "label": "Grid Input Energy This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 256,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridInputActiveThisHour",
+        "label": "Grid Input Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 258,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridInputEnergyToday",
+        "label": "Grid Input Energy Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 260,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridInputActiveToday",
+        "label": "Grid Input Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 262,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridInputEnergyThisWeek",
+        "label": "Grid Input Energy This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 264,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridInputActiveThisWeek",
+        "label": "Grid Input Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 266,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridInputEnergyThisMonth",
+        "label": "Grid Input Energy This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 268,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridInputActiveThisMonth",
+        "label": "Grid Input Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 270,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridInputEnergyThisYear",
+        "label": "Grid Input Energy This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 272,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridInputActiveThisYear",
+        "label": "Grid Input Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 274,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridInputEnergyLifetime",
+        "label": "Grid Input Energy Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 276,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridInputActiveLifetime",
+        "label": "Grid Input Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 278,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridOutputEnergyThisHour",
+        "label": "Grid Output Energy This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 280,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridOutputActiveThisHour",
+        "label": "Grid Output Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 282,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridOutputEnergyToday",
+        "label": "Grid Output Energy Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 284,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridOutputActiveToday",
+        "label": "Grid Output Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 286,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridOutputEnergyThisWeek",
+        "label": "Grid Output Energy This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 288,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridOutputActiveThisWeek",
+        "label": "Grid Output Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 290,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridOutputEnergyThisMonth",
+        "label": "Grid Output Energy This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 292,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridOutputActiveThisMonth",
+        "label": "Grid Output Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 294,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridOutputEnergyThisYear",
+        "label": "Grid Output Energy This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 296,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridOutputActiveThisYear",
+        "label": "Grid Output Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 298,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GridOutputEnergyLifetime",
+        "label": "Grid Output Energy Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 300,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GridOutputActiveLifetime",
+        "label": "Grid Output Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 302,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "LoadOutputEnergyThisHour",
+        "label": "Load Output Energy This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 304,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "LoadOutputActiveThisHour",
+        "label": "Load Output Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 306,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "LoadOutputEnergyToday",
+        "label": "Load Output Energy Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 308,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "LoadOutputActiveToday",
+        "label": "Load Output Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 310,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "LoadOutputEnergyThisWeek",
+        "label": "Load Output Energy This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 312,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "LoadOutputActiveThisWeek",
+        "label": "Load Output Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 314,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "LoadOutputEnergyThisMonth",
+        "label": "Load Output Energy This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 316,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "LoadOutputActiveThisMonth",
+        "label": "Load Output Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 318,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "LoadOutputEnergyThisYear",
+        "label": "Load Output Energy This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 320,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "LoadOutputActiveThisYear",
+        "label": "Load Output Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 322,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "LoadOutputEnergyLifetime",
+        "label": "Load Output Energy Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 324,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "LoadOutputActiveLifetime",
+        "label": "Load Output Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 326,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GeneratorInputEnergyThisHour",
+        "label": "Generator Input Energy This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 328,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GeneratorInputActiveThisHour",
+        "label": "Generator Input Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 330,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GeneratorInputEnergyToday",
+        "label": "Generator Input Energy Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 332,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GeneratorInputActiveToday",
+        "label": "Generator Input Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 334,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GeneratorInputEnergyThisWeek",
+        "label": "Generator Input Energy This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 336,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GeneratorInputActiveThisWeek",
+        "label": "Generator Input Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 338,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GeneratorInputEnergyThisMonth",
+        "label": "Generator Input Energy This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 340,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GeneratorInputActiveThisMonth",
+        "label": "Generator Input Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 342,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GeneratorInputEnergyThisYear",
+        "label": "Generator Input Energy This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 344,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GeneratorInputActiveThisYear",
+        "label": "Generator Input Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 346,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "GeneratorInputEnergyLifetime",
+        "label": "Generator Input Energy Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 348,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "GeneratorInputActiveLifetime",
+        "label": "Generator Input Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 350,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "IdentifyEnable",
+        "label": "Identify Enable",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 352,
+        "len": 1
+      },
+      {
+        "name": "InverterEnableDisable",
+        "label": "Inverter Enable/Disable",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 353,
+        "len": 1
+      },
+      {
+        "name": "GridSupportSellEnableDisable",
+        "label": "Grid Support Sell Enable/Disable",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 354,
+        "len": 1
+      },
+      {
+        "name": "ForceSell",
+        "label": "Force Sell",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 355,
+        "len": 1
+      },
+      {
+        "name": "ChargerEnableDisable",
+        "label": "Charger Enable/Disable",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 356,
+        "len": 1
+      },
+      {
+        "name": "ForceChargerState",
+        "label": "Force Charger State",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 357,
+        "len": 1
+      },
+      {
+        "name": "OperatingMode",
+        "label": "Operating Mode",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 358,
+        "len": 1
+      },
+      {
+        "name": "Reset",
+        "label": "Reset",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 359,
+        "len": 1
+      },
+      {
+        "name": "Clear",
+        "label": "Clear",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 360,
+        "len": 1
+      },
+      {
+        "name": "SearchMode",
+        "label": "Search Mode",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 361,
+        "len": 1
+      },
+      {
+        "name": "InverterMode",
+        "label": "Inverter Mode",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 362,
+        "len": 1
+      },
+      {
+        "name": "RemotePowerOff",
+        "label": "Remote Power Off",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 363,
+        "len": 1
+      },
+      {
+        "name": "PowerSave",
+        "label": "Power Save",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 364,
+        "len": 1
+      },
+      {
+        "name": "SellDelay40Sec",
+        "label": "Sell Delay 40 Sec",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 365,
+        "len": 1
+      },
+      {
+        "name": "ChargeCycle",
+        "label": "Charge Cycle",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 366,
+        "len": 1
+      },
+      {
+        "name": "MaximumChargeRate",
+        "label": "Maximum Charge Rate",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 367,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "EqualizeNow",
+        "label": "Equalize Now",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 368,
+        "len": 1
+      },
+      {
+        "name": "DefaultBatteryTemperature",
+        "label": "Default Battery Temperature",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 369,
+        "len": 1
+      },
+      {
+        "name": "GFSEnable",
+        "label": "GFS Enable",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 370,
+        "len": 1
+      },
+      {
+        "name": "BatteryType",
+        "label": "Battery Type",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 371,
+        "len": 1
+      },
+      {
+        "name": "NominalBatteryVoltage",
+        "label": "Nominal Battery Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 372,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "BatteryBankCapacity",
+        "label": "Battery Bank Capacity",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 374,
+        "len": 1,
+        "units": "Ah"
+      },
+      {
+        "name": "BatteryTemperatureCoefficient",
+        "label": "Battery Temperature Coefficient",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 375,
+        "len": 1,
+        "staticScale": -1,
+        "units": "mV/degC"
+      },
+      {
+        "name": "GridSupportVoltage",
+        "label": "Grid Support Voltage",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 376,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "RechargeVoltage",
+        "label": "Recharge Voltage",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 378,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "LowBatteryCutOut",
+        "label": "Low Battery Cut Out",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 380,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "LowBatteryCutOutDelay",
+        "label": "Low Battery Cut Out Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 382,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 383,
+        "len": 1
+      },
+      {
+        "name": "LowBatteryTriggerSet",
+        "label": "Low Battery Trigger Set",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 384,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "LowBatteryTriggerSetDelay",
+        "label": "Low Battery Trigger Set Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 386,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 387,
+        "len": 1
+      },
+      {
+        "name": "LowBatteryTriggerClear",
+        "label": "Low Battery Trigger Clear",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 388,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "LowBatteryTriggerClearDelay",
+        "label": "Low Battery Trigger Clear Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 390,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "ACPriority",
+        "label": "AC Priority",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 391,
+        "len": 1
+      },
+      {
+        "name": "AC1BreakerSize",
+        "label": "AC1 Breaker Size",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 392,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "A"
+      },
+      {
+        "name": "AC2BreakerSize",
+        "label": "AC2 Breaker Size",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 393,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "A"
+      },
+      {
+        "name": "HighBatteryCutOut",
+        "label": "High Battery Cut Out",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 394,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "HighBatteryTriggerSet",
+        "label": "High Battery Trigger Set",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 396,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "HighBatteryTriggerSetDelay",
+        "label": "High Battery Trigger Set Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 398,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 399,
+        "len": 1
+      },
+      {
+        "name": "HighBatteryTriggerClear",
+        "label": "High Battery Trigger Clear",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 400,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "HighBatteryTriggerClearDelay",
+        "label": "High Battery Trigger Clear Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 402,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "MaximumSearchWatts",
+        "label": "Maximum Search Watts",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 403,
+        "len": 1,
+        "units": "W"
+      },
+      {
+        "name": "SearchDelay",
+        "label": "Search Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 404,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 405,
+        "len": 1
+      },
+      {
+        "name": "EqualizeVoltageSetPoint",
+        "label": "Equalize Voltage Set Point",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 406,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "EqualizeSupport",
+        "label": "Equalize Support",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 408,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 409,
+        "len": 1
+      },
+      {
+        "name": "BulkBoostVoltageSetPoint",
+        "label": "Bulk/Boost Voltage Set Point",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 410,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AbsorptionVoltageSetPoint",
+        "label": "Absorption Voltage Set Point",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 412,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AbsorptionTime",
+        "label": "Absorption Time",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 414,
+        "len": 1,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 415,
+        "len": 1
+      },
+      {
+        "name": "FloatVoltageSetPoint",
+        "label": "Float Voltage Set Point",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 416,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC1LowVoltage",
+        "label": "AC1 Low Voltage",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 418,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC2LowVoltage",
+        "label": "AC2 Low Voltage",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 420,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC1HighVoltage",
+        "label": "AC1 High Voltage",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 422,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "AC2HighVoltage",
+        "label": "AC2 High Voltage",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 424,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "ChargeBlockStart",
+        "label": "Charge Block Start",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 426,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "ChargeBlockStop",
+        "label": "Charge Block Stop",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 427,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "LoadShaveStop",
+        "label": "Load Shave Stop",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 428,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "LoadShaveStart",
+        "label": "Load Shave Start",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 429,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "AC1LowFrequency",
+        "label": "AC1 Low Frequency",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 430,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "AC2LowFrequency",
+        "label": "AC2 Low Frequency",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 431,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "AC1HighFrequency",
+        "label": "AC1 High Frequency",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 432,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "AC2HighFrequency",
+        "label": "AC2 High Frequency",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 433,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "LoadShave",
+        "label": "Load Shave",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 434,
+        "len": 1
+      },
+      {
+        "name": "GridSupport",
+        "label": "Grid Support",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 435,
+        "len": 1
+      },
+      {
+        "name": "MaximumSellAmps",
+        "label": "Maximum Sell Amps",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 436,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "LoadShaveAmps",
+        "label": "Load Shave Amps",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 438,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "GeneratorSupportEnable",
+        "label": "Generator Support Enable",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 440,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 441,
+        "len": 1
+      },
+      {
+        "name": "GeneratorSupportAmps",
+        "label": "Generator Support Amps",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 442,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "ManualAux",
+        "label": "Manual Aux",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 444,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 445,
+        "len": 1
+      },
+      {
+        "name": "AuxiliaryOutputActiveLevel",
+        "label": "Auxiliary Output Active Level",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 446,
+        "len": 1
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 447,
+        "len": 1
+      },
+      {
+        "name": "LowTemperatureTriggerSet",
+        "label": "Low Temperature Trigger Set",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 448,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "degC"
+      },
+      {
+        "name": "LowTemperatureTriggerSetDelay",
+        "label": "Low Temperature Trigger Set Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 450,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 451,
+        "len": 1
+      },
+      {
+        "name": "LowTemperatureTriggerClear",
+        "label": "Low Temperature Trigger Clear",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 452,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "degC"
+      },
+      {
+        "name": "LowTemperatureTriggerClearDelay",
+        "label": "Low Temperature Trigger Clear Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 454,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 455,
+        "len": 1
+      },
+      {
+        "name": "HighTemperatureTriggerSet",
+        "label": "High Temperature Trigger Set",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 456,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "degC"
+      },
+      {
+        "name": "HighTemperatureTriggerSetDelay",
+        "label": "High Temperature Trigger Set Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 458,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 459,
+        "len": 1
+      },
+      {
+        "name": "HighTemperatureTriggerClear",
+        "label": "High Temperature Trigger Clear",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 460,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "degC"
+      },
+      {
+        "name": "HighTemperatureTriggerClearDelay",
+        "label": "High Temperature Trigger Clear Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 462,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "RefreshConfigurationData",
+        "label": "Refresh Configuration Data",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 463,
+        "len": 1
+      },
+      {
+        "name": "ACOutputAssociationLoads",
+        "label": "AC Output Association (Loads)",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 464,
+        "len": 1
+      },
+      {
+        "name": "AC2AssociationGenerator",
+        "label": "AC2 Association (Generator)",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 465,
+        "len": 1
+      },
+      {
+        "name": "AC1AssociationGrid",
+        "label": "AC1 Association (Grid)",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 466,
+        "len": 1
+      },
+      {
+        "name": "BatteryAssociation",
+        "label": "Battery Association",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 467,
+        "len": 1
+      },
+      {
+        "name": "MaximumDischargeCurrent",
+        "label": "Maximum Discharge Current",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 468,
+        "len": 1,
+        "units": "A"
+      },
+      {
+        "name": "MaximumDischargeTimeInterval",
+        "label": "Maximum Discharge Time Interval",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 469,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "GVSEnableDisable",
+        "label": "GVS Enable/Disable",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 470,
+        "len": 1
+      },
+      {
+        "name": "MaximumReactiveCapacitivePower",
+        "label": "Maximum Reactive Capacitive Power",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 471,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "%"
+      },
+      {
+        "name": "MaximumReactiveInductivePower",
+        "label": "Maximum Reactive Inductive Power",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 472,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "%"
+      },
+      {
+        "name": "MaximumReactivePowerGridVoltage",
+        "label": "Maximum Reactive Power Grid Voltage",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 473,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "V"
+      },
+      {
+        "name": "MinimumReactivePowerGridVoltage",
+        "label": "Minimum Reactive Power Grid Voltage",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 474,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "V"
+      },
+      {
+        "name": "InductiveVoltageSetPoint",
+        "label": "Inductive Voltage Set Point",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 475,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "V"
+      },
+      {
+        "name": "CapacitiveVoltageSetPoint",
+        "label": "Capacitive Voltage Set Point",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 476,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "V"
+      },
+      {
+        "name": "VoltageThresholdtostartstopexcitation",
+        "label": "Voltage Threshold to start/stop excitation",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 477,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "V"
+      },
+      {
+        "name": "ExcitationControlDelayTime",
+        "label": "Excitation Control Delay Time",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 478,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 479,
+        "len": 1
+      },
+      {
+        "name": "APIFrequencyStartLevel",
+        "label": "API Frequency Start Level",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 480,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "APIFrequencyStopLevel",
+        "label": "API Frequency Stop Level",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 481,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "APIFrequencyRecoverLevel",
+        "label": "API Frequency Recover Level",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 482,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "APIGradientwithTime",
+        "label": "API Gradient with Time",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 483,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "APRFrequencyStartLevel",
+        "label": "APR Frequency Start Level",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 484,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "APRFrequencyStopLevel",
+        "label": "APR Frequency Stop Level",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 485,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "APRFrequencyRecoverLevel",
+        "label": "APR Frequency Recover Level",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 486,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "APRGradientwithFrequency",
+        "label": "APR Gradient with Frequency",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 487,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "APRGradientwithTime",
+        "label": "APR Gradient with Time",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 488,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 489,
+        "len": 1
+      },
+      {
+        "name": "StateofChargeLeveltoStop",
+        "label": "State of Charge Level to Stop",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 490,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "StateofChargeStopDelay",
+        "label": "State of Charge Stop Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 491,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "StateofChargeLeveltoStart",
+        "label": "State of Charge Level to Start",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 492,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "StateofChargeStartDelay",
+        "label": "State of Charge Start Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 493,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "GeneratorSupportPlus",
+        "label": "Generator Support Plus",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 494,
+        "len": 1
+      },
+      {
+        "name": "ACCoupling",
+        "label": "AC Coupling",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 495,
+        "len": 1
+      },
+      {
+        "name": "BatteryEnergyBalance",
+        "label": "Battery Energy Balance",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 496,
+        "len": 1
+      },
+      {
+        "name": "PeakLoadShavingDelay",
+        "label": "Peak Load Shaving Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 497,
+        "len": 1
+      },
+      {
+        "name": "LowBatteryCutOutHysteresis",
+        "label": "Low Battery Cut Out Hysteresis",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 498,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 500,
+        "len": 1
+      },
+      {
+        "name": "AC1TransferSwitchDelay",
+        "label": "AC1 Transfer Switch Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 501,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "AC2TransferSwitchDelay",
+        "label": "AC2 Transfer Switch Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 502,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "SellBlockStart",
+        "label": "Sell Block Start",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 503,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "SellBlockEnd",
+        "label": "Sell Block End",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 504,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "AuxiliaryOutputTriggerBlockStart",
+        "label": "Auxiliary Output Trigger Block Start",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 505,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "AuxiliaryOutputTriggerBlockEnd",
+        "label": "Auxiliary Output Trigger Block End",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 506,
+        "len": 1,
+        "units": "min"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 507,
+        "len": 1
+      },
+      {
+        "name": "HeatSinkHighTemperatureTriggerSet",
+        "label": "Heat Sink High Temperature Trigger Set",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 508,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "degC"
+      },
+      {
+        "name": "HeatSinkHighTemperatureTriggerSetDelay",
+        "label": "Heat Sink High Temperature Trigger Set Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 510,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "MaximumSellScalePercentage",
+        "label": "Maximum Sell Scale Percentage",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 511,
+        "len": 1,
+        "units": "%"
+      },
+      {
+        "name": "HeatSinkHighTemperatureTriggerClear",
+        "label": "Heat Sink High Temperature Trigger Clear",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 512,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "degC"
+      },
+      {
+        "name": "HeatSinkHighTemperatureTriggerClearDelay",
+        "label": "Heat Sink High Temperature Trigger Clear Delay",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 514,
+        "len": 1,
+        "staticScale": 0.01,
+        "units": "s"
+      },
+      {
+        "name": "reserved",
+        "label": "reserved",
+        "type": "uint16",
+        "access": "r",
+        "offset": 515,
+        "len": 1
+      },
+      {
+        "name": "AuxiliaryOutputTriggerSource",
+        "label": "Auxiliary Output Trigger Source",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 516,
+        "len": 2
+      },
+      {
+        "name": "RemoteSell",
+        "label": "Remote Sell",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 518,
+        "len": 1
+      },
+      {
+        "name": "ExternalTransferContactor",
+        "label": "External Transfer Contactor",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 519,
+        "len": 1
+      },
+      {
+        "name": "ACTransientOverVoltageDisconnect",
+        "label": "AC Transient Over Voltage Disconnect",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 520,
+        "len": 1
+      },
+      {
+        "name": "ExternalLoadSwitch",
+        "label": "External Load Switch",
+        "type": "uint16",
+        "access": "rw",
+        "offset": 521,
+        "len": 1
+      },
+      {
+        "name": "MaximumBulkChargeCurrent",
+        "label": "Maximum Bulk Charge Current",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 522,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "MaximumAbsorptionChargeCurrent",
+        "label": "Maximum Absorption Charge Current",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 524,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "MaximumFloatChargeCurrent",
+        "label": "Maximum Float Charge Current",
+        "type": "uint32",
+        "access": "rw",
+        "offset": 526,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "Generator1ACVoltage",
+        "label": "Generator (1) AC Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 576,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "Generator1ACCurrent",
+        "label": "Generator (1) AC Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 578,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "Generator1ACFrequency",
+        "label": "Generator (1) AC Frequency",
+        "type": "uint32",
+        "access": "r",
+        "offset": 580,
+        "len": 2,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "Generator1ACVoltageQualified",
+        "label": "Generator (1) AC Voltage Qualified",
+        "type": "uint32",
+        "access": "r",
+        "offset": 582,
+        "len": 2,
+        "staticScale": 2.2,
+        "units": "0.0See section"
+      },
+      {
+        "name": "Generator1ACFrequencyQualified",
+        "label": "Generator (1) AC Frequency Qualified",
+        "type": "uint32",
+        "access": "r",
+        "offset": 584,
+        "len": 2,
+        "staticScale": 2.2,
+        "units": "0.0See section"
+      },
+      {
+        "name": "Generator1ACQualifiedDuration",
+        "label": "Generator (1) AC Qualified Duration",
+        "type": "uint32",
+        "access": "r",
+        "offset": 586,
+        "len": 2,
+        "units": "0.0"
+      },
+      {
+        "name": "Generator1ACPower",
+        "label": "Generator (1) AC Power",
+        "type": "uint32",
+        "access": "r",
+        "offset": 588,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "Generator1ACL1Voltage",
+        "label": "Generator (1) AC L1 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 590,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "Generator1ACL1Current",
+        "label": "Generator (1) AC L1 Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 592,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "Generator1ACL2Voltage",
+        "label": "Generator (1) AC L2 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 594,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "Generator1ACL2Current",
+        "label": "Generator (1) AC L2 Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 596,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "Generator1ACPowerApparent",
+        "label": "Generator (1) AC Power - Apparent",
+        "type": "uint32",
+        "access": "r",
+        "offset": 598,
+        "len": 2,
+        "units": "VA0.0"
+      },
+      {
+        "name": "Generator2ACVoltage",
+        "label": "Generator (2) AC Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 600,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "Generator2ACCurrent",
+        "label": "Generator (2) AC Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 602,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "Generator2ACFrequency",
+        "label": "Generator (2) AC Frequency",
+        "type": "uint32",
+        "access": "r",
+        "offset": 604,
+        "len": 2,
+        "staticScale": 0.01,
+        "units": "Hz"
+      },
+      {
+        "name": "Generator2ACVoltageQualified",
+        "label": "Generator (2) AC Voltage Qualified",
+        "type": "uint32",
+        "access": "r",
+        "offset": 606,
+        "len": 2,
+        "staticScale": 2.2,
+        "units": "0.0See section"
+      },
+      {
+        "name": "Generator2ACFrequencyQualified",
+        "label": "Generator (2) AC Frequency Qualified",
+        "type": "uint32",
+        "access": "r",
+        "offset": 608,
+        "len": 2,
+        "staticScale": 2.2,
+        "units": "0.0See section"
+      },
+      {
+        "name": "Generator2ACQualifiedDuration",
+        "label": "Generator (2) AC Qualified Duration",
+        "type": "uint32",
+        "access": "r",
+        "offset": 610,
+        "len": 2,
+        "units": "0.0"
+      },
+      {
+        "name": "Generator2ACPower",
+        "label": "Generator (2) AC Power",
+        "type": "uint32",
+        "access": "r",
+        "offset": 612,
+        "len": 2,
+        "units": "W"
+      },
+      {
+        "name": "Generator2ACL1Voltage",
+        "label": "Generator (2) AC L1 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 614,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "Generator2ACL1Current",
+        "label": "Generator (2) AC L1 Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 616,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "Generator2ACL2Voltage",
+        "label": "Generator (2) AC L2 Voltage",
+        "type": "uint32",
+        "access": "r",
+        "offset": 618,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "V"
+      },
+      {
+        "name": "Generator2ACL2Current",
+        "label": "Generator (2) AC L2 Current",
+        "type": "uint32",
+        "access": "r",
+        "offset": 620,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "A"
+      },
+      {
+        "name": "Generator2ACPowerApparent",
+        "label": "Generator (2) AC Power - Apparent",
+        "type": "uint32",
+        "access": "r",
+        "offset": 622,
+        "len": 2,
+        "units": "VA0.0"
+      },
+      {
+        "name": "Generator1InputEnergyThisHour",
+        "label": "Generator (1) Input Energy This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 640,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator1InputActiveThisHour",
+        "label": "Generator (1) Input Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 642,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator1InputEnergyToday",
+        "label": "Generator (1) Input Energy Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 644,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator1InputActiveToday",
+        "label": "Generator (1) Input Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 646,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator1InputEnergyThisWeek",
+        "label": "Generator (1) Input Energy This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 648,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator1InputActiveThisWeek",
+        "label": "Generator (1) Input Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 650,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator1InputEnergyThisMonth",
+        "label": "Generator (1) Input Energy This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 652,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator1InputActiveThisMonth",
+        "label": "Generator (1) Input Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 654,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator1InputEnergyThisYear",
+        "label": "Generator (1) Input Energy This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 656,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator1InputActiveThisYear",
+        "label": "Generator (1) Input Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 658,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator1InputEnergyLifetime",
+        "label": "Generator (1) Input Energy Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 660,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator1InputActiveLifetime",
+        "label": "Generator (1) Input Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 662,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator2InputEnergyThisHour",
+        "label": "Generator (2) Input Energy This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 664,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator2InputActiveThisHour",
+        "label": "Generator (2) Input Active This Hour",
+        "type": "uint32",
+        "access": "r",
+        "offset": 666,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator2InputEnergyToday",
+        "label": "Generator (2) Input Energy Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 668,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator2InputActiveToday",
+        "label": "Generator (2) Input Active Today",
+        "type": "uint32",
+        "access": "r",
+        "offset": 670,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator2InputEnergyThisWeek",
+        "label": "Generator (2) Input Energy This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 672,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator2InputActiveThisWeek",
+        "label": "Generator (2) Input Active This Week",
+        "type": "uint32",
+        "access": "r",
+        "offset": 674,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator2InputEnergyThisMonth",
+        "label": "Generator (2) Input Energy This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 676,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator2InputActiveThisMonth",
+        "label": "Generator (2) Input Active This Month",
+        "type": "uint32",
+        "access": "r",
+        "offset": 678,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator2InputEnergyThisYear",
+        "label": "Generator (2) Input Energy This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 680,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator2InputActiveThisYear",
+        "label": "Generator (2) Input Active This Year",
+        "type": "uint32",
+        "access": "r",
+        "offset": 682,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "Generator2InputEnergyLifetime",
+        "label": "Generator (2) Input Energy Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 684,
+        "len": 2,
+        "staticScale": 0.001,
+        "units": "kWh"
+      },
+      {
+        "name": "Generator2InputActiveLifetime",
+        "label": "Generator (2) Input Active Lifetime",
+        "type": "uint32",
+        "access": "r",
+        "offset": 686,
+        "len": 2,
+        "units": "s"
+      },
+      {
+        "name": "XWPowerFactor",
+        "label": "XW Power Factor",
+        "type": "sint16",
+        "access": "w",
+        "offset": 688,
+        "len": 1,
+        "staticScale": 0.01
+      }
+    ]
+  }
+}

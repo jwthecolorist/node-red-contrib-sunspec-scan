@@ -37,33 +37,75 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
     const client = new ModbusRTU();
     const foundIds = [];
 
-    try {
-        await client.connectTCP(ip, { port: port });
-        client.setTimeout(timeout);
-
-        let idsToCheck = [];
-
-        if (Array.isArray(idsToCheckOverride) && idsToCheckOverride.length > 0) {
-            idsToCheck = idsToCheckOverride;
+    // Prioritize ID list based on Port
+    let idsToCheck = [];
+    if (Array.isArray(idsToCheckOverride) && idsToCheckOverride.length > 0) {
+        idsToCheck = idsToCheckOverride;
+    } else {
+        if (port == 503) {
+            // Conext Default Range 10-29. Add a buffer.
+            idsToCheck = [];
+            for (let i = 10; i <= 35; i++) idsToCheck.push(i);
+            // Also check standard ones just in case
+            idsToCheck.push(1, 2, 201);
         } else {
-            // Full Scan (Priority First)
+            // SunSpec/Standard Order
             idsToCheck = [1, 126, 2, 3, 4, 100, 200];
             for (let i = 1; i <= 247; i++) {
                 if (!idsToCheck.includes(i)) idsToCheck.push(i);
             }
         }
+    }
+
+    try {
+        await client.connectTCP(ip, { port: port });
+        client.setTimeout(timeout);
 
         for (const id of idsToCheck) {
             if (shouldStop && shouldStop()) break;
             client.setID(id);
+
+            // 1. Check SunSpec (Port 502 mainly, but maybe 503 too?)
             try {
-                // Try reading SunSpec Marker
                 const data = await client.readHoldingRegisters(40000, 2);
                 if (data.data[0] === 0x5375 && data.data[1] === 0x6e53) {
-                    foundIds.push(id);
-                    if (statusCallback) statusCallback(`Found ID ${id} at ${ip}`);
+                    foundIds.push({ id: id, type: 'sunspec' });
+                    if (statusCallback) statusCallback(`Found SunSpec ID ${id} at ${ip}`);
+                    continue;
                 }
             } catch (e) { }
+
+            // 2. Check SMA EDMM (Port 502 usually)
+            if (port != 503) {
+                try {
+                    const data = await client.readHoldingRegisters(30051, 2);
+                    const val = (data.data[0] << 16) | data.data[1];
+                    if (val === 8128 || val === 9397 || val === 19135) {
+                        foundIds.push({ id: id, type: 'sma_edmm' });
+                        if (statusCallback) statusCallback(`Found SMA ID ${id} at ${ip}`);
+                        continue;
+                    }
+                } catch (e) { }
+            }
+
+            // 3. Check Conext (Port 503 usually)
+            if (port == 503) {
+                try {
+                    // Reg 0 is Device Name (str16). Read 8 registers (16 chars).
+                    const data = await client.readHoldingRegisters(0, 8);
+                    // Check if it looks like a string (ASCII range)
+                    // First char should be alphanumeric?
+                    // Conext devices start with "XW", "MPPT", "Gateway"?
+                    // Or check "Device Name" existence.
+                    // Let's just assume valid read of Reg 0-7 implies Conext if on Port 503?
+                    // Or check specific substring?
+                    // The buffer will allow us to check.
+                    // For now, if read succeeds on Port 503 Reg 0, we assume Conext.
+                    foundIds.push({ id: id, type: 'conext_xw_503' });
+                    if (statusCallback) statusCallback(`Found Conext ID ${id} at ${ip}`);
+                    continue;
+                } catch (e) { }
+            }
         }
 
     } catch (e) {

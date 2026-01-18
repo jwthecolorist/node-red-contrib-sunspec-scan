@@ -42,6 +42,19 @@
         },
         oneditprepare: function () {
             const node = this;
+            let currentNetworkMap = {};
+
+            let savedDevices = [];
+
+            // Fetch Server Network Map immediately
+            $.getJSON('sunspec-scan/network', function (map) {
+                if (map) currentNetworkMap = map;
+                // Fetch Saved Devices
+                $.getJSON('sunspec-scan/devices', function (devs) {
+                    savedDevices = devs || [];
+                    populateDeviceSelect();
+                });
+            });
 
             // Tabs Logic
             const tabs = RED.tabs.create({
@@ -91,10 +104,14 @@
                 const $prog = $("#scan-progress-bar");
 
                 let ip = $("#node-input-ip").val();
-                const port = $("#node-input-port").val();
-                const timeout = $("#node-input-timeout").val();
+                // Validate port and timeout with sensible defaults
+                let port = parseInt($("#node-input-port").val()) || 502;
+                let timeout = parseInt($("#node-input-timeout").val()) || 2000;
                 const unitId = $("#node-input-unitId").val();
-                // const scanIds = removed;
+
+                // Validate range constraints
+                if (port < 1 || port > 65535) port = 502;
+                if (timeout < 100 || timeout > 30000) timeout = 2000;
 
                 // Default to All Local if empty
                 if (!ip) ip = "0.0.0.0/0";
@@ -125,15 +142,19 @@
                     }),
                     success: function (results) {
                         clearInterval(statusInterval);
-                        $btn.html('<i class="fa fa-search"></i> Scan').prop("disabled", false);
+                        $btn.html('<i class="fa fa-search"></i> Scan').prop("disabled", false).show();
                         $stopBtn.hide();
                         $prog.hide();
-                        populateDeviceSelect(results);
-                        RED.notify("Network scan complete. Found " + Object.keys(results).length + " devices.", "success");
+                        // Refresh Saved Devices list (as auto-save may have occurred)
+                        $.getJSON('sunspec-scan/devices', function (devs) {
+                            if (devs) savedDevices = devs;
+                            populateDeviceSelect(results);
+                            RED.notify("Network scan complete. Found " + Object.keys(results).length + " devices.", "success");
+                        });
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         clearInterval(statusInterval);
-                        $btn.html('<i class="fa fa-search"></i> Scan').prop("disabled", false);
+                        $btn.html('<i class="fa fa-search"></i> Scan').prop("disabled", false).show();
                         $stopBtn.hide();
                         $prog.hide();
                         if (textStatus !== 'abort') {
@@ -161,8 +182,7 @@
                 // Fallback if clicked before scan starts? Should remain hidden.
             });
 
-            // Global Cache (Shared across node instances in editor)
-            if (!window.sunspecScanCache) window.sunspecScanCache = {};
+            // Global Cache - REMOVED (Using currentNetworkMap from oneditprepare)
 
             // --- Dropdown Logic ---
 
@@ -174,12 +194,27 @@
                     .join(' ');
             }
 
+            let globalModelDefinitions = null;
+            $.getJSON('sunspec-scan/models', function (allModels) {
+                globalModelDefinitions = allModels;
+                // If we were waiting to populate, maybe re-trigger? 
+                // Mostly this loads fast enough before user clicks.
+            });
+
             function populateModelsDropdown(models, currentMod) {
                 const $mod = $("#node-input-selectedModel");
                 $mod.empty().append('<option value="">-- Select Model --</option>');
 
-                $.getJSON('sunspec-scan/models', function (allModels) {
-                    const sortedMids = Object.keys(models).sort((a, b) => parseInt(a) - parseInt(b));
+                // Logic to run population once data available
+                const runPopulate = (allModels) => {
+                    const sortedMids = Object.keys(models).sort((a, b) => {
+                        const na = parseInt(a);
+                        const nb = parseInt(b);
+                        if (isNaN(na) && isNaN(nb)) return a.localeCompare(b);
+                        if (isNaN(na)) return 1; // Strings at end
+                        if (isNaN(nb)) return -1;
+                        return na - nb;
+                    });
                     sortedMids.forEach(mid => {
                         if (mid === 'info') return;
                         const mDef = allModels[mid];
@@ -201,7 +236,17 @@
                     }
 
                     if (restored) $mod.trigger('change');
-                });
+                };
+
+                if (globalModelDefinitions) {
+                    runPopulate(globalModelDefinitions);
+                } else {
+                    // Fallback fetch if not ready (rare but possible on refresh)
+                    $.getJSON('sunspec-scan/models', function (allModels) {
+                        globalModelDefinitions = allModels;
+                        runPopulate(allModels);
+                    });
+                }
             }
 
             function populateDeviceSelect(scanResults) {
@@ -209,26 +254,39 @@
                 const currentVal = $dev.val();
                 $dev.empty().append('<option value="">-- Select Device --</option>');
 
-                // Update Global Cache
+                // Update Local Map from Scan Results
                 if (scanResults) {
                     for (const ip in scanResults) {
-                        window.sunspecScanCache[ip] = scanResults[ip];
+                        currentNetworkMap[ip] = scanResults[ip];
                     }
                 }
 
-                // If no results and cache empty, add ghost
-                if (!scanResults && Object.keys(window.sunspecScanCache).length === 0 && node.selectedDevice) {
-                    const ghostLabel = node.selectedDeviceLabel || node.selectedDevice;
-                    $dev.append($('<option>', { value: node.selectedDevice, text: ghostLabel, selected: true }));
-                    return;
+                // 1. Saved Devices Group
+                if (savedDevices.length > 0) {
+                    const group = $('<optgroup label="Saved Devices">');
+                    savedDevices.forEach(d => {
+                        const val = `${d.ip}:${d.unitId}`;
+                        // Use saved name or format
+                        group.append($('<option>', { value: val, text: d.name, 'data-port': d.port }));
+                    });
+                    $dev.append(group);
                 }
 
-                // Loop through cache
-                Object.keys(window.sunspecScanCache).forEach(function (ip) {
-                    const idMap = window.sunspecScanCache[ip];
+                // 2. Network/Discovered Devices
+                const netGroup = $('<optgroup label="Network Scan">');
+                let hasNet = false;
+
+                Object.keys(currentNetworkMap).forEach(function (ip) {
+                    const idMap = currentNetworkMap[ip];
                     if (!idMap) return;
 
                     Object.keys(idMap).forEach(function (id) {
+                        // Check if already in saved (by IP/ID)
+                        const isSaved = savedDevices.some(s => s.ip === ip && s.unitId == id);
+                        // Optional: Hide from network list if saved? Or show both?
+                        // Showing both is confusing. Let's filter.
+                        if (isSaved) return;
+
                         const models = idMap[id];
                         let label = "";
                         let combinedModel = "";
@@ -236,46 +294,43 @@
                         if (models && models.info) {
                             const mn = models.info.Mn || "";
                             const md = models.info.Md || "";
-
-                            if (md && /[0-9-]/.test(md)) {
-                                combinedModel = md;
-                            } else {
-                                let safeMn = mn.length > 2 ? mn.slice(2) : mn;
-                                combinedModel = safeMn + md;
-                            }
+                            if (mn || md) label = `${mn} ${md}`;
                         }
 
-                        if (!combinedModel || combinedModel.length === 0) combinedModel = "Unknown Device";
+                        // Fallback Label logic...
+                        if (!label) label = `Unknown Device`;
 
-                        if (models && models.info) {
-                            const sn = models.info.SN || "";
-                            const snShort = sn.length > 4 ? "..." + sn.slice(-4) : sn;
-                            label = `${combinedModel} (${snShort}) - ${ip}:${id}`;
-                        } else if (models) {
-                            const modelCount = Object.keys(models).length;
-                            label = `${ip}:${id} (${modelCount} models)`;
-                        } else {
-                            label = `${ip}:${id}`;
+                        // Models list
+                        if (models) {
+                            const mList = Object.keys(models).filter(m => m !== 'info').join(', ');
+                            if (mList) combinedModel = `(Models: ${mList})`;
                         }
 
-                        const val = `${ip}:${id}`;
-                        $dev.append($('<option>', { value: val, text: label }));
+                        const text = `${ip}:${id} - ${label} ${combinedModel}`;
+                        netGroup.append($('<option>', { value: `${ip}:${id}`, text: text }));
+                        hasNet = true;
                     });
                 });
 
-                // Restore Value
-                if (currentVal && $dev.find(`option[value='${currentVal}']`).length > 0) {
-                    $dev.val(currentVal);
-                } else if (node.selectedDevice) {
-                    if ($dev.find(`option[value='${node.selectedDevice}']`).length > 0) {
-                        $dev.val(node.selectedDevice);
-                    } else {
+                if (hasNet) $dev.append(netGroup);
+
+                // If currently selected is NOT in list (ghost), add it
+                if (node.selectedDevice) {
+                    const exists = $dev.find(`option[value='${node.selectedDevice}']`).length > 0;
+                    if (!exists) {
                         const ghostLabel = node.selectedDeviceLabel || node.selectedDevice;
                         $dev.append($('<option>', { value: node.selectedDevice, text: ghostLabel, selected: true }));
-                        $dev.val(node.selectedDevice);
                     }
                 }
+
+                if (currentVal) {
+                    $dev.val(currentVal).trigger('change');
+                } else if (node.selectedDevice) {
+                    $dev.val(node.selectedDevice).trigger('change');
+                }
             }
+
+
 
             // Initial Populate on Open (Call ONCE)
             populateDeviceSelect(null);
@@ -292,17 +347,19 @@
                 const currentMod = $mod.val();
                 $mod.empty().append('<option value="">-- Select Model --</option>');
 
+                // Also Reset Point Dropdown
+                $("#node-input-selectedPoint").empty().append('<option value="">-- Select Point --</option>');
+
                 if (dev) {
                     const [ip, id] = dev.split(':');
                     $("#node-input-selectedId").val(id);
 
-                    if (!window.sunspecScanCache) window.sunspecScanCache = {};
-                    const cache = window.sunspecScanCache;
+                    const cache = currentNetworkMap;
 
                     // CHECK IF MODELS LOADED
                     const deviceData = (cache[ip] && cache[ip][id]) ? cache[ip][id] : null;
 
-                    if (deviceData && Object.keys(deviceData).length <= 2) {
+                    if (!deviceData || Object.keys(deviceData).length <= 2) {
                         // LAZY LOAD TRIGGER
                         $mod.append('<option value="" disabled>Loading models (deep scanning)...</option>');
                         const port = $("#node-input-port").val();
@@ -364,19 +421,18 @@
                 $pt.prop('disabled', true);
 
                 // Get implemented points from scan cache
-                // Get implemented points from scan cache
                 const deviceKey = $("#node-input-selectedDevice").val();
                 let implementedPoints = null;
 
                 if (deviceKey) {
                     const [ip, id] = deviceKey.split(':');
                     // Check nested cache structure [IP][ID][ModelID]
-                    if (window.sunspecScanCache &&
-                        window.sunspecScanCache[ip] &&
-                        window.sunspecScanCache[ip][id] &&
-                        window.sunspecScanCache[ip][id][mid]) {
+                    if (currentNetworkMap &&
+                        currentNetworkMap[ip] &&
+                        currentNetworkMap[ip][id] &&
+                        currentNetworkMap[ip][id][mid]) {
 
-                        implementedPoints = window.sunspecScanCache[ip][id][mid].implementedPoints;
+                        implementedPoints = currentNetworkMap[ip][id][mid].implementedPoints;
                         console.log(`[SunSpec UI] Model ${mid}: Loaded ${implementedPoints ? implementedPoints.length : 'null'} implemented points from cache.`);
                     } else {
                         console.log(`[SunSpec UI] Model ${mid}: No scan cache found at ${ip}[${id}][${mid}]`);
@@ -426,11 +482,14 @@
                     }
 
                     // Restore
-                    if (currentPt && $pt.find(`option[value='${currentPt}']`).length > 0) $pt.val(currentPt);
-                    else if (node.selectedPoint && $pt.find(`option[value='${node.selectedPoint}']`).length > 0) $pt.val(node.selectedPoint);
-                    else if (node.selectedPoint) {
-                        const ghostLabel = node.selectedPointLabel || node.selectedPoint;
-                        $pt.append($('<option>', { value: node.selectedPoint, text: ghostLabel, selected: true }));
+                    // Restore only if we are on the configured model
+                    if (mid == node.selectedModel) {
+                        if (currentPt && $pt.find(`option[value='${currentPt}']`).length > 0) $pt.val(currentPt);
+                        else if (node.selectedPoint && $pt.find(`option[value='${node.selectedPoint}']`).length > 0) $pt.val(node.selectedPoint);
+                        else if (node.selectedPoint) {
+                            const ghostLabel = node.selectedPointLabel || node.selectedPoint;
+                            $pt.append($('<option>', { value: node.selectedPoint, text: ghostLabel, selected: true }));
+                        }
                     }
                 }).fail(function () {
                     // Error handler - always re-enable dropdown
@@ -499,6 +558,118 @@
 
                 $("#node-input-outputList-container").editableList('addItem', item);
                 RED.notify("Added to list", "success");
+            });
+            // Update Port on Device Selection if Saved Device
+            $("#node-input-selectedDevice").change(function () {
+                const val = $(this).val();
+                if (!val) return;
+                const opt = $(this).find("option:selected");
+                const savedPort = opt.data('port');
+                if (savedPort) {
+                    $("#node-input-port").val(savedPort);
+                }
+            });
+
+            // MANAGE DEVICES LOGIC
+            function refreshManageList() {
+                const $list = $("#saved-device-list");
+                $list.empty();
+                if (savedDevices.length === 0) {
+                    $list.append('<li style="color:#999; text-align:center; padding:20px;">No saved devices</li>');
+                } else {
+                    savedDevices.forEach(d => {
+                        const li = $('<li>').css({ padding: '8px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' });
+                        const info = $('<div>').html(`<b>${d.name}</b><br><small>${d.ip}:${d.port} ID:${d.unitId}</small>`);
+                        const btns = $('<div>');
+                        // Edit Btn
+                        $('<button>').addClass('red-ui-button red-ui-button-small').html('<i class="fa fa-pencil"></i>')
+                            .click(() => {
+                                $("#manage-device-name").val(d.name);
+                                $("#manage-device-ip").val(d.ip);
+                                $("#manage-device-port").val(d.port);
+                                $("#manage-device-unitId").val(d.unitId);
+                                $("#btn-save-device").data('id', d.id).html('<i class="fa fa-save"></i> Update');
+                            }).appendTo(btns);
+                        // Delete Btn
+                        $('<button>').addClass('red-ui-button red-ui-button-small').css({ marginLeft: '5px', color: '#a00' }).html('<i class="fa fa-trash"></i>')
+                            .click(() => {
+                                if (confirm("Delete this device?")) {
+                                    $.ajax({
+                                        url: 'sunspec-scan/devices/' + d.id,
+                                        type: 'DELETE',
+                                        success: () => {
+                                            // Refresh
+                                            $.getJSON('sunspec-scan/devices', function (devs) {
+                                                savedDevices = devs || [];
+                                                refreshManageList();
+                                                populateDeviceSelect();
+                                            });
+                                        }
+                                    });
+                                }
+                            }).appendTo(btns);
+
+                        li.append(info).append(btns);
+                        $list.append(li);
+                    });
+                }
+            }
+
+            $("#btn-manage-devices").click(function (e) {
+                e.preventDefault();
+                $("#dialog-manage-devices").dialog("open");
+                refreshManageList();
+            });
+
+            $("#dialog-manage-devices").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 500,
+                close: function () {
+                    // Populate select on close to reflect changes
+                    populateDeviceSelect();
+                }
+            });
+
+            $("#btn-clear-manage-form").click(function () {
+                $("#manage-device-name").val('');
+                $("#manage-device-ip").val('');
+                $("#manage-device-port").val('502');
+                $("#manage-device-unitId").val('1');
+                $("#btn-save-device").removeData('id').html('<i class="fa fa-save"></i> Save Device');
+            });
+
+            $("#btn-save-device").click(function () {
+                const name = $("#manage-device-name").val();
+                const ip = $("#manage-device-ip").val();
+                const port = $("#manage-device-port").val();
+                const unitId = $("#manage-device-unitId").val();
+                const id = $(this).data('id');
+
+                if (!ip) { RED.notify("IP Address required", "error"); return; }
+
+                const payload = { name, ip, port, unitId };
+                const method = id ? 'PUT' : 'POST';
+                const url = 'sunspec-scan/devices' + (id ? '/' + id : '');
+
+                $.ajax({
+                    url: url,
+                    type: method,
+                    contentType: "application/json",
+                    data: JSON.stringify(payload),
+                    success: function () {
+                        RED.notify("Device Saved", "success");
+                        $("#btn-clear-manage-form").click();
+                        // Refresh List
+                        $.getJSON('sunspec-scan/devices', function (devs) {
+                            savedDevices = devs || [];
+                            refreshManageList();
+                        });
+                    },
+                    error: function (xhr) {
+                        RED.notify("Error: " + xhr.responseText, "error");
+                    }
+                });
             });
         },
         oneditsave: function () {
@@ -598,15 +769,17 @@
             <br>
             <div class="form-row">
                 <label for="node-input-selectedDevice"><i class="fa fa-server"></i> Device</label>
-                <select id="node-input-selectedDevice" style="width:70%;">
-                    <option value="">(Scan to populate)</option>
-                </select>
+                <div style="display:inline-block; width:70%;">
+                    <select id="node-input-selectedDevice" style="width:calc(100% - 40px);">
+                        <option value="">(Scan to populate)</option>
+                    </select>
+                    <button id="btn-manage-devices" class="red-ui-button" title="Manage Saved Devices"
+                        style="width:35px; margin-left:5px;"><i class="fa fa-cog"></i></button>
+                </div>
             </div>
             <!-- Explicit ID Field for Single Parameter Mode -->
-            <div class="form-row param-mode-only mode-group">
-                <label for="node-input-selectedId"><i class="fa fa-bookmark"></i> Unit ID</label>
-                <input type="text" id="node-input-selectedId" placeholder="Populated from Device">
-            </div>
+            <!-- Hidden ID Field for Single Parameter Mode (Auto-populated) -->
+            <input type="hidden" id="node-input-selectedId">
 
             <div class="form-row">
                 <label for="node-input-selectedModel"><i class="fa fa-cube"></i> Model</label>
@@ -665,6 +838,38 @@
                 <li><strong>Range:</strong> <code>1-10</code></li>
             </ul>
         </div>
+    </div>
+</div>
+
+<!-- DEVICE MANAGEMENT MODAL -->
+<div id="dialog-manage-devices" style="display:none">
+    <div class="form-row">
+        <label for="manage-device-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="manage-device-name" placeholder="My Device">
+    </div>
+    <div class="form-row">
+        <label for="manage-device-ip"><i class="fa fa-globe"></i> IP</label>
+        <input type="text" id="manage-device-ip" placeholder="192.168.1.10">
+    </div>
+    <div class="form-row">
+        <label for="manage-device-port"><i class="fa fa-random"></i> Port</label>
+        <input type="number" id="manage-device-port" placeholder="502" style="width:80px">
+        <label for="manage-device-unitId" style="width:auto; margin-left:10px;">ID</label>
+        <input type="number" id="manage-device-unitId" placeholder="1" style="width:60px">
+    </div>
+    <div class="form-row" style="text-align:right;">
+        <button id="btn-save-device" class="red-ui-button"><i class="fa fa-save"></i> Save Device</button>
+        <button id="btn-clear-manage-form" class="red-ui-button" style="margin-left:5px;">New</button>
+    </div>
+    <hr>
+    <div class="form-row">
+        <label style="width:100%;"><i class="fa fa-list"></i> Saved Devices</label>
+    </div>
+    <div class="form-row" style="height:200px; overflow-y:auto; border:1px solid #ccc; background:#fff; padding:5px;">
+        <ul id="saved-device-list" style="list-style:none; padding:0; margin:0;">
+            <!-- Items injected here -->
+            <li style="color:#999; text-align:center; padding:20px;">No saved devices</li>
+        </ul>
     </div>
 </div>
 </script>

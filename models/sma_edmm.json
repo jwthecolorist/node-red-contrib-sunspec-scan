@@ -1,0 +1,2331 @@
+{
+  "group": {
+    "name": "SMA_EDMM",
+    "label": "SMA Data Manager",
+    "desc": "Generated from parameterlist_en.html",
+    "points": [
+      {
+        "name": "SmaModbusProfileRevision",
+        "label": "SMA Modbus profile revision",
+        "offset": 30001,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "Susyid",
+        "label": "SUSyID",
+        "offset": 30003,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "SerialNumber",
+        "label": "Serial number",
+        "offset": 30005,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ModbusDataChangeCount",
+        "label": "Modbus data change count",
+        "offset": 30007,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "DeviceClass",
+        "label": "Device class",
+        "offset": 30051,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "DeviceType",
+        "label": "Device type",
+        "offset": 30053,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "UtcSystemTime",
+        "label": "UTC system time",
+        "offset": 30193,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "UtcSystemTime",
+        "label": "UTC system time",
+        "offset": 30193,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "Condition",
+        "label": "Condition",
+        "offset": 30201,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "SetActivePowerLimit",
+        "label": "Set active power limit",
+        "offset": 30233,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "TotalYield",
+        "label": "Total yield",
+        "offset": 30513,
+        "len": 4,
+        "type": "uint64",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "DailyYield",
+        "label": "Daily yield",
+        "offset": 30517,
+        "len": 4,
+        "type": "uint64",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "CounterReadingOfPowerDrawnCounter",
+        "label": "Counter reading of power drawn counter",
+        "offset": 30581,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "GridFeedInCounterReading",
+        "label": "Grid feed-in counter reading",
+        "offset": 30583,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "Power",
+        "label": "Power",
+        "offset": 30775,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePower",
+        "label": "Reactive power",
+        "offset": 30805,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "CurrentBatteryStateOfCharge",
+        "label": "Current battery state of charge",
+        "offset": 30845,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "PowerDrawn",
+        "label": "Power drawn",
+        "offset": 30865,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "PowerGridFeedIn",
+        "label": "Power grid feed-in",
+        "offset": 30867,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "SetpointOfActivePowerLimitationViaDialogInput",
+        "label": "Setpoint of active power limitation via dialog input",
+        "offset": 31235,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "SetpointForActivePowerLimitationViaAnalogInput",
+        "label": "Setpoint for active power limitation via analog input",
+        "offset": 31237,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "NormalizedActivePowerLimitationByPvSystemControl",
+        "label": "Normalized active power limitation by PV system control",
+        "offset": 31239,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PvPowerLimitationViaCommunicationForDirectMarketing",
+        "label": "PV power limitation via communication for direct marketing",
+        "offset": 31241,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "MinimumPvPowerLimitation",
+        "label": "Minimum PV power limitation",
+        "offset": 31243,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "InternalPvPowerLimitation",
+        "label": "Internal PV power limitation",
+        "offset": 31245,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "SystemActivePowerAtGridConnectionPoint",
+        "label": "System active power at grid connection point",
+        "offset": 31249,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "SystemReactivePowerAtGridConnectionPoint",
+        "label": "System reactive power at grid connection point",
+        "offset": 31251,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "GridVoltagePhaseL1",
+        "label": "Grid voltage phase L1",
+        "offset": 31253,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridVoltagePhaseL2",
+        "label": "Grid voltage phase L2",
+        "offset": 31255,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridVoltagePhaseL3",
+        "label": "Grid voltage phase L3",
+        "offset": 31257,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PowerGridFeedingL1",
+        "label": "Power grid feeding L1",
+        "offset": 31259,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "PowerGridFeedingL2",
+        "label": "Power grid feeding L2",
+        "offset": 31261,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "PowerGridFeedingL3",
+        "label": "Power grid feeding L3",
+        "offset": 31263,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ReactivePowerGridFeedingPhaseL1",
+        "label": "Reactive power grid feeding phase L1",
+        "offset": 31271,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ReactivePowerGridFeedingPhaseL2",
+        "label": "Reactive power grid feeding phase L2",
+        "offset": 31273,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ReactivePowerGridFeedingPhaseL3",
+        "label": "Reactive power grid feeding phase L3",
+        "offset": 31275,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ReactivePowerGridFeeding",
+        "label": "Reactive power grid feeding",
+        "offset": 31277,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "PresentBatteryCharge",
+        "label": "Present battery charge",
+        "offset": 31393,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "PresentBatteryDischarge",
+        "label": "Present battery discharge",
+        "offset": 31395,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "BatteryCharge",
+        "label": "Battery charge",
+        "offset": 31397,
+        "len": 4,
+        "type": "uint64",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "BatteryDischarge",
+        "label": "Battery discharge",
+        "offset": 31401,
+        "len": 4,
+        "type": "uint64",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "DisplacementPowerFactor",
+        "label": "Displacement power factor",
+        "offset": 31433,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridCurrentPhaseL1",
+        "label": "Grid current phase L1",
+        "offset": 31435,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.001
+      },
+      {
+        "name": "GridCurrentPhaseL2",
+        "label": "Grid current phase L2",
+        "offset": 31437,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.001
+      },
+      {
+        "name": "GridCurrentPhaseL3",
+        "label": "Grid current phase L3",
+        "offset": 31439,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.001
+      },
+      {
+        "name": "ApparentPowerL1",
+        "label": "Apparent power L1",
+        "offset": 31441,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ApparentPowerL2",
+        "label": "Apparent power L2",
+        "offset": 31443,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ApparentPowerL3",
+        "label": "Apparent power L3",
+        "offset": 31445,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "GridFrequency",
+        "label": "Grid frequency",
+        "offset": 31447,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridVoltagePhaseL3AgainstL1",
+        "label": "Grid voltage phase L3 against L1",
+        "offset": 31449,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridVoltagePhaseL1AgainstL2",
+        "label": "Grid voltage phase L1 against L2",
+        "offset": 31451,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridVoltagePhaseL2AgainstL3",
+        "label": "Grid voltage phase L2 against L3",
+        "offset": 31453,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "ApparentPower",
+        "label": "Apparent power",
+        "offset": 31455,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "ExcitationTypeOfCos",
+        "label": "Excitation type of cos \u03c6",
+        "offset": 31501,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1
+      },
+      {
+        "name": "PowerGridFeedInLineConductorL1AtPointOfInterconnection",
+        "label": "Power Grid feed-in Line conductor L1 at point of interconnection",
+        "offset": 31503,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "PowerGridFeedInLineConductorL2AtPointOfInterconnection",
+        "label": "Power Grid feed-in Line conductor L2 at point of interconnection",
+        "offset": 31505,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "PowerGridFeedInLineConductorL3AtPointOfInterconnection",
+        "label": "Power Grid feed-in Line conductor L3 at point of interconnection",
+        "offset": 31507,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePowerGridFeedInLineConductorL1AtPointOfInterconnection",
+        "label": "Reactive power Grid feed-in Line conductor L1 at point of interconnection",
+        "offset": 31509,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePowerGridFeedInLineConductorL2AtPointOfInterconnection",
+        "label": "Reactive power Grid feed-in Line conductor L2 at point of interconnection",
+        "offset": 31511,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePowerGridFeedInLineConductorL3AtPointOfInterconnection",
+        "label": "Reactive power Grid feed-in Line conductor L3 at point of interconnection",
+        "offset": 31513,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "GridVoltageLineConductorL1AgainstL2AtPointOfInterconnection",
+        "label": "Grid voltage Line conductor L1 against L2 at point of interconnection",
+        "offset": 31515,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridVoltageLineConductorL2AgainstL3AtPointOfInterconnection",
+        "label": "Grid voltage Line conductor L2 against L3 at point of interconnection",
+        "offset": 31517,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridVoltageLineConductorL3AgainstL1AtPointOfInterconnection",
+        "label": "Grid voltage Line conductor L3 against L1 at point of interconnection",
+        "offset": 31519,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "MeanValueGridVoltageLNAtPointOfInterconnection",
+        "label": "Mean value Grid voltage L-N at point of interconnection",
+        "offset": 31521,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "MeanValueGridVoltageLLAtPointOfInterconnection",
+        "label": "Mean value Grid voltage L-L at point of interconnection",
+        "offset": 31523,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "DisplacementPowerFactorAtPointOfInterconnection",
+        "label": "Displacement power factor at point of interconnection",
+        "offset": 31525,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "GridFrequencyAtPointOfInterconnection",
+        "label": "Grid frequency at point of interconnection",
+        "offset": 31527,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PvSystemVoltagePhaseL1",
+        "label": "PV system voltage phase L1",
+        "offset": 31529,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PvSystemVoltagePhaseL2",
+        "label": "PV system voltage phase L2",
+        "offset": 31531,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PvSystemVoltagePhaseL3",
+        "label": "PV system voltage phase L3",
+        "offset": 31533,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "OutputCurrentGridFeedInLineConductorL1AtPointOfInterconnection",
+        "label": "Output current Grid feed-in Line conductor L1 at point of interconnection",
+        "offset": 31535,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "OutputCurrentGridFeedInLineConductorL2AtPointOfInterconnection",
+        "label": "Output current Grid feed-in Line conductor L2 at point of interconnection",
+        "offset": 31537,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "OutputCurrentGridFeedInLineConductorL3AtPointOfInterconnection",
+        "label": "Output current Grid feed-in Line conductor L3 at point of interconnection",
+        "offset": 31539,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "MeanValueGridVoltageLineConductorLN",
+        "label": "Mean value Grid voltage Line conductor L-N",
+        "offset": 31541,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "MeanValueGridVoltageLineConductorLL",
+        "label": "Mean value Grid voltage Line conductor L-L",
+        "offset": 31543,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 1,
+        "staticScale": 0.01
+      },
+      {
+        "name": "AvailableSystemPower",
+        "label": "Available system power",
+        "offset": 31545,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "AvailableInverterPower",
+        "label": "Available inverter power",
+        "offset": 31547,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "InternalPvReactivePowerLimitation",
+        "label": "Internal PV reactive power limitation",
+        "offset": 32185,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "AvailableUnderexcitedReactivePower",
+        "label": "Available underexcited reactive power",
+        "offset": 32187,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "AvailableOverexcitedReactivePower",
+        "label": "Available overexcited reactive power",
+        "offset": 32189,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "TheoreticallyAvailableSystemPower",
+        "label": "Theoretically available system power",
+        "offset": 32191,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "GenerationPlantAvailability",
+        "label": "Generation plant availability",
+        "offset": 32193,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "ExternalActivePowerReduction",
+        "label": "External active power reduction",
+        "offset": 32195,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "AvailableUnderexcitedReactivePower",
+        "label": "Available underexcited reactive power",
+        "offset": 32197,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "AvailableOverexcitedReactivePower",
+        "label": "Available overexcited reactive power",
+        "offset": 32199,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "TemperatureOfDewPoint",
+        "label": "Temperature of dew point",
+        "offset": 32281,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "AbsoluteAirPressure",
+        "label": "Absolute air pressure",
+        "offset": 32283,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "RelativeAirPressure",
+        "label": "Relative air pressure",
+        "offset": 32285,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "StandardDeviationOfWindSpeed",
+        "label": "Standard deviation of wind speed",
+        "offset": 32287,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "StandardDeviationOfWindDirection",
+        "label": "Standard deviation of wind direction",
+        "offset": 32289,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "QualityOfWindMeasurement",
+        "label": "Quality of wind measurement",
+        "offset": 32291,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "AbsolutePrecipitationAmount",
+        "label": "Absolute precipitation amount",
+        "offset": 32293,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "DifferentialPrecipitationAmount",
+        "label": "Differential precipitation amount",
+        "offset": 32295,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PrecipitationIntensity",
+        "label": "Precipitation intensity",
+        "offset": 32297,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PrecipitationType",
+        "label": "Precipitation type",
+        "offset": 32299,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "LightningEvents",
+        "label": "Lightning events",
+        "offset": 32303,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "LightningEventsInterval",
+        "label": "Lightning events (interval)",
+        "offset": 32305,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "ExternalTemperatureSensor",
+        "label": "External temperature sensor",
+        "offset": 32307,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "WindDirection",
+        "label": "Wind direction",
+        "offset": 32311,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "StandardDeviationOfSolarIrradiation",
+        "label": "Standard deviation of solar irradiation",
+        "offset": 32315,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "PollutionDegreeSensor",
+        "label": "Pollution degree Sensor",
+        "offset": 32345,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "PollutionDegreeSensor",
+        "label": "Pollution degree Sensor",
+        "offset": 32347,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "TransmissionLossSensor",
+        "label": "Transmission loss Sensor",
+        "offset": 32365,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "TransmissionLossSensor",
+        "label": "Transmission loss Sensor",
+        "offset": 32367,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "AmbientTemperature",
+        "label": "Ambient temperature",
+        "offset": 34609,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "Insolation",
+        "label": "Insolation",
+        "offset": 34613,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "WindSpeed",
+        "label": "Wind speed",
+        "offset": 34615,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "AirHumidity",
+        "label": "Air humidity",
+        "offset": 34617,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "ModuleTemperature",
+        "label": "Module temperature",
+        "offset": 34621,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "InsolationOnExternalSensor",
+        "label": "Insolation on external sensor",
+        "offset": 34623,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "AmbientTemperature",
+        "label": "Ambient temperature",
+        "offset": 34625,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "AmbientTemperature",
+        "label": "Ambient temperature",
+        "offset": 34627,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "ModuleTemperature",
+        "label": "Module temperature",
+        "offset": 34629,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "ModuleTemperature",
+        "label": "Module temperature",
+        "offset": 34631,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "WindSpeed",
+        "label": "Wind speed",
+        "offset": 34633,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "WindSpeed",
+        "label": "Wind speed",
+        "offset": 34635,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "DigitalInputGroup1Di1Di4",
+        "label": "Digital input group 1 (DI1 .. DI4)",
+        "offset": 34653,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "MaximumReactivePowerSetpointSpecification",
+        "label": "Maximum reactive power setpoint specification",
+        "offset": 34695,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "StandardizedRampRateOfActivePowerAtThePointOfInterconnection",
+        "label": "Standardized ramp rate of active power at the point of interconnection",
+        "offset": 35403,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "RampRateOfActivePowerAtThePointOfInterconnection",
+        "label": "Ramp rate of active power at the point of interconnection",
+        "offset": 35405,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "NumberOfInvertersInStateRun",
+        "label": "Number of inverters in state Run",
+        "offset": 35407,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "NumberOfInvertersInStateWait",
+        "label": "Number of inverters in state Wait",
+        "offset": 35409,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "NumberOfInvertersInStateStop",
+        "label": "Number of inverters in state Stop",
+        "offset": 35411,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "NumberOfInvertersInStateQOnDemand",
+        "label": "Number of inverters in state Q on Demand",
+        "offset": 35413,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "SystemActivePowerDrawnAtGridConnectionPoint",
+        "label": "System active power (drawn) at grid connection point",
+        "offset": 35415,
+        "len": 2,
+        "type": "int32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "EnergyDrawnAtTheGridConnectionPoint",
+        "label": "Energy drawn at the grid connection point",
+        "offset": 35417,
+        "len": 4,
+        "type": "uint64",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "FeedInEnergyAtTheGridConnectionPoint",
+        "label": "Feed-in energy at the grid connection point",
+        "offset": 35421,
+        "len": 4,
+        "type": "uint64",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "StandardizedReactivePowerSetpointBySystemControl",
+        "label": "Standardized reactive power setpoint by system control",
+        "offset": 40015,
+        "len": 1,
+        "type": "int16",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "NormalizedActivePowerLimitationByPvSystemControl",
+        "label": "Normalized active power limitation by PV system control",
+        "offset": 40016,
+        "len": 1,
+        "type": "int16",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "FastShutDown",
+        "label": "Fast shut-down",
+        "offset": 40018,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ExternReactivePowerMode",
+        "label": "Extern. reactive power mode",
+        "offset": 40022,
+        "len": 1,
+        "type": "int16",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "NormalizedActivePowerLimitationByPvSystemControl",
+        "label": "Normalized active power limitation by PV system control",
+        "offset": 40023,
+        "len": 1,
+        "type": "int16",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "ExternalCosSetpointSpecificationCosSetpointForActivePowerOutput",
+        "label": "External cos \u03c6 setpoint specification, cos \u03c6 setpoint for active power output",
+        "offset": 40024,
+        "len": 1,
+        "type": "uint16",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.0001
+      },
+      {
+        "name": "ExternalCosSetpointSpecificationExcitationTypeForActivePowerOutput",
+        "label": "External cos \u03c6 setpoint specification, excitation type for active power output",
+        "offset": 40025,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "GeneralOperatingStatus",
+        "label": "General operating status",
+        "offset": 40029,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2
+      },
+      {
+        "name": "GridNominalVoltage",
+        "label": "Grid nominal voltage",
+        "offset": 40472,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "NormalizedActivePowerLimitationBySystemControlViaDirectMarketer",
+        "label": "Normalized active power limitation by system control via direct marketer",
+        "offset": 40493,
+        "len": 1,
+        "type": "int16",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "ManuallySetActivePowerLimitationForTheEntireSystem",
+        "label": "Manually set active power limitation for the entire system",
+        "offset": 41167,
+        "len": 2,
+        "type": "uint32",
+        "access": "ro",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "ActivePowerControlMode",
+        "label": "Active power control mode",
+        "offset": 41315,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePowerControlMode",
+        "label": "Reactive power control mode",
+        "offset": 41317,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePowerModeInCaseOfActivePowerOutput",
+        "label": "Reactive power mode in case of active power output",
+        "offset": 41319,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePowerModeInCaseOfActivePowerDraw",
+        "label": "Reactive power mode in case of active power draw",
+        "offset": 41321,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ReactivePowerForZeroActivePower",
+        "label": "Reactive power for zero active power",
+        "offset": 41323,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41325,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41327,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41329,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41331,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41333,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41335,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41337,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVVoltageValue",
+        "label": "Q(V), voltage value",
+        "offset": 41339,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41341,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41343,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41345,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41347,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41349,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41351,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41353,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVReactivePowerValue",
+        "label": "Q(V), reactive power value",
+        "offset": 41355,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVExternalReferenceVoltageSettingInV",
+        "label": "Q(V), external reference voltage setting in V",
+        "offset": 41443,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.1
+      },
+      {
+        "name": "IntegralLocalFrequencyIlfActivationViaModbus",
+        "label": "Integral local frequency (ILF), activation via Modbus",
+        "offset": 41455,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "TotalSystemPower",
+        "label": "Total system power",
+        "offset": 41463,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "HeartbeatSignalForCommunicationMonitoringToExternalPlantController",
+        "label": "Heartbeat signal for communication monitoring to external plant controller",
+        "offset": 41465,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "MaximumActivePower",
+        "label": "Maximum active power",
+        "offset": 44039,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "MinimumActivePower",
+        "label": "Minimum active power",
+        "offset": 44041,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44051,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44053,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44055,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44057,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44059,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44061,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44063,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVVoltageValue",
+        "label": "P(V), voltage value",
+        "offset": 44065,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44067,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44069,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44071,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44073,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44075,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44077,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44079,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PVActivePowerValue",
+        "label": "P(V), active power value",
+        "offset": 44081,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "ReactivePowerModeReferenceSizeForReactivePowerSetting",
+        "label": "Reactive power mode, reference size for reactive power setting",
+        "offset": 44095,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ExternalCosSettingCosNominalValueInCaseOfActivePowerDraw",
+        "label": "External cos \u03c6 setting, cos \u03c6 nominal value in case of active power draw",
+        "offset": 44141,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.0001
+      },
+      {
+        "name": "ExternalCosSettingExcitationTypeInCaseOfActivePowerDraw",
+        "label": "External cos \u03c6 setting, excitation type in case of active power draw",
+        "offset": 44143,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44147,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44149,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44151,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44153,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44155,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44157,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44159,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44161,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44163,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44165,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44167,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44169,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44171,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44173,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44175,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44177,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QVExternalReferenceVoltageSettingInPU",
+        "label": "Q(V), external reference voltage setting in p.u.",
+        "offset": 44211,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFCharacteristicCurve",
+        "label": "P(f) characteristic curve",
+        "offset": 44333,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "PFReferenceValueForActivePowerInCaseOfOverfrequency",
+        "label": "P(f) reference value for active power in case of overfrequency",
+        "offset": 44335,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "PFReferenceValueForActivePowerForUnderfrequency",
+        "label": "P(f), reference value for active power for underfrequency",
+        "offset": 44337,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "PFSettingTime",
+        "label": "P(f), setting time",
+        "offset": 44339,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "PFHysteresisInCaseOfOverfrequency",
+        "label": "P(f), hysteresis in case of overfrequency",
+        "offset": 44341,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "PFHysteresisInCaseOfUnderfrequency",
+        "label": "P(f), hysteresis in case of underfrequency",
+        "offset": 44343,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "PFBucklingOverfrequency",
+        "label": "P(f), buckling overfrequency",
+        "offset": 44345,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFBucklingOverfrequency",
+        "label": "P(f), buckling overfrequency",
+        "offset": 44347,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFBucklingOverfrequency",
+        "label": "P(f), buckling overfrequency",
+        "offset": 44349,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFActivePowerChangePerHzInCaseOfOverfrequency",
+        "label": "P(f), active power change per Hz in case of overfrequency",
+        "offset": 44351,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFActivePowerChangePerHzInCaseOfOverfrequency",
+        "label": "P(f), active power change per Hz in case of overfrequency",
+        "offset": 44353,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFActivePowerChangePerHzInCaseOfOverfrequency",
+        "label": "P(f), active power change per Hz in case of overfrequency",
+        "offset": 44355,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFResetUnderfrequency",
+        "label": "P(f), reset underfrequency",
+        "offset": 44357,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFBucklingUnderfrequency",
+        "label": "P(f), buckling underfrequency",
+        "offset": 44359,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFBucklingUnderfrequency",
+        "label": "P(f), buckling underfrequency",
+        "offset": 44361,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFBucklingUnderfrequency",
+        "label": "P(f), buckling underfrequency",
+        "offset": 44363,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFActivePowerChangePerHzInCaseOfUnderfrequency",
+        "label": "P(f), active power change per Hz in case of underfrequency",
+        "offset": 44365,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFActivePowerChangePerHzInCaseOfUnderfrequency",
+        "label": "P(f), active power change per Hz in case of underfrequency",
+        "offset": 44367,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFActivePowerChangePerHzInCaseOfUnderfrequency",
+        "label": "P(f), active power change per Hz in case of underfrequency",
+        "offset": 44369,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFResetUnderfrequency",
+        "label": "P(f), reset underfrequency",
+        "offset": 44371,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "PFTrippingDelay",
+        "label": "P(f), tripping delay",
+        "offset": 44373,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "PFLagTime",
+        "label": "P(f), lag time",
+        "offset": 44375,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "NominalActivePowerWmaxout",
+        "label": "Nominal active power WMaxOut",
+        "offset": 44381,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "NominalActivePowerWmaxin",
+        "label": "Nominal active power WMaxIn",
+        "offset": 44383,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "NominalReactivePowerVarmaxq1",
+        "label": "Nominal reactive power VArMaxQ1",
+        "offset": 44393,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "NominalReactivePowerVarmaxq2",
+        "label": "Nominal reactive power VArMaxQ2",
+        "offset": 44395,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "NominalReactivePowerVarmaxq3",
+        "label": "Nominal reactive power VArMaxQ3",
+        "offset": 44397,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "NominalReactivePowerVarmaxq4",
+        "label": "Nominal reactive power VArMaxQ4",
+        "offset": 44399,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "BatteryMaximumActivePower",
+        "label": "Battery maximum active power",
+        "offset": 44449,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "ActivePowerSetpointForBatterySystem",
+        "label": "Active power setpoint for battery system",
+        "offset": 44457,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "ExternalActivePowerSetting2NominalValueFilter",
+        "label": "External active power setting 2, nominal value filter",
+        "offset": 44461,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ExternalActivePowerSetting2LimitationOfChangeRate",
+        "label": "External active power setting 2, limitation of change rate",
+        "offset": 44463,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ExternalActivePowerSetting2IncreaseRate",
+        "label": "External active power setting 2, increase rate",
+        "offset": 44465,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "ExternalActivePowerSetting2DecreaseRate",
+        "label": "External active power setting 2, decrease rate",
+        "offset": 44467,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.01
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44469,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPActivePowerValue",
+        "label": "Q(P), active power value",
+        "offset": 44471,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44473,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "QPReactivePowerValue",
+        "label": "Q(P), reactive power value",
+        "offset": 44475,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2,
+        "staticScale": 0.001
+      },
+      {
+        "name": "FrequencyContainmentReserveFcr",
+        "label": "Frequency containment reserve (FCR)",
+        "offset": 44479,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "ActivePowerLimitationByPvSystemControl",
+        "label": "Active power limitation by PV system control",
+        "offset": 44493,
+        "len": 2,
+        "type": "int32",
+        "access": "rw",
+        "unitId": 2
+      },
+      {
+        "name": "PresettingOfQVCurve",
+        "label": "Presetting of Q(V) curve",
+        "offset": 44511,
+        "len": 2,
+        "type": "uint32",
+        "access": "rw",
+        "unitId": 2
+      }
+    ]
+  }
+}

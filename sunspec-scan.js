@@ -29,8 +29,37 @@ module.exports = function (RED) {
     const CONST = require('./constants');
     const utils = require('./utils');
     const errors = require('./errors');
+    const DeviceManager = require('./device-manager');
+
+    // Initialize Device Manager
+    const deviceManager = new DeviceManager(RED.settings.userDir);
 
     // --- Admin API ---
+    // Device Management
+    RED.httpAdmin.get('/sunspec-scan/devices', RED.auth.needsPermission('sunspec-scan.read'), function (req, res) {
+        res.json(deviceManager.list());
+    });
+
+    RED.httpAdmin.post('/sunspec-scan/devices', RED.auth.needsPermission('sunspec-scan.write'), function (req, res) {
+        try {
+            const dev = deviceManager.add(req.body);
+            res.json(dev);
+        } catch (e) { res.status(400).send(e.message); }
+    });
+
+    RED.httpAdmin.put('/sunspec-scan/devices/:id', RED.auth.needsPermission('sunspec-scan.write'), function (req, res) {
+        try {
+            const dev = deviceManager.update(req.params.id, req.body);
+            res.json(dev);
+        } catch (e) { res.status(400).send(e.message); }
+    });
+
+    RED.httpAdmin.delete('/sunspec-scan/devices/:id', RED.auth.needsPermission('sunspec-scan.write'), function (req, res) {
+        const success = deviceManager.delete(req.params.id);
+        if (success) res.sendStatus(200);
+        else res.sendStatus(404);
+    });
+
     RED.httpAdmin.get('/sunspec-scan/models', RED.auth.needsPermission('sunspec-scan.read'), function (req, res) {
         const modelsPath = path.join(__dirname, 'models', 'index.json');
         try {
@@ -46,6 +75,33 @@ module.exports = function (RED) {
         stop: false
     };
 
+    // Server-side persistent network map: { ip: { unitId: { models... } } }
+    let networkMap = {};
+    const cachePath = path.join(RED.settings.userDir, 'sunspec-cache.json');
+
+    function saveNetworkMap() {
+        try {
+            fs.writeJsonSync(cachePath, networkMap, { spaces: 2 });
+        } catch (e) {
+            console.error("[SunSpec] Failed to save scan cache:", e.message);
+        }
+    }
+
+    function loadNetworkMap() {
+        try {
+            if (fs.existsSync(cachePath)) {
+                networkMap = fs.readJsonSync(cachePath);
+                console.log(`[SunSpec] Loaded scan cache from disk (${Object.keys(networkMap).length} devices).`);
+            }
+        } catch (e) {
+            console.error("[SunSpec] Failed to load scan cache:", e.message);
+            networkMap = {};
+        }
+    }
+
+    // Load on startup
+    loadNetworkMap();
+
     RED.httpAdmin.post('/sunspec-scan/stop', RED.auth.needsPermission('sunspec-scan.read'), function (req, res) {
         activeScan.stop = true;
         res.status(200).send("Stopping");
@@ -53,6 +109,11 @@ module.exports = function (RED) {
 
     RED.httpAdmin.get('/sunspec-scan/status', RED.auth.needsPermission('sunspec-scan.read'), function (req, res) {
         res.json(activeScan);
+    });
+
+    // NEW: Get full network map
+    RED.httpAdmin.get('/sunspec-scan/network', RED.auth.needsPermission('sunspec-scan.read'), function (req, res) {
+        res.json(networkMap);
     });
 
     RED.httpAdmin.post('/sunspec-scan/discover', RED.auth.needsPermission('sunspec-scan.read'), async function (req, res) {
@@ -90,17 +151,42 @@ module.exports = function (RED) {
 
                 if (ids.length > 0) {
                     results[targetIp] = {};
-                    for (const id of ids) {
+                    for (const idObj of ids) {
                         if (activeScan.stop) break; // Check inside ID loop too
+                        const id = idObj.id;
+                        const type = idObj.type;
+
                         activeScan.status = `Reading Model Data from ${targetIp}:${id}...`;
 
-                        console.log(`[SunSpec] Reading Identity for ${targetIp}:${id}...`);
+                        console.log(`[SunSpec] Reading Identity (${type}) for ${targetIp}:${id}...`);
                         const t1 = Date.now();
-                        // Fast Scan: Only read Model 1
-                        const modelsFound = await scanDeviceModelsOnly(targetIp, port, id, models, timeout, true);
+                        // Fast Scan: Only read Model 1 or Vendor ID
+                        const modelsFound = await scanDeviceModelsOnly(targetIp, port, id, models, timeout, true, type);
                         console.log(`[SunSpec] Identity Read in ${Date.now() - t1}ms for ID ${id}`);
 
                         results[targetIp][id] = modelsFound;
+
+                        // Update Global Map
+                        if (!networkMap[targetIp]) networkMap[targetIp] = {};
+                        networkMap[targetIp][id] = modelsFound;
+                        saveNetworkMap();
+
+                        // Auto-save to Device Manager
+                        try {
+                            let name = "";
+                            if (modelsFound && modelsFound.info) {
+                                const mn = modelsFound.info.Mn || "";
+                                const md = modelsFound.info.Md || "";
+                                if (mn || md) name = `${mn} ${md}`.trim();
+                            }
+                            // If no name found immediately, let upsert logic handle default or keep existing
+                            deviceManager.upsert({
+                                ip: targetIp,
+                                port: port,
+                                unitId: id,
+                                name: name || undefined
+                            });
+                        } catch (e) { console.error("[SunSpec] Auto-save error:", e.message); }
                     }
                 }
             }
@@ -131,9 +217,24 @@ module.exports = function (RED) {
             return;
         }
 
+        // Check Network Map (Deep Scan Cache)
+        if (networkMap[ip] && networkMap[ip][unitId]) {
+            const cached = networkMap[ip][unitId];
+            // Only serve cache if it looks like a deep scan (more than just Model 1 + Info)
+            if (Object.keys(cached).length > 2) {
+                res.json(cached);
+                return;
+            }
+        }
+
         try {
             console.log(`[SunSpec] Deep Scanning Models for ${ip}:${unitId}...`);
             const modelsFound = await scanDeviceModelsOnly(ip, port, unitId, models, timeout, false); // False = Full Scan
+
+            // Update Global Map
+            if (!networkMap[ip]) networkMap[ip] = {};
+            networkMap[ip][unitId] = modelsFound;
+
             res.json(modelsFound);
         } catch (e) {
             res.status(500).send(e.message);
@@ -148,7 +249,15 @@ module.exports = function (RED) {
      * @param {number} timeout 
      * @param {boolean} fastMode If true, stops after finding Model 1
      */
-    async function scanDeviceModelsOnly(ip, port, unitId, models, timeout, fastMode) {
+    async function scanDeviceModelsOnly(ip, port, unitId, models, timeout, fastMode, type) {
+        // Vendor Specific Scan
+        if (type === 'sma_edmm') {
+            return {
+                'sma_edmm': { start: 0, len: 0 },
+                'info': { Mn: 'SMA', Md: 'Data Manager' }
+            };
+        }
+
         const client = new ModbusRTU();
         const foundModels = {};
         try {
@@ -160,8 +269,41 @@ module.exports = function (RED) {
             try {
                 let data = await client.readHoldingRegisters(baseAddr, 2);
                 if (data.data[0] === 0x5375) baseAddr = 40002;
-                else return {};
-            } catch (e) { return {}; }
+                else {
+                    // SunSpec Header Not Found. Check for SMA?
+                    // Probe 30051 (Device Class) for SMA Signature (8128)
+                    try {
+                        const smaData = await client.readHoldingRegisters(30051, 2);
+                        const smaVal = (smaData.data[0] << 16) | smaData.data[1];
+                        if (smaVal === 8128 || smaVal === 9397 || smaVal === 19135) {
+                            console.log(`[SunSpec] Fallback: Detected SMA Device at ${ip}:${unitId} during scan.`);
+                            return {
+                                'sma_edmm': { start: 0, len: 0 },
+                                'info': { Mn: 'SMA', Md: 'Data Manager' }
+                            };
+                        }
+                    } catch (e2) {
+                        // Ignore
+                    }
+                    return {};
+                }
+            } catch (e) {
+                // Read Failed. Only check SMA if read error was NOT timeout?
+                // Or just try SMA anyway if SunSpec failed.
+                try {
+                    const smaData = await client.readHoldingRegisters(30051, 2);
+                    const smaVal = (smaData.data[0] << 16) | smaData.data[1];
+                    if (smaVal === 8128 || smaVal === 9397 || smaVal === 19135) {
+                        console.log(`[SunSpec] Fallback: Detected SMA Device at ${ip}:${unitId} during scan (after SunSpec fail).`);
+                        return {
+                            'sma_edmm': { start: 0, len: 0 },
+                            'info': { Mn: 'SMA', Md: 'Data Manager' }
+                        };
+                    }
+                } catch (e3) { }
+
+                return {};
+            }
 
             let addr = baseAddr;
             while (true) {
@@ -301,7 +443,9 @@ module.exports = function (RED) {
 
         // Single param config
         node.selectedDevice = config.selectedDevice; // IP:ID
-        node.selectedModel = parseInt(config.selectedModel);
+        // Support string models (e.g. sma_edmm)
+        const parsedMid = parseInt(config.selectedModel);
+        node.selectedModel = isNaN(parsedMid) ? config.selectedModel : parsedMid;
         node.selectedPoint = config.selectedPoint;
         node.selectedId = config.selectedId; // Explicit param ID
 
@@ -337,49 +481,221 @@ module.exports = function (RED) {
 
         // Core Scan Logic Reusable Function
         async function triggerScan(msg) {
-            msg = msg || {};
+            try {
+                msg = msg || {};
 
-            // --- MODE 2: Parameter List (Custom Array) ---
-            if (node.readMode === 'list' && node.outputList.length > 0) {
-                node.status({ fill: "blue", shape: "dot", text: `reading ${node.outputList.length} items...` });
+                // --- MODE 2: Parameter List (Custom Array) ---
+                if (node.readMode === 'list' && node.outputList.length > 0) {
+                    node.status({ fill: "blue", shape: "dot", text: `reading ${node.outputList.length} items...` });
 
-                // Group by IP:ID for optimization
-                const groups = {};
-                node.outputList.forEach((item, index) => {
-                    const key = `${item.device}:${item.id}`;
-                    if (!groups[key]) groups[key] = [];
-                    groups[key].push({ ...item, originalIndex: index });
-                });
+                    // Group by IP:ID for optimization
+                    const groups = {};
+                    node.outputList.forEach((item, index) => {
+                        const key = `${item.device}:${item.id}`;
+                        if (!groups[key]) groups[key] = [];
+                        groups[key].push({ ...item, originalIndex: index });
+                    });
 
-                const finalArray = new Array(node.outputList.length).fill(null);
+                    const finalArray = new Array(node.outputList.length).fill(null);
 
-                // Process Groups concurrently 
-                for (const key in groups) {
-                    const [ip, idStr] = key.split(':');
-                    const id = parseInt(idStr);
-                    const items = groups[key];
+                    // Process Groups concurrently 
+                    for (const key in groups) {
+                        const [ip, idStr] = key.split(':');
+                        const id = parseInt(idStr);
+                        const items = groups[key];
 
-                    // Run single connection session for this device
-                    try {
-                        const values = await readMultiplePoints(node, models, ip, node.port, id, items, node.timeout);
-                        // Map back to final array
-                        values.forEach(v => {
-                            finalArray[v.index] = v.value;
-                        });
-                    } catch (e) {
-                        node.error(`List Read Error ${key}: ${e.message}`);
+                        // Run single connection session for this device
+                        try {
+                            const values = await readMultiplePoints(node, models, ip, node.port, id, items, node.timeout);
+                            // Map back to final array
+                            values.forEach(v => {
+                                finalArray[v.index] = v.value;
+                            });
+                        } catch (e) {
+                            node.error(`List Read Error ${key}: ${e.message}`);
+                        }
                     }
+
+                    msg.payload = finalArray;
+                    node.send(msg);
+                    node.status({ fill: "green", shape: "dot", text: "read complete" });
+                    return;
                 }
 
-                msg.payload = finalArray;
-                node.send(msg);
-                node.status({ fill: "green", shape: "dot", text: "read complete" });
-                return;
-            }
+                // --- MODE 1: Single Parameter ---
+                if (node.readMode === 'parameter' && node.selectedModel && node.selectedPoint) {
+                    node.status({ fill: "blue", shape: "dot", text: `reading ${node.selectedPoint}...` });
 
-            // --- MODE 1: Single Parameter ---
-            if (node.readMode === 'parameter' && node.selectedModel && node.selectedPoint) {
-                node.status({ fill: "blue", shape: "dot", text: `reading ${node.selectedPoint}...` });
+                    let targetId = node.unitId;
+                    let targetIp = node.ip;
+
+                    if (node.selectedDevice && node.selectedDevice.includes(":")) {
+                        const [ip, id] = node.selectedDevice.split(':');
+                        targetIp = ip;
+                        targetId = parseInt(id);
+                    }
+
+                    if (node.selectedId) {
+                        targetId = parseInt(node.selectedId);
+                    }
+
+                    if (!targetIp || isNaN(targetId)) {
+                        node.error("Invalid Target IP/ID for parameter read");
+                        return;
+                    }
+
+                    try {
+                        const val = await readSinglePoint(node, models, targetIp, node.port, targetId, node.selectedModel, node.selectedPoint, node.timeout);
+                        if (val !== null) {
+                            msg.payload = val;
+                            node.send(msg);
+                            node.status({ fill: "green", shape: "dot", text: `${val}` });
+                        } else {
+                            node.status({ fill: "red", shape: "ring", text: "read failed" });
+                        }
+                    } catch (e) {
+                        node.error(e);
+                    }
+                    return;
+                }
+
+                // --- MODE 0: Full Scan (Fallback) ---
+                node.status({ fill: "blue", shape: "dot", text: "scanning..." });
+                const results = {};
+                let ips = discovery.parseIpRange(node.ip);
+                for (const targetIp of ips) {
+                    if (!await discovery.checkPort(targetIp, node.port)) continue;
+                    const ids = node.scanIds ? await discovery.scanUnitIds(targetIp, node.port, node.timeout) : [node.unitId];
+                    for (const id of ids) {
+                        const deviceData = await readSunSpecDevice(targetIp, node.port, id, models, node);
+                        if (deviceData) {
+                            if (!results[targetIp]) results[targetIp] = {};
+                            results[targetIp][id] = deviceData;
+                        }
+                    }
+                }
+                msg.payload = results;
+                node.send(msg);
+                node.status({ fill: "green", shape: "dot", text: "scan complete" });
+            } catch (err) {
+                // Top-level error handler to prevent node crash
+                node.error(`Scan failed: ${err.message}`);
+                node.status({ fill: "red", shape: "ring", text: "scan error" });
+                throw err; // Re-throw for retry logic to catch
+            }
+        }
+
+        // Input Listener
+        node.on('input', function (msg) {
+            triggerScan(msg);
+        });
+
+        // Interval Listener with retry logic
+        let intervalId = null;
+        let retryTimeoutId = null;
+
+        // CRITICAL: Only enable auto-read if node is properly configured
+        const isConfigured = () => {
+            if (node.readMode === 'parameter') {
+                // Must have valid device, model, and point
+                return node.selectedModel && node.selectedPoint &&
+                    (node.selectedDevice || (node.ip && !isNaN(node.unitId)));
+            }
+            if (node.readMode === 'list') {
+                // Must have output list
+                return node.outputList && node.outputList.length > 0;
+            }
+            // Scan mode requires explicit IP
+            return node.ip && node.ip.trim() !== '';
+        };
+
+        if (node.pacing && node.pacing > 0 && isConfigured()) {
+            node.log(`Auto-read enabled: ${node.pacing}s`);
+
+            const MAX_RETRIES = 10; // Maximum retry attempts before giving up
+
+            const executeRead = () => {
+                triggerScan({})
+                    .then(() => {
+                        // Success - reset error counter
+                        if (node.connectionState.consecutiveErrors > 0) {
+                            node.log(`Auto-read recovered after ${node.connectionState.consecutiveErrors} failures`);
+                        }
+                        node.connectionState.consecutiveErrors = 0;
+                        node.connectionState.lastSuccess = new Date();
+
+                        // Reschedule normal interval if needed? 
+                        // Check if interval is running. 
+                        // If we are in "Retry Mode" (intervalId is null), we should switch back to normal interval?
+                        // Actually, my interval logic below sets intervalId.
+                        // But if we entered retry loop, intervalId was cleared.
+                        // So we must restart interval here if it's null.
+                        if (!intervalId) {
+                            intervalId = setInterval(executeRead, node.pacing * 1000);
+                        }
+                    })
+                    .catch(err => {
+                        node.connectionState.consecutiveErrors++;
+                        node.connectionState.lastError = new Date();
+
+                        // Check if we've exceeded max retries
+                        if (node.connectionState.consecutiveErrors >= MAX_RETRIES) {
+                            node.error(`Auto-read stopped after ${MAX_RETRIES} consecutive failures. Manual intervention required.`);
+                            node.status({ fill: "red", shape: "ring", text: `failed ${MAX_RETRIES}x - stopped` });
+                            return;
+                        }
+
+                        // Exponential backoff (max 30s)
+                        const delay = Math.min(
+                            node.connectionState.retryDelay * Math.pow(2, node.connectionState.consecutiveErrors - 1),
+                            CONST.MAX_RETRY_DELAY
+                        );
+
+                        node.error(`Auto-read failed (${node.connectionState.consecutiveErrors}/${MAX_RETRIES}). Retrying in ${delay / 1000}s...`);
+
+                        // Clear regular interval during error recovery
+                        if (intervalId) {
+                            clearInterval(intervalId);
+                            intervalId = null;
+                        }
+
+                        // Schedule retry
+                        retryTimeoutId = setTimeout(() => {
+                            retryTimeoutId = null;
+                            executeRead(); // Recursive retry
+                        }, delay);
+                    });
+            };
+
+
+            // Input Listener with Error Handling
+            node.on('input', function (msg) {
+                // Determine if this is a WRITE or READ
+                // Rules:
+                // 1. Must be in 'parameter' mode (Parameter Read/Write)
+                // 2. msg.payload must define a value (not empty trigger)
+                // 3. msg.payload !== undefined && msg.payload !== '' (strict check?)
+                //    Note: Writing 0 is valid. Writing false is valid?
+                if (node.readMode === 'parameter' && msg.payload !== undefined && msg.payload !== '') {
+                    // Trigger WRITE
+                    executeWrite(msg).catch(err => {
+                        node.error(`Write failed: ${err.message}`);
+                        node.status({ fill: "red", shape: "ring", text: "write error" });
+                    });
+                } else {
+                    // Trigger READ (Default)
+                    triggerScan(msg).catch(err => {
+                        node.error(`Input scan failed: ${err.message}`);
+                        node.status({ fill: "red", shape: "ring", text: "scan error" });
+                    });
+                }
+            });
+
+            const executeWrite = async (msg) => {
+                const models = global.globalModelDefinitions || {};
+                const valueToWrite = msg.payload;
+
+                node.status({ fill: "yellow", shape: "dot", text: `writing ${valueToWrite}...` });
 
                 let targetId = node.unitId;
                 let targetIp = node.ip;
@@ -395,94 +711,14 @@ module.exports = function (RED) {
                 }
 
                 if (!targetIp || isNaN(targetId)) {
-                    node.error("Invalid Target IP/ID for parameter read");
-                    return;
+                    throw new Error("Invalid Target IP/ID for write");
                 }
 
-                try {
-                    const val = await readSinglePoint(node, models, targetIp, node.port, targetId, node.selectedModel, node.selectedPoint, node.timeout);
-                    if (val !== null) {
-                        msg.payload = val;
-                        node.send(msg);
-                        node.status({ fill: "green", shape: "dot", text: `${val}` });
-                    } else {
-                        node.status({ fill: "red", shape: "ring", text: "read failed" });
-                    }
-                } catch (e) {
-                    node.error(e);
-                }
-                return;
-            }
+                await writeSinglePoint(node, models, targetIp, node.port, targetId, node.selectedModel, node.selectedPoint, valueToWrite, node.timeout);
 
-            // --- MODE 0: Full Scan (Fallback) ---
-            node.status({ fill: "blue", shape: "dot", text: "scanning..." });
-            const results = {};
-            let ips = discovery.parseIpRange(node.ip);
-            for (const targetIp of ips) {
-                if (!await discovery.checkPort(targetIp, node.port)) continue;
-                const ids = node.scanIds ? await discovery.scanUnitIds(targetIp, node.port, 1000) : [node.unitId];
-                for (const id of ids) {
-                    const deviceData = await readSunSpecDevice(targetIp, node.port, id, models, node);
-                    if (deviceData) {
-                        if (!results[targetIp]) results[targetIp] = {};
-                        results[targetIp][id] = deviceData;
-                    }
-                }
-            }
-            msg.payload = results;
-            node.send(msg);
-            node.status({ fill: "green", shape: "dot", text: "scan complete" });
-        }
-
-        // Input Listener
-        node.on('input', function (msg) {
-            triggerScan(msg);
-        });
-
-        // Interval Listener with retry logic
-        let intervalId = null;
-        let retryTimeoutId = null;
-
-        if (node.pacing && node.pacing > 0) {
-            node.log(`Auto-read enabled: ${node.pacing}s`);
-
-            const executeRead = () => {
-                triggerScan({}).catch(err => {
-                    node.connectionState.consecutiveErrors++;
-                    node.connectionState.lastError = new Date();
-
-                    // Exponential backoff (max 30s)
-                    const delay = Math.min(
-                        node.connectionState.retryDelay * Math.pow(2, node.connectionState.consecutiveErrors - 1),
-                        30000
-                    );
-
-                    node.error(`Auto-read failed (${node.connectionState.consecutiveErrors} consecutive). Retrying in ${delay / 1000}s...`);
-
-                    // Clear regular interval during error recovery
-                    if (intervalId) {
-                        clearInterval(intervalId);
-                        intervalId = null;
-                    }
-
-                    // Schedule retry
-                    retryTimeoutId = setTimeout(() => {
-                        retryTimeoutId = null;
-                        executeRead(); // Recursive retry
-                    }, delay);
-                }).then(() => {
-                    // Success - reset error counter
-                    if (node.connectionState.consecutiveErrors > 0) {
-                        node.log(`Auto-read recovered after ${node.connectionState.consecutiveErrors} failures`);
-                    }
-                    node.connectionState.consecutiveErrors = 0;
-                    node.connectionState.lastSuccess = new Date();
-
-                    // Resume regular interval if we were in retry mode
-                    if (!intervalId && node.pacing > 0) {
-                        intervalId = setInterval(executeRead, node.pacing * 1000);
-                    }
-                });
+                node.status({ fill: "green", shape: "dot", text: "write success" });
+                // Echo the written value?
+                node.send(msg);
             };
 
             // Initial read
@@ -490,6 +726,8 @@ module.exports = function (RED) {
 
             // Regular interval
             intervalId = setInterval(executeRead, node.pacing * 1000);
+        } else if (node.pacing > 0 && !isConfigured()) {
+            node.warn('Auto-read disabled: Node configuration incomplete. Please configure device, model, and point.');
         }
 
         node.on('close', function (done) {
@@ -504,6 +742,106 @@ module.exports = function (RED) {
         });
     }
 
+    // --- Write Functionality ---
+    async function writeSinglePoint(node, models, ip, port, unitId, modelId, pointId, value, timeout) {
+        const client = new ModbusRTU();
+        try {
+            await client.connectTCP(ip, { port: port });
+            client.setID(unitId);
+            client.setTimeout(timeout || 2000);
+
+            // 1. Resolve Model Address
+            let modelAddr = -1;
+            const cacheKey = `${ip}:${unitId}:${port}`; // Cache by device
+
+            // Check cache first
+            if (node.modelAddressCache && node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
+                modelAddr = node.modelAddressCache[cacheKey][modelId];
+            }
+
+            // If not found, try to find it (using existing helper)
+            if (modelAddr === -1) {
+                modelAddr = await findModelAddress(client, modelId, node, cacheKey);
+            }
+
+            if (modelAddr === -1) {
+                throw new Error(`Model ${modelId} not found on device`);
+            }
+
+            // 2. Get Point Definition
+            if (!models[modelId]) throw new Error(`Model definition for ${modelId} missing`);
+            const modelDef = models[modelId].group;
+            const pointDef = modelDef.points.find(p => p.name === pointId);
+            if (!pointDef) throw new Error(`Point ${pointId} not found in model`);
+
+            // Calculate Offset Dynamically (if missing from def)
+            let pointOffset = 0;
+            if (pointDef.offset !== undefined) {
+                pointOffset = pointDef.offset;
+            } else {
+                for (const p of modelDef.points) {
+                    if (p.name === pointId) break;
+                    // Skip Header Points (ID and L) as modelAddr is already shifted by 2
+                    if (p.name === 'ID' || p.name === 'L') continue;
+
+                    let size = p.size || 1;
+                    if (!p.size) {
+                        if (p.type.includes('32')) size = 2;
+                        if (p.type.includes('64')) size = 4;
+                        if (p.type === 'sunssf') size = 1;
+                    }
+                    pointOffset += size;
+                }
+            }
+
+            // 3. Apply Reverse Scaling
+            // Support staticScale
+            let val = value;
+            if (pointDef.staticScale) {
+                val = val / pointDef.staticScale;
+            }
+
+            // Support SunSpec Scale Factors not implemented for write yet (complex dependency)
+            // If 'sf' property exists, we should ideally read the sf register first?
+            // Or assume the user passes Raw Value?
+            // For Conext (spec 503), scaling is static (units/scale column).
+            // So staticScale support is sufficient for Conext.
+
+            val = Math.round(val); // Modbus registers are integers
+
+            // 4. Serialize Data
+            let buffer;
+            const type = pointDef.type;
+
+            if (type === 'uint16' || type === 'enum16' || type === 'bitfield16') {
+                buffer = Buffer.alloc(2);
+                buffer.writeUInt16BE(val);
+            } else if (type === 'int16' || type === 'sint16') {
+                buffer = Buffer.alloc(2);
+                buffer.writeInt16BE(val);
+            } else if (type === 'uint32') {
+                buffer = Buffer.alloc(4);
+                buffer.writeUInt32BE(val);
+            } else if (type === 'int32' || type === 'sint32') {
+                buffer = Buffer.alloc(4);
+                buffer.writeInt32BE(val);
+            } else {
+                throw new Error(`Write not supported for type: ${type}`);
+            }
+
+            // 5. Execute Write
+            const addr = modelAddr + pointOffset;
+            await client.writeRegisters(addr, buffer);
+
+            // Success
+            return val;
+
+        } catch (e) {
+            throw e;
+        } finally {
+            client.close();
+        }
+    }
     // --- Optimized Multi-Read ---
     async function readMultiplePoints(node, models, ip, port, unitId, items, timeout) {
         const client = new ModbusRTU();
@@ -570,22 +908,22 @@ module.exports = function (RED) {
         const pointDef = points.find(p => p.name === pointName);
         if (!pointDef) return null;
 
-        // Calc Offset
+        // Calculate Offset
         let offset = 0;
-        let logOffset = "";
-        for (const p of points) {
-            if (p.name === pointName) {
-                if (node) node.warn(`Offset Info for ${pointName}: Addr = ${modelAddr} +${offset}=${modelAddr + offset} (Prev Points Summed: ${logOffset})`);
-                break;
+        if (pointDef.offset !== undefined) {
+            offset = pointDef.offset;
+        } else {
+            // Standard SunSpec Summation Logic
+            for (const p of points) {
+                if (p.name === pointName) break;
+                let size = p.size || 1;
+                if (!p.size) {
+                    if (p.type.includes('32')) size = 2;
+                    if (p.type.includes('64')) size = 4;
+                    if (p.type === 'sunssf') size = 1;
+                }
+                offset += size;
             }
-            let size = p.size || 1;
-            if (!p.size) {
-                if (p.type.includes('32')) size = 2;
-                if (p.type.includes('64')) size = 4;
-                if (p.type === 'sunssf') size = 1;
-            }
-            offset += size;
-            // logOffset += `${ p.name } (${ size })`; // heavy logging
         }
 
         let size = pointDef.size || 1;
@@ -638,10 +976,12 @@ module.exports = function (RED) {
         if (typeof val === 'string' || val === null) return val;
 
         // Scaling
-        if (pointDef.sf && typeof val === 'number') {
+        if (pointDef.staticScale && typeof val === 'number') {
+            val = val * pointDef.staticScale;
+        } else if (pointDef.sf && typeof val === 'number') {
             // Skip scaling for W and VA - return raw values
             if (pointDef.name === 'W' || pointDef.name === 'VA') {
-                if (node) node.warn(`Skipping scaling for ${pointDef.name}: Raw = ${val} (scale factor ignored per config)`);
+                // if (node) node.warn(`Skipping scaling for ${pointDef.name}: Raw = ${val} (scale factor ignored per config)`);
             } else {
                 let sfOffset = 0;
                 let foundSF = false;
@@ -699,7 +1039,19 @@ module.exports = function (RED) {
      */
     async function readSinglePoint(node, models, ip, port, unitId, modelId, pointName, timeout) {
         const client = new ModbusRTU();
+        // Prevent unhandled error events from crashing the process
+        client.on('error', (err) => {
+            // Log but don't throw, as the promise chain will likely reject anyway
+            // console.log(`[SunSpec Worker] Client Error: ${err.message}`);
+        });
+
         try {
+            // Look up Point Definition to check for Unit ID Override
+            let pointDef = null;
+            if (models[modelId] && models[modelId].group && models[modelId].group.points) {
+                pointDef = models[modelId].group.points.find(p => p.name === pointName);
+            }
+
             // Connection with timeout
             await utils.withTimeout(
                 client.connectTCP(ip, { port: port }),
@@ -707,14 +1059,22 @@ module.exports = function (RED) {
                 'TCP connection'
             );
 
-            client.setID(unitId);
+            // Handle Override or Default Unit ID
+            let targetUnitId = unitId;
+            if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
+
+            client.setID(targetUnitId);
             client.setTimeout(timeout || CONST.DEFAULT_TIMEOUT);
 
             const cacheKey = `${ip}:${unitId}`;
 
             // Check cache first
             let modelAddr = -1;
-            if (node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
+
+            // SMA EDMM uses Absolute Addressing (Start = 0)
+            if (modelId === 'sma_edmm' || modelId === 'conext_xw_503') {
+                modelAddr = 0; // Absolute Addressing for SMA
+            } else if (node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
                 modelAddr = node.modelAddressCache[cacheKey][modelId];
             } else {
                 // Cache miss - use utility function to find model
@@ -733,11 +1093,13 @@ module.exports = function (RED) {
                 }
             }
 
+
             if (modelAddr === -1) {
                 throw new errors.SunSpecModelNotFoundError(modelId, `${ip}:${unitId}`);
             }
 
-            const result = await fetchPointValue(node, client, models, modelId, modelAddr, pointName);
+            // Fix argument order: client, models, modelId, modelAddr, pointName, node
+            const result = await fetchPointValue(client, models, modelId, modelAddr, pointName, node);
 
             // Update connection state on success
             if (node.connectionState) {
@@ -799,9 +1161,71 @@ module.exports = function (RED) {
                 deviceMap[modelId] = decoded;
                 addr += 2 + length;
             }
-            return deviceMap;
         } catch (e) { return null; } finally { client.close(); }
     }
 
     RED.nodes.registerType("sunspec-scan", SunSpecScanNode);
+
+    // Initialize Models
+    loadModels(RED);
+}
+
+// Global Model Loader
+function loadModels(RED) {
+    if (global.globalModelDefinitions) return; // Already loaded
+
+    const fs = require('fs-extra');
+    const path = require('path');
+    const modelsPath = path.join(__dirname, 'models', 'index.json');
+
+    try {
+        console.log("[SunSpec] Loading SunSpec models...");
+        const models = fs.readJsonSync(modelsPath);
+        global.globalModelDefinitions = models;
+        console.log(`[SunSpec] Loaded ${Object.keys(models).length} models into global cache.`);
+    } catch (e) {
+        console.error("[SunSpec] Failed to load models:", e.message);
+        global.globalModelDefinitions = {};
+    }
+}
+
+
+// Helper to find model address (Shared)
+async function findModelAddress(client, modelId, node, cacheKey) {
+    // 1. Absolute Addressing
+    if (modelId === 'sma_edmm' || modelId === 'conext_xw_503') {
+        return 0;
+    }
+
+    // 2. SunSpec Scan
+    let baseAddr = 40000;
+    try {
+        let data = await client.readHoldingRegisters(baseAddr, 2);
+        if (data.data[0] === 0x5375 && data.data[1] === 0x6e53) baseAddr = 40002;
+        else return -1;
+    } catch (e) { return -1; }
+
+    let addr = baseAddr;
+    while (true) {
+        // Read Header (ID + Length)
+        const header = await client.readHoldingRegisters(addr, 2);
+        const mid = header.data[0];
+        const len = header.data[1];
+
+        if (mid === 0xFFFF) break; // End of chain
+
+        // Update Cache?
+        if (node && node.modelAddressCache && cacheKey) {
+            if (!node.modelAddressCache[cacheKey]) node.modelAddressCache[cacheKey] = {};
+            node.modelAddressCache[cacheKey][mid] = addr + 2;
+        }
+
+        if (String(mid) === String(modelId)) {
+            return addr + 2; // Point Data starts after ID+Len
+        }
+
+        addr += 2 + len;
+    }
+
+    return -1;
 }
