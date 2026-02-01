@@ -14,6 +14,9 @@ A professional-grade Node-RED node for discovering, scanning, and reading SunSpe
   - Full Scan: Discover all devices and models
   - Single Parameter: Read specific point with auto-refresh
   - Custom List: Batch read multiple parameters
+- 🔌 **Proprietary Device Support**:
+  - **Schneider Conext XW Pro**: Native support via Port 503 (SunSpec-like mapping)
+  - **SMA Data Manager M (EDMM)**: HTML-scraped register mapping
 - ⚡ **Performance Optimized**:
   - Model address caching (85% traffic reduction)
   - Persistent cache across Node-RED restarts
