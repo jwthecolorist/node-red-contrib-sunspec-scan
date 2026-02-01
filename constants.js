@@ -25,7 +25,7 @@ module.exports = {
     FLOAT32_NOT_IMPL: NaN,           // float32 "not implemented" value
 
     // Default Timeouts (ms)
-    DEFAULT_TIMEOUT: 2000,           // Standard Modbus timeout
+    DEFAULT_TIMEOUT: 6000,           // Standard Modbus timeout
     DEFAULT_SCAN_TIMEOUT: 5000,      // Full device scan timeout
     DEFAULT_PORT_CHECK_TIMEOUT: 300, // Quick port availability check
     CONNECTION_TIMEOUT: 5000,        // TCP connection timeout

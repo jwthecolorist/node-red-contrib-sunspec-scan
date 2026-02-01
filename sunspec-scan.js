@@ -170,8 +170,10 @@ module.exports = function (RED) {
                         results[targetIp][id] = modelsFound;
 
                         // Update Global Map
-                        if (!networkMap[targetIp]) networkMap[targetIp] = {};
-                        networkMap[targetIp][id] = modelsFound;
+                        // KEY BY IP:PORT to avoid collision (502 vs 503)
+                        const deviceKey = `${targetIp}:${port}`;
+                        if (!networkMap[deviceKey]) networkMap[deviceKey] = {};
+                        networkMap[deviceKey][id] = modelsFound;
                         saveNetworkMap();
 
                         // Auto-save to Device Manager
@@ -221,8 +223,12 @@ module.exports = function (RED) {
         }
 
         // Check Network Map (Deep Scan Cache)
-        if (networkMap[ip] && networkMap[ip][unitId]) {
-            const cached = networkMap[ip][unitId];
+        // Check Network Map (Deep Scan Cache)
+        // BUG FIX: Key is IP:PORT for disambiguation
+        const deviceKey = (port === 502) ? ip : `${ip}:${port}`;
+
+        if (networkMap[deviceKey] && networkMap[deviceKey][unitId]) {
+            const cached = networkMap[deviceKey][unitId];
             // Only serve cache if it looks like a deep scan (more than just Model 1 + Info)
             if (Object.keys(cached).length > 2) {
                 res.json(cached);
@@ -231,12 +237,17 @@ module.exports = function (RED) {
         }
 
         try {
-            console.log(`[SunSpec] Deep Scanning Models for ${ip}:${unitId}...`);
-            const modelsFound = await scanDeviceModelsOnly(ip, port, unitId, models, timeout, false); // False = Full Scan
+            console.log(`[SunSpec] Deep Scanning Models for ${ip}:${port}:${unitId}...`);
+
+            // Infer Type from Port
+            let type = null;
+            if (port === 503) type = 'conext_xw_503';
+
+            const modelsFound = await scanDeviceModelsOnly(ip, port, unitId, models, timeout, false, type); // False = Full Scan
 
             // Update Global Map
-            if (!networkMap[ip]) networkMap[ip] = {};
-            networkMap[ip][unitId] = modelsFound;
+            if (!networkMap[deviceKey]) networkMap[deviceKey] = {};
+            networkMap[deviceKey][unitId] = modelsFound;
 
             res.json(modelsFound);
         } catch (e) {
@@ -253,6 +264,7 @@ module.exports = function (RED) {
      * @param {boolean} fastMode If true, stops after finding Model 1
      */
     async function scanDeviceModelsOnly(ip, port, unitId, models, timeout, fastMode, type) {
+
         // Vendor Specific Scan
         if (type === 'sma_edmm') {
             return {
@@ -260,6 +272,16 @@ module.exports = function (RED) {
                 'info': { Mn: 'SMA', Md: 'Data Manager' }
             };
         }
+
+        // Restored Conext 503 logic
+        if (type === 'conext_xw_503') {
+            return {
+                'conext_xw_503': { start: 0, len: 0 },
+                'info': { Mn: 'Schneider', Md: 'Conext XW (503)' }
+            };
+        }
+
+
 
         const client = new ModbusRTU();
         const foundModels = {};
@@ -350,6 +372,7 @@ module.exports = function (RED) {
         } catch (e) { console.log("Scan Model Error", e); } finally {
             client.close();
         }
+        console.log(`[SunSpec-Dubgger] Scan Result for ${ip}:${port}: ${Object.keys(foundModels).length} models found.`);
         return foundModels;
     }
 
@@ -552,13 +575,39 @@ module.exports = function (RED) {
                         const val = await readSinglePoint(node, models, targetIp, node.port, targetId, node.selectedModel, node.selectedPoint, node.timeout);
                         if (val !== null) {
                             msg.payload = val;
+
+                            // Enrich Output with Metadata
+                            const mDef = models[node.selectedModel];
+                            if (mDef && mDef.group) {
+                                // Model Label
+                                msg.modelLabel = mDef.group.label || mDef.group.name;
+                                
+                                // Point Metadata
+                                const pDef = mDef.group.points.find(p => p.name === node.selectedPoint);
+                                if (pDef) {
+                                    msg.label = pDef.label || pDef.name; // Human readable name
+                                    msg.name = pDef.name;                // Raw ID
+                                    msg.units = pDef.units || "";
+                                }
+                            }
+
                             node.send(msg);
-                            node.status({ fill: "green", shape: "dot", text: `${val}` });
+                            
+                            // Human Readable Status
+                            // Clean up technical units (e.g., "%WHRtg" -> "%", "degC" -> "°C")
+                            let displayUnits = msg.units || '';
+                            if (displayUnits.startsWith('%')) displayUnits = '%';
+                            if (displayUnits === 'degC') displayUnits = '°C';
+                            if (displayUnits === 'degF') displayUnits = '°F';
+                            
+                            const statusText = msg.label ? `${msg.label}: ${val}${displayUnits}` : `${node.selectedPoint}: ${val}`;
+                            node.status({ fill: "green", shape: "dot", text: statusText.trim() });
                         } else {
                             node.status({ fill: "red", shape: "ring", text: "read failed" });
                         }
+
                     } catch (e) {
-                        node.error(e);
+                        throw e;
                     }
                     return;
                 }
@@ -583,7 +632,7 @@ module.exports = function (RED) {
                 node.status({ fill: "green", shape: "dot", text: "scan complete" });
             } catch (err) {
                 // Top-level error handler to prevent node crash
-                node.error(`Scan failed: ${err.message}`);
+                // node.error(`Scan failed: ${err.message}`); // Handled by caller
                 node.status({ fill: "red", shape: "ring", text: "scan error" });
                 throw err; // Re-throw for retry logic to catch
             }
@@ -655,7 +704,7 @@ module.exports = function (RED) {
                             CONST.MAX_RETRY_DELAY
                         );
 
-                        node.error(`Auto-read failed (${node.connectionState.consecutiveErrors}/${MAX_RETRIES}). Retrying in ${delay / 1000}s...`);
+                        node.warn(`Auto-read failed (${node.connectionState.consecutiveErrors}/${MAX_RETRIES}): ${err.message}. Retrying in ${delay / 1000}s...`);
 
                         // Clear regular interval during error recovery
                         if (intervalId) {
@@ -683,13 +732,23 @@ module.exports = function (RED) {
                 if (node.readMode === 'parameter' && msg.payload !== undefined && msg.payload !== '') {
                     // Trigger WRITE
                     executeWrite(msg).catch(err => {
-                        node.error(`Write failed: ${err.message}`);
+                        // Suppress stack for timeouts
+                        if (err.message.startsWith('Timeout')) {
+                            node.warn(err.message);
+                        } else {
+                            node.error(`Write failed: ${err.message}`, msg);
+                        }
                         node.status({ fill: "red", shape: "ring", text: "write error" });
                     });
                 } else {
                     // Trigger READ (Default)
                     triggerScan(msg).catch(err => {
-                        node.error(`Input scan failed: ${err.message}`);
+                        // Suppress stack for timeouts
+                        if (err.message.startsWith('Timeout')) {
+                            node.warn(err.message);
+                        } else {
+                            node.error(`Input scan failed: ${err.message}`, msg);
+                        }
                         node.status({ fill: "red", shape: "ring", text: "scan error" });
                     });
                 }
@@ -748,120 +807,119 @@ module.exports = function (RED) {
 
     // --- Write Functionality ---
     async function writeSinglePoint(node, models, ip, port, unitId, modelId, pointName, value, timeout) {
-        // Use Pooled Connection
-        let client;
-        try {
-            client = await connManager.getClient(ip, port, unitId, timeout);
-        } catch (connErr) {
-            throw new Error(`Write Connection failed: ${connErr.message}`);
-        }
-
-        try {
-            // Look up Point Definition to check for Unit ID Override
-            let pointDef = null;
-            if (models[modelId] && models[modelId].group && models[modelId].group.points) {
-                pointDef = models[modelId].group.points.find(p => p.name === pointName);
-            }
-
-            // Handle Override or Default Unit ID
-            let targetUnitId = unitId;
-            if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
-
-            // Ensure ID is set (pooled client might have changed it)
-            await client.setID(targetUnitId);
-            client.setTimeout(timeout || 2000);
-
-            // 1. Resolve Model Address
-            let modelAddr = -1;
-            const cacheKey = `${ip}:${unitId}:${port}`; // Cache by device
-
-            // Check cache first
-            if (node.modelAddressCache && node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
-                modelAddr = node.modelAddressCache[cacheKey][modelId];
-            }
-
-            // If not found, try to find it (using existing helper)
-            if (modelAddr === -1) {
-                modelAddr = await findModelAddress(client, modelId, node, cacheKey);
-            }
-
-            if (modelAddr === -1) {
-                throw new Error(`Model ${modelId} not found on device`);
-            }
-
-            // 2. Get Point Definition
-            if (!models[modelId]) throw new Error(`Model definition for ${modelId} missing`);
-            const modelDef = models[modelId].group;
-            // pointDef is already defined above
-            if (!pointDef) throw new Error(`Point ${pointName} not found in model`);
-
-            // Calculate Offset Dynamically (if missing from def)
-            let pointOffset = 0;
-            if (pointDef.offset !== undefined) {
-                pointOffset = pointDef.offset;
-            } else {
-                for (const p of modelDef.points) {
-                    if (p.name === pointName) break;
-                    // Skip Header Points (ID and L) as modelAddr is already shifted by 2
-                    if (p.name === 'ID' || p.name === 'L') continue;
-
-                    let size = p.size || 1;
-                    if (!p.size) {
-                        if (p.type.includes('32')) size = 2;
-                        if (p.type.includes('64')) size = 4;
-                        if (p.type === 'sunssf') size = 1;
-                    }
-                    pointOffset += size;
+        return await connManager.request(ip, port, unitId, async (client) => {
+            try {
+                // Look up Point Definition to check for Unit ID Override
+                let pointDef = null;
+                if (models[modelId] && models[modelId].group && models[modelId].group.points) {
+                    pointDef = models[modelId].group.points.find(p => p.name === pointName);
                 }
+
+                // Handle Override or Default Unit ID
+                let targetUnitId = unitId;
+                if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
+
+                // Client ID is set by connManager, but if override exists:
+                if (pointDef && pointDef.unitId) {
+                    await client.setID(pointDef.unitId);
+                }
+
+                // 1. Resolve Model Address
+                let modelAddr = -1;
+                const cacheKey = `${ip}:${unitId}`; // Standardize cache key (removed :port to match read) or keep consistent? 
+                // readSinglePoint uses `${ip}:${unitId}`. writeSinglePoint used `${ip}:${unitId}:${port}`? 
+                // Let's stick to the one used in readSinglePoint for hits: `${ip}:${unitId}`.
+
+                // SMA EDMM uses Absolute Addressing (Start = 0)
+                if (modelId === 'sma_edmm' || modelId === 'conext_xw_503') {
+                    modelAddr = 0;
+                } else if (node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
+                    modelAddr = node.modelAddressCache[cacheKey][modelId];
+                } else {
+                    // Cache miss - use utility function
+                    modelAddr = await utils.findModelAddress(client, modelId);
+
+                    if (modelAddr !== -1) {
+                        if (!node.modelAddressCache[cacheKey]) node.modelAddressCache[cacheKey] = {};
+                        node.modelAddressCache[cacheKey][modelId] = modelAddr;
+                        // Persist
+                        const persistKey = `modelAddressCache_${node.id}`;
+                        node.context().set(persistKey, node.modelAddressCache);
+                    }
+                }
+
+                if (modelAddr === -1) {
+                    throw new Error(`Model ${modelId} not found on device`);
+                }
+
+                // 2. Get Point Definition
+                if (!models[modelId]) throw new Error(`Model definition for ${modelId} missing`);
+                const modelDef = models[modelId].group;
+                if (!pointDef) throw new Error(`Point ${pointName} not found in model`);
+
+                // Calculate Offset Dynamically (if missing from def)
+                let pointOffset = 0;
+                if (pointDef.offset !== undefined) {
+                    pointOffset = pointDef.offset;
+                } else {
+                    for (const p of modelDef.points) {
+                        if (p.name === pointName) break;
+
+                        let size = p.size || 1;
+                        if (!p.size) {
+                            if (p.type.includes('32')) size = 2;
+                            if (p.type.includes('64')) size = 4;
+                            if (p.type === 'sunssf') size = 1;
+                        }
+                        pointOffset += size;
+                    }
+                }
+
+                // 3. Apply Reverse Scaling
+                // Support staticScale
+                let val = value;
+                if (pointDef.staticScale) {
+                    val = val / pointDef.staticScale;
+                }
+
+                val = Math.round(val); // Modbus registers are integers
+
+                // 4. Serialize Data
+                let buffer;
+                const type = pointDef.type;
+
+                if (type === 'uint16' || type === 'enum16' || type === 'bitfield16') {
+                    buffer = Buffer.alloc(2);
+                    buffer.writeUInt16BE(val);
+                } else if (type === 'int16' || type === 'sint16') {
+                    buffer = Buffer.alloc(2);
+                    buffer.writeInt16BE(val);
+                } else if (type === 'uint32') {
+                    buffer = Buffer.alloc(4);
+                    buffer.writeUInt32BE(val);
+                } else if (type === 'int32' || type === 'sint32') {
+                    buffer = Buffer.alloc(4);
+                    buffer.writeInt32BE(val);
+                } else {
+                    throw new Error(`Write not supported for type: ${type}`);
+                }
+
+                // 5. Execute Write
+                const finalAddr = modelAddr + pointOffset;
+                // Write
+                await client.writeRegisters(finalAddr, buffer);
+                node.warn(`[SunSpec Write] Success: Wrote ${value} to ${modelId}:${pointName} (@${finalAddr})`);
+                return true;
+
+            } catch (err) {
+                // Enrich error message
+                const isTimeout = err.message.toLowerCase().includes('time') || err.code === 'ETIMEDOUT';
+                if (isTimeout) {
+                    throw new Error(`Timeout: Device ${ip}:${unitId} did not respond to write request.`);
+                }
+                throw new Error(`Write failed: ${err.message} (${ip}:${unitId} Model=${modelId} Point=${pointName})`);
             }
-
-            // 3. Apply Reverse Scaling
-            // Support staticScale
-            let val = value;
-            if (pointDef.staticScale) {
-                val = val / pointDef.staticScale;
-            }
-
-            // Support SunSpec Scale Factors not implemented for write yet (complex dependency)
-            // If 'sf' property exists, we should ideally read the sf register first?
-            // Or assume the user passes Raw Value?
-            // For Conext (spec 503), scaling is static (units/scale column).
-            // So staticScale support is sufficient for Conext.
-
-            val = Math.round(val); // Modbus registers are integers
-
-            // 4. Serialize Data
-            let buffer;
-            const type = pointDef.type;
-
-            if (type === 'uint16' || type === 'enum16' || type === 'bitfield16') {
-                buffer = Buffer.alloc(2);
-                buffer.writeUInt16BE(val);
-            } else if (type === 'int16' || type === 'sint16') {
-                buffer = Buffer.alloc(2);
-                buffer.writeInt16BE(val);
-            } else if (type === 'uint32') {
-                buffer = Buffer.alloc(4);
-                buffer.writeUInt32BE(val);
-            } else if (type === 'int32' || type === 'sint32') {
-                buffer = Buffer.alloc(4);
-                buffer.writeInt32BE(val);
-            } else {
-                throw new Error(`Write not supported for type: ${type}`);
-            }
-
-            // 5. Execute Write
-            const finalAddr = modelAddr + pointOffset;
-            // Write
-            await client.writeRegisters(finalAddr, buffer);
-            node.warn(`[SunSpec Write] Success: Wrote ${value} to ${modelId}:${pointName} (@${finalAddr})`);
-            return true;
-
-        } catch (err) {
-            connManager.reportError(ip, port, err);
-            throw err;
-        }
-        // DO NOT CLOSE
+        }, timeout);
     }
     // --- Optimized Multi-Read ---
     async function readMultiplePoints(node, models, ip, port, unitId, items, timeout) {
@@ -1059,91 +1117,70 @@ module.exports = function (RED) {
      * @throws {SunSpecPointNotFoundError} If point not found in model
      */
     async function readSinglePoint(node, models, ip, port, unitId, modelId, pointName, timeout) {
-        // Use Pooled Connection
-        let client;
-        try {
-            client = await connManager.getClient(ip, port, unitId, timeout);
-        } catch (connErr) {
-            throw new Error(`Connection failed to ${ip}:${port} - ${connErr.message}`);
-        }
-
-        try {
-            // Look up Point Definition to check for Unit ID Override
-            let pointDef = null;
-            if (models[modelId] && models[modelId].group && models[modelId].group.points) {
-                pointDef = models[modelId].group.points.find(p => p.name === pointName);
-            }
-
-            // Handle Override or Default Unit ID
-            let targetUnitId = unitId;
-            if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
-
-            // Ensure ID is set (pooled client might have changed it)
-            await client.setID(targetUnitId);
-            client.setTimeout(timeout || CONST.DEFAULT_TIMEOUT);
-
-            const cacheKey = `${ip}:${unitId}`;
-
-            // Check cache first
-            let modelAddr = -1;
-
-            // SMA EDMM uses Absolute Addressing (Start = 0)
-            if (modelId === 'sma_edmm' || modelId === 'conext_xw_503') {
-                modelAddr = 0; // Absolute Addressing for SMA
-            } else if (node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
-                modelAddr = node.modelAddressCache[cacheKey][modelId];
-            } else {
-                // Cache miss - use utility function to find model
-                modelAddr = await utils.findModelAddress(client, modelId);
-
-                // Store in cache if found
-                if (modelAddr !== -1) {
-                    if (!node.modelAddressCache[cacheKey]) {
-                        node.modelAddressCache[cacheKey] = {};
-                    }
-                    node.modelAddressCache[cacheKey][modelId] = modelAddr;
-
-                    // Persist immediately
-                    const persistKey = `modelAddressCache_${node.id}`;
-                    node.context().set(persistKey, node.modelAddressCache);
+        return await connManager.request(ip, port, unitId, async (client) => {
+            try {
+                // Look up Point Definition
+                let pointDef = null;
+                if (models[modelId] && models[modelId].group && models[modelId].group.points) {
+                    pointDef = models[modelId].group.points.find(p => p.name === pointName);
                 }
+
+                // Handle Override or Default Unit ID (Note: client ID is already set by connManager)
+                // However, internal logic of fetchPointValue assumes it can use the client logic
+                // Double check target ID if overridden by pointDef
+                if (pointDef && pointDef.unitId) {
+                    await client.setID(pointDef.unitId);
+                }
+
+                const cacheKey = `${ip}:${unitId}`;
+                let modelAddr = -1;
+
+                // Address Caching Logic
+                if (modelId === 'sma_edmm' || modelId === 'conext_xw_503') {
+                    modelAddr = 0;
+                } else if (node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
+                    modelAddr = node.modelAddressCache[cacheKey][modelId];
+                } else {
+                    // Cache miss
+                    modelAddr = await utils.findModelAddress(client, modelId);
+                    if (modelAddr !== -1) {
+                        if (!node.modelAddressCache[cacheKey]) node.modelAddressCache[cacheKey] = {};
+                        node.modelAddressCache[cacheKey][modelId] = modelAddr;
+                        const persistKey = `modelAddressCache_${node.id}`;
+                        node.context().set(persistKey, node.modelAddressCache);
+                    }
+                }
+
+                if (modelAddr === -1) {
+                    throw new errors.SunSpecModelNotFoundError(modelId, `${ip}:${unitId}`);
+                }
+
+                const result = await fetchPointValue(client, models, modelId, modelAddr, pointName, node);
+
+                if (node.connectionState) {
+                    node.connectionState.lastSuccess = new Date();
+                }
+
+                return result;
+
+            } catch (e) {
+                if (e instanceof errors.SunSpecModelNotFoundError) {
+                    throw e;
+                }
+
+                // Classify Error
+                const isTimeout = e.message.toLowerCase().includes('time') || e.code === 'ETIMEDOUT';
+
+                if (isTimeout) {
+                    throw new Error(`Timeout: Device ${ip}:${unitId} did not respond to read request.`);
+                }
+
+                // Generic Error with Context
+                const errorMsg = `Read failed: ${e.message} (${ip}:${port} ID=${unitId} Model=${modelId} Point=${pointName})`;
+                if (node.connectionState) node.connectionState.lastError = new Date();
+                throw new Error(errorMsg);
             }
-
-
-            if (modelAddr === -1) {
-                throw new errors.SunSpecModelNotFoundError(modelId, `${ip}:${unitId}`);
-            }
-
-            // Fix argument order: client, models, modelId, modelAddr, pointName, node
-            const result = await fetchPointValue(client, models, modelId, modelAddr, pointName, node);
-
-            // Update connection state on success
-            if (node.connectionState) {
-                node.connectionState.lastSuccess = new Date();
-            }
-
-            return result;
-        } catch (e) {
-            // Enhanced error logging with specific error types
-            if (e instanceof errors.SunSpecModelNotFoundError ||
-                e instanceof errors.SunSpecTimeoutError) {
-                // Already typed errors - rethrow as-is
-                throw e;
-            }
-
-            // Wrap generic errors
-            const errorMsg = `Read failed: ${e.message} (${ip}:${port} ID=${unitId} Model=${modelId} Point=${pointName})`;
-            console.error(errorMsg);
-
-            // Update connection state
-            if (node.connectionState) {
-                node.connectionState.lastError = new Date();
-            }
-
-            throw new Error(errorMsg);
-        } finally {
-            // DO NOT CLOSE CLIENT - Leave it for the pool
-        }
+        }, timeout);
     }
 
     // Copy of read logic (no change)

@@ -11,7 +11,7 @@ const ModbusRTU = require("modbus-serial");
  */
 class ConnectionManager {
     constructor() {
-        // Map<"ip:port", { client: ModbusRTU, lastActive: number, promise: Promise, unitId: number }>
+        // Map<"ip:port", { client: ModbusRTU, lastActive: number, queue: Promise }>
         this.pool = new Map();
 
         // Timeout in ms before closing an idle connection
@@ -22,96 +22,107 @@ class ConnectionManager {
     }
 
     /**
-     * Get a connected client for the given target.
-     * Reuse existing if open, or connect new.
+     * Execute a function using a serialized connection.
+     * Ensures exclusive access to the client for the duration of the action.
+     * @param {string} ip 
+     * @param {number} port 
+     * @param {number} unitId 
+     * @param {function(client):Promise<T>} action 
+     * @param {number} timeout Connection timeout 
+     * @returns {Promise<T>}
      */
-    async getClient(ip, port, unitId, timeout) {
+    async request(ip, port, unitId, action, timeout) {
         const key = `${ip}:${port}`;
-        const now = Date.now();
         timeout = timeout || 5000;
 
-        // 1. Check existing pool
-        if (this.pool.has(key)) {
-            const entry = this.pool.get(key);
-
-            // Update Activity
-            entry.lastActive = now;
-
-            // Update Unit ID (ModbusRTU handles this instantly)
-            if (entry.client) {
-                entry.client.setID(unitId);
-            }
-
-            // Return active client (or wait for pending connection)
-            if (entry.promise) {
-                return entry.promise; // Return the pending promise
-            }
-
-            if (entry.client && entry.client.isOpen) {
-                return entry.client;
-            } else {
-                // Stale/Closed - remove and reconnect
-                this.invalidate(ip, port);
-            }
+        // 1. Get or Create Pool Entry
+        if (!this.pool.has(key)) {
+            this.pool.set(key, {
+                client: null,
+                lastActive: Date.now(),
+                queue: Promise.resolve() // Initialize ready queue
+            });
         }
 
-        // 2. Connect New
-        const client = new ModbusRTU();
-        client.setTimeout(timeout);
+        const entry = this.pool.get(key);
+        entry.lastActive = Date.now();
 
-        // Store the promise to handle race conditions (concurrent requests wait for SAME connection)
-        const connectPromise = new Promise(async (resolve, reject) => {
+        // 2. Append Action to Queue
+        // We chain the new action to the end of the existing queue
+        const resultPromise = entry.queue.then(async () => {
+            // A. Acquire Client (Connect if needed)
+            let client = entry.client;
+
+            // Check if healthy
+            if (!client || !client.isOpen) {
+                try {
+                    client = await this._connect(ip, port, timeout);
+                    entry.client = client;
+                } catch (e) {
+                    this.invalidate(ip, port);
+                    throw e;
+                }
+            } else {
+                client.setTimeout(timeout);
+            }
+
+            // B. Set Unit ID
             try {
-                // console.log(`[ConnectionManager] Connecting to ${ip}:${port}...`);
-                await client.connectTCP(ip, { port: port });
-                client.setID(unitId);
-
-                // Success: Update Pool Entry with actual client
-                this.pool.set(key, {
-                    client: client,
-                    lastActive: Date.now(),
-                    promise: null // Clear promise
-                });
-
-                // Handle unexpected closure
-                client.on('error', (err) => {
-                    // console.log(`[ConnectionManager] Error on ${key}: ${err.message}`);
-                    this.invalidate(ip, port);
-                });
-                client.on('close', () => {
-                    // console.log(`[ConnectionManager] Closed on ${key}`);
-                    this.invalidate(ip, port);
-                });
-
-                resolve(client);
+                await client.setID(unitId);
             } catch (e) {
-                this.invalidate(ip, port); // Remove failed entry
-                reject(e);
+                // Should practically never fail if open
+                throw e;
+            }
+
+            // C. Execute the Action
+            try {
+                const res = await action(client);
+                await new Promise(r => setTimeout(r, 100));
+                return res;
+            } catch (e) {
+                // If action failed, check if it was a connection death
+                if (this._isFatalError(e)) {
+                    this.invalidate(ip, port);
+                    entry.client = null; // Force next queued item to reconnect
+                }
+                throw e;
             }
         });
 
-        // Store incomplete entry
-        this.pool.set(key, {
-            client: null,
-            lastActive: now,
-            promise: connectPromise
-        });
+        // 3. Update Queue Head
+        // We catch errors here so the queue doesn't stall for future requests
+        entry.queue = resultPromise.catch(() => { });
 
-        return connectPromise;
+        return resultPromise;
     }
 
     /**
-     * Report an error to invalidate the connection if necessary.
-     * Call this when a READ/WRITE fails unexpectedly.
+     * Internal: Establish new connection
      */
-    reportError(ip, port, error) {
-        const key = `${ip}:${port}`;
-        // If error suggests connection loss, invalidate
-        const fatalErrors = ['ECONNRESET', 'EPIPE', 'ETIMEDOUT', 'Port Not Open'];
-        const isFatal = fatalErrors.some(e => error.message && error.message.includes(e));
+    async _connect(ip, port, timeout) {
+        const client = new ModbusRTU();
+        client.setTimeout(timeout);
+        // console.log(`[ConnectionManager] Connecting to ${ip}:${port}...`);
+        await client.connectTCP(ip, { port: port });
 
-        if (isFatal || !error.message) {
-            // console.log(`[ConnectionManager] Invalidating ${key} due to fatal error.`);
+        // Handle unexpected closure
+        client.on('error', (err) => {
+            this.invalidate(ip, port);
+        });
+        client.on('close', () => {
+            this.invalidate(ip, port);
+        });
+
+        return client;
+    }
+
+    _isFatalError(error) {
+        const fatalErrors = ['ECONNRESET', 'EPIPE', 'ETIMEDOUT', 'Port Not Open', 'Transaction timed out'];
+        return fatalErrors.some(e => error.message && error.message.includes(e));
+    }
+
+    reportError(ip, port, error) {
+        if (this._isFatalError(error)) {
             this.invalidate(ip, port);
         }
     }
@@ -140,7 +151,7 @@ class ConnectionManager {
                     this.pool.delete(key);
                 }
             }
-        }, 5000); // Check every 5s
+        }, 5000);
     }
 }
 
