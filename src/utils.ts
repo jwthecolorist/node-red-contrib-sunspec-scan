@@ -3,8 +3,9 @@
  * Reusable helper functions for SunSpec protocol operations
  */
 
-const CONST = require('./constants');
-const { SunSpecModelNotFoundError, SunSpecConnectionError } = require('./errors');
+import * as CONST from './constants';
+import { SunSpecModelNotFoundError, SunSpecConnectionError, SunSpecTimeoutError } from './errors';
+import ModbusRTU from 'modbus-serial';
 
 /**
  * Find the memory address of a specific model in the SunSpec model chain
@@ -14,12 +15,8 @@ const { SunSpecModelNotFoundError, SunSpecConnectionError } = require('./errors'
  * @param {number} [baseAddr] - Optional base address override (default: auto-detect)
  * @returns {Promise<number>} Model start address, or -1 if not found
  * @throws {Error} If Modbus communication fails
- * 
- * @example
- * const addr = await findModelAddress(client, 103); // Find inverter model
- * if (addr === -1) throw new Error('Model not found');
  */
-async function findModelAddress(client, modelId, baseAddr = null) {
+export async function findModelAddress(client: ModbusRTU, modelId: number | string, baseAddr: number | null = null): Promise<number> {
     // Auto-detect base address if not provided
     if (baseAddr === null) {
         baseAddr = CONST.BASE_ADDR_40002; // Default
@@ -46,7 +43,7 @@ async function findModelAddress(client, modelId, baseAddr = null) {
         }
 
         // Check for match
-        if (id === modelId) {
+        if (String(id) === String(modelId)) {
             return addr; // Found!
         }
 
@@ -61,13 +58,8 @@ async function findModelAddress(client, modelId, baseAddr = null) {
  * @param {number|string} value - Value to check
  * @param {string} type - SunSpec data type (e.g., 'int16', 'uint32', 'float32')
  * @returns {boolean} True if value is a "not implemented" sentinel
- * 
- * @example
- * if (isNotImplemented(-32768, 'int16')) {
- *     console.log('Point not implemented');
- * }
  */
-function isNotImplemented(value, type) {
+export function isNotImplemented(value: any, type: string): boolean {
     if (typeof value !== 'number') return false;
 
     switch (type) {
@@ -95,11 +87,8 @@ function isNotImplemented(value, type) {
  * 
  * @param {string} type - SunSpec data type
  * @returns {number} Number of 16-bit registers required
- * 
- * @example
- * const size = getRegisterSize('float32'); // Returns 2
  */
-function getRegisterSize(type) {
+export function getRegisterSize(type: string | undefined): number {
     if (!type) return CONST.REG_SIZE_16;
 
     if (type.includes('32')) return CONST.REG_SIZE_32;
@@ -116,17 +105,13 @@ function getRegisterSize(type) {
  * 
  * @param {string} unitIdStr - Unit ID specification (e.g., "1", "1-10", "1,5,10-20")
  * @returns {number[]|null} Array of unit IDs, or null for "scan all"
- * 
- * @example
- * parseUnitIds("1,5,10-12") // Returns [1, 5, 10, 11, 12]
- * parseUnitIds("") // Returns null (scan all)
  */
-function parseUnitIds(unitIdStr) {
+export function parseUnitIds(unitIdStr: string): number[] | null {
     if (!unitIdStr || unitIdStr.trim() === "") {
         return null; // Scan all
     }
 
-    const ids = [];
+    const ids: number[] = [];
     const parts = unitIdStr.split(',').map(s => s.trim());
 
     for (const part of parts) {
@@ -158,35 +143,11 @@ function parseUnitIds(unitIdStr) {
  * @param {number} timeoutMs - Timeout in milliseconds
  * @param {string} operationName - Name of operation for error message
  * @returns {Promise} Result of operation or timeout error
- * 
- * @example
- * await withTimeout(
- *     client.connectTCP(ip, { port }),
- *     5000,
- *     'TCP connection'
- * );
  */
-async function withTimeout(operation, timeoutVal, operationName) {
-    const { SunSpecTimeoutError } = require('./errors');
-    const timeoutMs = parseInt(timeoutVal, 10) || 5000;
+export async function withTimeout<T>(operation: Promise<T>, timeoutMs: number, operationName: string): Promise<T> {
+    const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new SunSpecTimeoutError(operationName, timeoutMs)), timeoutMs)
+    );
 
-    let timer;
-    const timeoutPromise = new Promise((_, reject) => {
-        timer = setTimeout(() => reject(new SunSpecTimeoutError(operationName, timeoutMs)), timeoutMs);
-    });
-
-    try {
-        // Await the race so we can clear the timeout in finally block
-        return await Promise.race([operation, timeoutPromise]);
-    } finally {
-        if (timer) clearTimeout(timer);
-    }
+    return Promise.race([operation, timeoutPromise]);
 }
-
-module.exports = {
-    findModelAddress,
-    isNotImplemented,
-    getRegisterSize,
-    parseUnitIds,
-    withTimeout
-};

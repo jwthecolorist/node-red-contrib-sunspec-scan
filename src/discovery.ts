@@ -1,12 +1,17 @@
 
-const ModbusRTU = require("modbus-serial");
-const net = require('net');
-const os = require('os');
+import ModbusRTU from "modbus-serial";
+import net from 'net';
+import os from 'os';
+
+export interface ScanResult {
+    id: number;
+    type: 'sunspec' | 'sma_edmm' | 'conext_xw_503';
+}
 
 /**
  * Helper to scan a single IP for Modbus Port 502
  */
-async function checkPort(ip, port = 502, timeout = 300) {
+export async function checkPort(ip: string, port = 502, timeout = 300): Promise<boolean> {
     return new Promise((resolve) => {
         const socket = new net.Socket();
         socket.setTimeout(timeout);
@@ -33,12 +38,19 @@ async function checkPort(ip, port = 502, timeout = 300) {
 /**
  * Scan a single IP for valid SunSpec Unit IDs
  */
-async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride, shouldStop) {
+export async function scanUnitIds(
+    ip: string, 
+    port: number, 
+    timeout: number, 
+    statusCallback?: (msg: string) => void, 
+    idsToCheckOverride?: number[], 
+    shouldStop?: () => boolean
+): Promise<ScanResult[]> {
     const client = new ModbusRTU();
-    const foundIds = [];
+    const foundIds: ScanResult[] = [];
 
     // Prioritize ID list based on Port
-    let idsToCheck = [];
+    let idsToCheck: number[] = [];
     if (Array.isArray(idsToCheckOverride) && idsToCheckOverride.length > 0) {
         idsToCheck = idsToCheckOverride;
     } else {
@@ -63,7 +75,10 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
 
         for (const id of idsToCheck) {
             if (shouldStop && shouldStop()) break;
-            client.setID(id);
+            
+            try {
+                await client.setID(id);
+            } catch (e) { continue; } // Should effectively not fail if open
 
             // 1. Check SunSpec (Port 502 mainly, but maybe 503 too?)
             try {
@@ -93,13 +108,6 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
                 try {
                     // Reg 0 is Device Name (str16). Read 8 registers (16 chars).
                     const data = await client.readHoldingRegisters(0, 8);
-                    // Check if it looks like a string (ASCII range)
-                    // First char should be alphanumeric?
-                    // Conext devices start with "XW", "MPPT", "Gateway"?
-                    // Or check "Device Name" existence.
-                    // Let's just assume valid read of Reg 0-7 implies Conext if on Port 503?
-                    // Or check specific substring?
-                    // The buffer will allow us to check.
                     // For now, if read succeeds on Port 503 Reg 0, we assume Conext.
                     foundIds.push({ id: id, type: 'conext_xw_503' });
                     if (statusCallback) statusCallback(`Found Conext ID ${id} at ${ip}`);
@@ -110,7 +118,12 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
 
     } catch (e) {
     } finally {
-        client.close();
+        // Safe close using the callback or try-catch block in wrapper? 
+        // ModbusRTU type def says close(cb).
+        try {
+             // Type definition might need update if we want to await close, or just fire and forget
+             client.close();
+        } catch(e) {}
     }
     return foundIds;
 }
@@ -118,13 +131,16 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
 /**
  * Get all local interface IPv4 addresses
  */
-function getLocalInterfaces() {
+function getLocalInterfaces(): { ip: string, netmask: string }[] {
     const interfaces = os.networkInterfaces();
-    const addresses = [];
+    const addresses: { ip: string, netmask: string }[] = [];
     for (const name of Object.keys(interfaces)) {
-        for (const iface of interfaces[name]) {
-            if (iface.family === 'IPv4' && !iface.internal) {
-                addresses.push({ ip: iface.address, netmask: iface.netmask });
+        const ifaceList = interfaces[name];
+        if (ifaceList) {
+            for (const iface of ifaceList) {
+                if (iface.family === 'IPv4' && !iface.internal) {
+                    addresses.push({ ip: iface.address, netmask: iface.netmask });
+                }
             }
         }
     }
@@ -134,14 +150,14 @@ function getLocalInterfaces() {
 /**
  * Calculate IP range from IP and Netmask (CIDR logic)
  */
-function getSubnetRange(ip, netmask) {
+function getSubnetRange(ip: string, netmask: string): string[] {
     const ipInt = ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0) >>> 0;
     const maskInt = netmask.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0) >>> 0;
 
     const base = ipInt & maskInt;
     const broadcast = base | (~maskInt >>> 0);
 
-    const ips = [];
+    const ips: string[] = [];
     // Start from base+1 to broadcast-1
     for (let i = base + 1; i < broadcast; i++) {
         const p1 = (i >>> 24) & 0xFF;
@@ -163,41 +179,28 @@ function getSubnetRange(ip, netmask) {
  * - CIDR: 192.168.1.0/24
  * - Magic: 0.0.0.0/0 (Local Subnets)
  */
-function parseIpRange(ipStr) {
+export function parseIpRange(ipStr: string): string[] {
     if (!ipStr || ipStr.trim() === '') return [];
 
     // Magic: All Local Subnets
     if (ipStr.trim() === '0.0.0.0/0' || ipStr.trim() === '0.0.0.0') {
         const localIfaces = getLocalInterfaces();
-        let allIps = [];
+        let allIps: string[] = [];
         for (const iface of localIfaces) {
             allIps = allIps.concat(getSubnetRange(iface.ip, iface.netmask));
         }
         return [...new Set(allIps)]; // Unique
     }
 
-    const ips = [];
+    const ips: string[] = [];
     const parts = ipStr.split(',').map(s => s.trim());
 
     for (const part of parts) {
         if (part.includes('/')) {
             // CIDR: 192.168.1.0/24
-            // Simplified: Require 'ip' library or implement manual cidr
-            // Manual implementation for basic /24 etc
-            // ... Actually getSubnetRange logic needs netmask. 
-            // Convert CIDR prefix to netmask
             const [baseIp, prefix] = part.split('/');
             const p = parseInt(prefix);
-            let mask = 0;
-            for (let i = 0; i < 32; i++) {
-                mask <<= 1;
-                if (i < p) mask |= 1;
-            }
-            // Netmask string not easy, let's look for a library? 
-            // We don't have 'ip' lib installed.
-            // Hack: Just supporting /24 for now which is common for 0.0.0.0/0 replacement
-            // Actually, implementing general CIDR to array:
-
+            
             // Convert IP to long
             const ipLong = baseIp.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet), 0) >>> 0;
             const maskLong = 0xffffffff << (32 - p) >>> 0;
@@ -206,7 +209,6 @@ function parseIpRange(ipStr) {
             const end = (start | (~maskLong >>> 0)) >>> 0;
 
             for (let i = start + 1; i < end; i++) { // Skip Network & Broadcast
-                if (ips.length >= 1000) break; // Safety Cap
                 const p1 = (i >>> 24) & 0xFF;
                 const p2 = (i >>> 16) & 0xFF;
                 const p3 = (i >>> 8) & 0xFF;
@@ -219,17 +221,10 @@ function parseIpRange(ipStr) {
             const lastDot = part.lastIndexOf('.');
             const subnet = part.substring(0, lastDot + 1);
             const range = part.substring(lastDot + 1).split('-');
-            let start = parseInt(range[0]);
-            let end = parseInt(range[1]);
-
-            if (start > end) {
-                const temp = start;
-                start = end;
-                end = temp;
-            }
+            const start = parseInt(range[0]);
+            const end = parseInt(range[1]);
 
             for (let i = start; i <= end; i++) {
-                if (ips.length >= 1000) break; // Safety Cap
                 ips.push(subnet + i);
             }
         } else {
@@ -239,9 +234,3 @@ function parseIpRange(ipStr) {
     }
     return ips;
 }
-
-module.exports = {
-    checkPort,
-    scanUnitIds,
-    parseIpRange
-};
