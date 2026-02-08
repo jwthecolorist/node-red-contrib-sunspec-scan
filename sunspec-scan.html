@@ -83,6 +83,8 @@
                     else if (mode === "parameter") $(".param-mode-only").show();
                     else if (mode === "list") $(".list-mode-only").show();
                 });
+                // B5 FIX: Trigger initial mode display on editor open
+                setTimeout(function() { $("#node-input-readMode").trigger("change"); }, 100);
 
                 // Auto-toggle Scan All based on Unit ID input
                 // Deprecated: Logic now handled by parsing Unit ID string directly
@@ -318,7 +320,9 @@
                             }
 
                             const text = `${ip}:${id} - ${label} ${combinedModel}`;
-                            netGroup.append($('<option>', { value: `${ip}:${id}`, text: text }));
+                            // B3 FIX: Use 3-part format (IP:PORT:UNITID) consistent with saved devices
+                            const port = node.port || 502;
+                            netGroup.append($('<option>', { value: `${ip}:${port}:${id}`, text: text }));
                             hasNet = true;
                         });
                     });
@@ -401,7 +405,8 @@
                         if (!deviceData || Object.keys(deviceData).length <= 2) {
                             // LAZY LOAD TRIGGER
                             $mod.append('<option value="" disabled>Loading models (deep scanning)...</option>');
-                            const port = $("#node-input-port").val();
+                            // B4 FIX: Use the parsed port from selectedDevice, not the Settings tab port
+                            const lazyPort = port;
                             const timeout = $("#node-input-timeout").val();
 
                             $.ajax({
@@ -410,7 +415,7 @@
                                 contentType: "application/json",
                                 data: JSON.stringify({
                                     ip: ip,
-                                    port: parseInt(port),
+                                    port: parseInt(lazyPort),
                                     unitId: id,
                                     timeout: timeout
                                 }),
@@ -590,7 +595,11 @@
                         return;
                     }
 
-                    const [ip, defaultId] = dev.split(':');
+                    // B2 FIX: Handle 3-part format (IP:PORT:UNITID)
+                    const devParts = dev.split(':');
+                    const defaultId = devParts.pop(); // Last part is UNITID
+                    if (devParts.length > 1) devParts.pop(); // Discard PORT
+                    const ip = devParts.join(':');
                     const overrideId = $("#node-input-selectedId").val();
                     const id = overrideId || defaultId;
 
@@ -605,16 +614,10 @@
                     $("#node-input-outputList-container").editableList('addItem', item);
                     RED.notify("Added to list", "success");
                 });
-                // Update Port on Device Selection if Saved Device
-                $("#node-input-selectedDevice").change(function () {
-                    const val = $(this).val();
-                    if (!val) return;
-                    const opt = $(this).find("option:selected");
-                    const savedPort = opt.data('port');
-                    if (savedPort) {
-                        $("#node-input-port").val(savedPort);
-                    }
-                });
+                // B1 FIX: Removed automatic Settings-tab port override on device selection.
+                // The port is already encoded in selectedDevice (IP:PORT:ID) and parsed correctly
+                // by the runtime and lazy loader. Overwriting the Settings tab port is confusing
+                // because it affects ALL modes, not just the selected device.
 
                 // MANAGE DEVICES LOGIC
                 function refreshManageList() {
@@ -818,6 +821,12 @@
             </div>
         </div>
         <!-- Progress Bar -->
+        <style>
+            @keyframes progress-indeterminate {
+                0%   { transform: translateX(-100%); }
+                100% { transform: translateX(200%); }
+            }
+        </style>
         <div class="form-row" id="scan-progress-bar" style="display:none;">
             <label>&nbsp;</label>
             <div style="display:inline-block; width:70%;">
