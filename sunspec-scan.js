@@ -557,9 +557,12 @@ module.exports = function (RED) {
                     let targetId = node.unitId;
                     let targetIp = node.ip;
 
+                    // Parse selectedDevice: supports "IP:PORT:UNITID" or "IP:UNITID"
                     if (node.selectedDevice && node.selectedDevice.includes(":")) {
-                        const [ip, id] = node.selectedDevice.split(':');
-                        targetIp = ip;
+                        const parts = node.selectedDevice.split(':');
+                        const id = parts.pop();   // Last part is always UNITID
+                        if (parts.length > 1) parts.pop(); // Discard PORT if present
+                        targetIp = parts.join(':');
                         targetId = parseInt(id);
                     }
 
@@ -650,9 +653,12 @@ module.exports = function (RED) {
             let targetId = node.unitId;
             let targetIp = node.ip;
 
+            // Parse selectedDevice: supports "IP:PORT:UNITID" or "IP:UNITID"
             if (node.selectedDevice && node.selectedDevice.includes(":")) {
-                const [ip, id] = node.selectedDevice.split(':');
-                targetIp = ip;
+                const parts = node.selectedDevice.split(':');
+                const id = parts.pop();   // Last part is always UNITID
+                if (parts.length > 1) parts.pop(); // Discard PORT if present
+                targetIp = parts.join(':');
                 targetId = parseInt(id);
             }
 

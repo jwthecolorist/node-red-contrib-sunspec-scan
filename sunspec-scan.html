@@ -745,6 +745,17 @@
                     point: item.find(".node-input-list-point").val()
                 });
             });
+
+            // Sync ip/port/unitId from selectedDevice so runtime config stays consistent
+            if (node.readMode === 'parameter' && node.selectedDevice) {
+                const parts = node.selectedDevice.split(':');
+                const id = parts.pop();   // Last part is UNITID
+                if (parts.length > 1) {
+                    node.port = parts.pop(); // PORT
+                }
+                node.ip = parts.join(':'); // IP
+                node.unitId = id;
+            }
         }
     });
 </script>
