@@ -644,6 +644,7 @@ module.exports = function (RED) {
             const models = global.globalModelDefinitions || {};
             const valueToWrite = msg.payload;
 
+
             node.status({ fill: "yellow", shape: "dot", text: `writing ${valueToWrite}...` });
 
             let targetId = node.unitId;

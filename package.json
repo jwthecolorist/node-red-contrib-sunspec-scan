@@ -2,7 +2,7 @@
   "name": "node-red-contrib-sunspec-scan",
   "version": "1.2.0",
   "description": "A Node-RED node for scanning, discovering, and reading/writing to SunSpec Modbus devices (inverters, storage, meters). Supports auto-discovery and scaling.",
-  "main": "dist/sunspec-scan.js",
+  "main": "sunspec-scan.js",
   "scripts": {
     "test": "jest",
     "build": "tsc && copy sunspec-scan.html dist\\"
@@ -26,7 +26,7 @@
   },
   "node-red": {
     "nodes": {
-      "sunspec-scan": "dist/sunspec-scan.js"
+      "sunspec-scan": "sunspec-scan.js"
     }
   },
   "devDependencies": {
