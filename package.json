@@ -26,7 +26,8 @@
   },
   "node-red": {
     "nodes": {
-      "sunspec-scan": "sunspec-scan.js"
+      "sunspec-scan": "sunspec-scan.js",
+      "mg-power-control": "power-control.js"
     }
   },
   "devDependencies": {
