@@ -14,11 +14,40 @@ class ConnectionManager {
         // Map<"ip:port", { client: ModbusRTU, lastActive: number, queue: Promise }>
         this.pool = new Map();
 
+        // Map<"ip:port:unitId", expirationTimeMs>
+        this.blacklist = new Map();
+
         // Timeout in ms before closing an idle connection
         this.IDLE_TIMEOUT = 20000;
 
         // Start cleanup interval
         this.startCleanupTask();
+    }
+
+    /**
+     * Set a temporary blacklist for a specific UnitID on a Gateway.
+     * Prevents requests from entering the unified TCP queue.
+     * @param {string} ip 
+     * @param {number} port 
+     * @param {number} unitId 
+     * @param {number} durationMs 
+     */
+    setBlacklist(ip, port, unitId, durationMs) {
+        const key = `${ip}:${port}:${unitId}`;
+        this.blacklist.set(key, Date.now() + durationMs);
+        // console.log(`[ConnectionManager] Blacklisted ${key} for ${durationMs}ms`);
+    }
+
+    isBlacklisted(ip, port, unitId) {
+        const key = `${ip}:${port}:${unitId}`;
+        if (!this.blacklist.has(key)) return false;
+
+        const expiration = this.blacklist.get(key);
+        if (Date.now() > expiration) {
+            this.blacklist.delete(key);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -34,6 +63,11 @@ class ConnectionManager {
     async request(ip, port, unitId, action, timeout) {
         const key = `${ip}:${port}`;
         const timeoutVal = parseInt(timeout, 10) || 5000;
+
+        // 0. Fast-Fail Blacklist Check (Bypass Queue entirely)
+        if (this.isBlacklisted(ip, port, unitId)) {
+            return Promise.reject(new Error(`Fast-Fail: UnitID ${unitId} at ${ip}:${port} is currently blacklisted due to recent timeout/error.`));
+        }
 
         // 1. Get or Create Pool Entry
         if (!this.pool.has(key)) {
@@ -121,9 +155,15 @@ class ConnectionManager {
         return fatalErrors.some(e => error.message && error.message.includes(e));
     }
 
-    reportError(ip, port, error) {
+    // Explicitly invoked by the Node when a Gateway-level serial timeout occurs
+    reportError(ip, port, unitId, error) {
         if (this._isFatalError(error)) {
+            // TCP died entirely. Invalidate whole socket.
             this.invalidate(ip, port);
+        } else if (error.message && (error.message.includes('Slave device failure') || error.message.includes('Gateway target device failed'))) {
+            // Physical RS485 device died behind a working TCP Gateway.
+            // Blacklist the UnitID for 60s so it stops clogging the TCP queue.
+            this.setBlacklist(ip, port, unitId, 60000); 
         }
     }
 
@@ -132,6 +172,12 @@ class ConnectionManager {
         if (this.pool.has(key)) {
             const entry = this.pool.get(key);
             if (entry.client) {
+                // Aggressive socket teardown
+                try {
+                    if (entry.client._port && entry.client._port.socket) {
+                        entry.client._port.socket.destroy();
+                    }
+                } catch (e) { }
                 try { entry.client.close(); } catch (e) { }
             }
             this.pool.delete(key);

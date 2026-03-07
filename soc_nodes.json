@@ -1,0 +1,134 @@
+[
+  {
+    "id": "5c27d287525e5ed1",
+    "type": "sunspec-scan",
+    "z": "95584f73c4b1d756",
+    "name": "",
+    "ip": "192.168.5.21",
+    "port": "502",
+    "timeout": "2000",
+    "pacing": "20",
+    "unitId": "126",
+    "scanIds": true,
+    "readMode": "parameter",
+    "selectedDevice": "172.17.0.10:502:1",
+    "selectedDeviceLabel": "SMA Data Manager",
+    "selectedModel": "sma_edmm",
+    "selectedModelLabel": "sma_edmm - SMA Data Manager",
+    "selectedPoint": "CurrentBatteryStateOfCharge",
+    "selectedPointLabel": "Current battery state of charge",
+    "selectedId": "1",
+    "outputList": [],
+    "roundDecimals": true,
+    "x": 260,
+    "y": 180,
+    "wires": [
+      [
+        "d163b9e864865230",
+        "7648d4504c27d2d9"
+      ]
+    ]
+  },
+  {
+    "id": "f9e0e107a17ef38c",
+    "type": "function",
+    "z": "95584f73c4b1d756",
+    "name": "Power Control",
+    "func": "// Get flow context values ensures numbers \nconst power = Number(flow.get('power')) || 0; \nconst soc = Number(flow.get('soc')) || 0;\nconst vars = Number(flow.get('var')); // Singular 'var'\nconst hz = Number(flow.get('hz')) || 0;\nconst voltpha = Number(flow.get('voltpha')) || 0; // Bus Voltage\n\nconst now = Date.now();\n\n// =========================================================\n// 1. VARS/VOLTAGE SAFETY MONITOR (Priority 1)\n// =========================================================\nlet varsHistory = context.get('varsHistory') || [];\nlet varsLockoutUntil = context.get('varsLockoutUntil') || 0;\n\n// Update History\nif (!isNaN(vars)) {\n    varsHistory.push({ value: vars, timestamp: now });\n    varsHistory = varsHistory.filter(entry => entry.timestamp >= (now - 60000));\n    context.set('varsHistory', varsHistory);\n}\n\n// ------------------------------------------\n// RULE A: IMMEDIATE HARD LIMIT (+/- 800)\n// ------------------------------------------\nlet hardLimitTrip = false;\nif (Math.abs(vars) > 800) {\n    hardLimitTrip = true;\n    node.warn(`SAFETY TRIP: Vars HARD LIMIT exceeded (${vars}). Lockout 10m.`);\n}\n\n// ------------------------------------------\n// RULE B: OSCILLATION DETECTION\n// ------------------------------------------\nlet varsMin = 0;\nlet varsMax = 0;\nlet isOscillating = false;\n\nif (varsHistory.length > 0) {\n    varsMin = varsHistory[0].value;\n    varsMax = varsHistory[0].value;\n    for (let i = 1; i < varsHistory.length; i++) {\n        const v = varsHistory[i].value;\n        if (v < varsMin) varsMin = v;\n        if (v > varsMax) varsMax = v;\n    }\n    \n    // \"Rapid fluctuation negative to positive\"\n    if (varsMax > 200 && varsMin < -200) {\n        isOscillating = true;\n    }\n}\n\n// ------------------------------------------\n// RULE C: CONDITIONAL TRIP (Voltage or Duration)\n// ------------------------------------------\nlet oscillationStartTime = context.get('oscillationStartTime');\nlet oscillationTrip = false;\nlet oscillationDuration = 0;\n\nif (isOscillating) {\n    // 1. Check Voltage (Immediate)\n    if (voltpha > 121) {\n        oscillationTrip = true;\n        node.warn(`SAFETY TRIP: Oscillation (+${varsMax}/${varsMin}) AND High Voltage (${voltpha}V). Lockout 10m.`);\n    } \n    // 2. Check Duration (Persistent)\n    else {\n        // Voltage is SAFE, but we are oscillating. Start/Check Timer.\n        if (!oscillationStartTime) {\n            oscillationStartTime = now;\n            context.set('oscillationStartTime', oscillationStartTime);\n        } else {\n            oscillationDuration = (now - oscillationStartTime) / 1000;\n            // \"If they exceed bounds over 2 minutes\"\n            if (oscillationDuration > 120) {\n                oscillationTrip = true;\n                node.warn(`SAFETY TRIP: Oscillation persisted > 2 mins despite safe voltage. Lockout 10m.`);\n            }\n        }\n    }\n} else {\n    // Reset Timer if oscillation stops\n    if (oscillationStartTime) {\n        context.set('oscillationStartTime', null);\n    }\n}\n\n\n// APPLY LOCKOUT\nif ((hardLimitTrip || oscillationTrip) && varsLockoutUntil < now) {\n    varsLockoutUntil = now + 600000; // 10 minutes\n    context.set('varsLockoutUntil', varsLockoutUntil);\n}\n\n// =========================================================\n// 2. FREQUENCY SUPPORT (Priority 2 - Grid Support)\n// =========================================================\nlet hzHighStartTime = context.get('hzHighStartTime');\nlet hzOverrideActive = context.get('hzOverrideActive') || false;\nlet hzDuration = 0;\n\nif (hz > 60.8) {\n    if (!hzHighStartTime) {\n        hzHighStartTime = now;\n        context.set('hzHighStartTime', hzHighStartTime);\n    } else {\n        hzDuration = (now - hzHighStartTime) / 1000;\n        if (hzDuration > 120) { // > 2 minutes\n            hzOverrideActive = true;\n            context.set('hzOverrideActive', true);\n        }\n    }\n} else {\n    if (hzHighStartTime) {\n        context.set('hzHighStartTime', null);\n    }\n    if (hz < 60.5 && hzOverrideActive) {\n        hzOverrideActive = false;\n        context.set('hzOverrideActive', false);\n    }\n}\n\n// =========================================================\n// 3. STANDARD LOGIC LOCKOUT (Priority 3)\n// =========================================================\nlet standardLockoutUntil = context.get('standardLockoutUntil') || 0;\n\nif (soc < 85 && power > 600 && now > standardLockoutUntil) {\n    standardLockoutUntil = now + 600000; // 10 minutes\n    context.set('standardLockoutUntil', standardLockoutUntil);\n    node.warn(`STANDARD TRIP: SOC < 85 & Power > 600. Lockout 10m.`);\n}\n\n// =========================================================\n// 4. DETERMINE TARGET VALUE & STATUS\n// =========================================================\nlet targetValue;\nlet statusOpts = {};\nlet detailedText = \"\";\n\n// Metrics\nconst metrics = `[Hz:${hz.toFixed(2)} | V:${voltpha.toFixed(1)} | VarRng:${varsMin.toFixed(0)}..${varsMax.toFixed(0)} | SOC:${soc}% | Pwr:${power}]`;\n\nif (now < varsLockoutUntil) {\n    // Priority 1: Vars Unsafe\n    targetValue = 0;\n    const remainingMins = Math.ceil((varsLockoutUntil - now) / 60000);\n    statusOpts = {fill:\"red\", shape:\"dot\", text:`Vars/Volt Trip: ${remainingMins}m`};\n    detailedText = `SHUTDOWN (SAFETY): Vars Trip (Hard Limit or Oscillation). Time left: ${remainingMins}m. ${metrics}`;\n} \nelse if (hzOverrideActive) {\n    // Priority 2: High Hz\n    targetValue = 1; \n    statusOpts = {fill:\"yellow\", shape:\"dot\", text:`Hz Override: ${hz.toFixed(2)}Hz`};\n    detailedText = `FORCED ON (HZ SUPPORT): Freq Override (>60.5Hz). Duration: ${hzDuration.toFixed(0)}s. ${metrics}`;\n} \nelse if (now < standardLockoutUntil) {\n    // Priority 3: Standard Lockout\n    targetValue = 0;\n    const remainingMins = Math.ceil((standardLockoutUntil - now) / 60000);\n    statusOpts = {fill:\"red\", shape:\"ring\", text:`Standard Lockout: ${remainingMins}m`};\n    detailedText = `SHUTDOWN (STANDARD): Power/SOC Trip Active. Time left: ${remainingMins}m. ${metrics}`;\n} \nelse {\n    // Normal Operation\n    targetValue = 1;\n    // Show Warning status if Oscillating but Voltage OK\n    if (isOscillating) {\n        statusOpts = {fill:\"yellow\", shape:\"ring\", text:`Oscillation Warning (${oscillationDuration.toFixed(0)}s)`};\n        detailedText = `NORMAL ON (WARNING): Vars Oscillating but Voltage Safe. Duration: ${oscillationDuration.toFixed(0)}s (Trip at 120s). ${metrics}`;\n    } else {\n        statusOpts = {fill:\"green\", shape:\"dot\", text:`On | SOC:${soc}%`};\n        detailedText = `NORMAL ON: System operating normally. ${metrics}`;\n    }\n}\n\n// Update Status\nnode.status(statusOpts);\n\n// =========================================================\n// 5. THROTTLING & OUTPUT\n// =========================================================\nconst lastSentValue = context.get('lastSentValue');\nconst lastWriteTime = context.get('lastWriteTime') || 0;\n\nlet shouldWrite = false;\n\nif (lastSentValue === undefined || lastSentValue !== targetValue) {\n    shouldWrite = true;\n} else if (now - lastWriteTime >= 60000) {\n    shouldWrite = true;\n}\n\nif (shouldWrite) {\n    context.set('lastSentValue', targetValue);\n    context.set('lastWriteTime', now);\n    \n    msg.payload = targetValue;\n    msg.control_status = detailedText; \n    msg.topic = \"control_logic_update\";\n    \n    return msg;\n} else {\n    return null;\n}",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 400,
+    "y": 380,
+    "wires": [
+      [
+        "99f77c4cef0b6014",
+        "95d40b8f0a55dfbf"
+      ]
+    ]
+  },
+  {
+    "id": "7648d4504c27d2d9",
+    "type": "change",
+    "z": "95584f73c4b1d756",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "soc",
+        "pt": "flow",
+        "to": "payload",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 510,
+    "y": 140,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "95d40b8f0a55dfbf",
+    "type": "sunspec-scan",
+    "z": "95584f73c4b1d756",
+    "name": "",
+    "ip": "192.168.5.21",
+    "port": "502",
+    "timeout": "2000",
+    "pacing": "20",
+    "unitId": "126",
+    "scanIds": true,
+    "readMode": "parameter",
+    "selectedDevice": "172.17.0.11:126",
+    "selectedDeviceLabel": "Schneider Electric XW Pro 6848 NA",
+    "selectedModel": "124",
+    "selectedModelLabel": "124 - Storage",
+    "selectedPoint": "StorCtl_Mod",
+    "selectedPointLabel": "Activate hold/discharge/charge storage control mode. Bitfield value.",
+    "selectedId": "126",
+    "outputList": [],
+    "roundDecimals": true,
+    "x": 570,
+    "y": 460,
+    "wires": [
+      [
+        "f5343a4aeeaec2a2"
+      ]
+    ]
+  },
+  {
+    "id": "28c579a66511b2e6",
+    "type": "sunspec-scan",
+    "z": "95584f73c4b1d756",
+    "name": "",
+    "ip": "172.17.0.11",
+    "port": "502",
+    "timeout": "2000",
+    "pacing": "9",
+    "unitId": "11",
+    "scanIds": true,
+    "readMode": "parameter",
+    "selectedDevice": "172.17.0.11:502:11",
+    "selectedDeviceLabel": "172.17.0.11:502:11 - Schneider Electric SP1 (Models: 1, 802, 20002)",
+    "selectedModel": "802",
+    "selectedModelLabel": "802 - Battery Base Model",
+    "selectedPoint": "SoC",
+    "selectedPointLabel": "State of charge, expressed as a percentage.",
+    "selectedId": "11",
+    "outputList": [],
+    "roundDecimals": true,
+    "x": 690,
+    "y": 180,
+    "wires": [
+      []
+    ]
+  }
+]

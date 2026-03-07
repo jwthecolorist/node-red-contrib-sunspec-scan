@@ -585,7 +585,7 @@ module.exports = function (RED) {
                             if (mDef && mDef.group) {
                                 // Model Label
                                 msg.modelLabel = mDef.group.label || mDef.group.name;
-                                
+
                                 // Point Metadata
                                 const pDef = mDef.group.points.find(p => p.name === node.selectedPoint);
                                 if (pDef) {
@@ -596,14 +596,14 @@ module.exports = function (RED) {
                             }
 
                             node.send(msg);
-                            
+
                             // Human Readable Status
                             // Clean up technical units (e.g., "%WHRtg" -> "%", "degC" -> "°C")
                             let displayUnits = msg.units || '';
                             if (displayUnits.startsWith('%')) displayUnits = '%';
                             if (displayUnits === 'degC') displayUnits = '°C';
                             if (displayUnits === 'degF') displayUnits = '°F';
-                            
+
                             const statusText = msg.label ? `${msg.label}: ${val}${displayUnits}` : `${node.selectedPoint}: ${val}`;
                             node.status({ fill: "green", shape: "dot", text: statusText.trim() });
                         } else {
@@ -916,8 +916,14 @@ module.exports = function (RED) {
                 // Enrich error message
                 const isTimeout = err.message.toLowerCase().includes('time') || err.code === 'ETIMEDOUT';
                 if (isTimeout) {
+                    connManager.reportError(ip, port, targetUnitId, new Error('ETIMEDOUT'));
                     throw new Error(`Timeout: Device ${ip}:${unitId} did not respond to write request.`);
                 }
+
+                if (err.message && (err.message.includes('Slave device failure') || err.message.includes('Gateway target device failed'))) {
+                    connManager.reportError(ip, port, targetUnitId, err);
+                }
+
                 throw new Error(`Write failed: ${err.message} (${ip}:${unitId} Model=${modelId} Point=${pointName})`);
             }
         }, timeout);
@@ -1173,7 +1179,12 @@ module.exports = function (RED) {
                 const isTimeout = e.message.toLowerCase().includes('time') || e.code === 'ETIMEDOUT';
 
                 if (isTimeout) {
+                    connManager.reportError(ip, port, unitId, new Error('ETIMEDOUT'));
                     throw new Error(`Timeout: Device ${ip}:${unitId} did not respond to read request.`);
+                }
+
+                if (e.message && (e.message.includes('Slave device failure') || e.message.includes('Gateway target device failed') || e.message.includes('Transaction timed out'))) {
+                    connManager.reportError(ip, port, unitId, e);
                 }
 
                 // Generic Error with Context
