@@ -503,6 +503,9 @@ module.exports = function (RED) {
             retryDelay: CONST.BASE_RETRY_DELAY
         };
 
+        // Track last written value to reduce log spam on continuous injects
+        node.lastWriteValue = undefined;
+
         const modelsPath = path.join(__dirname, 'models', 'index.json');
         let models = {};
         try { models = fs.readJsonSync(modelsPath); } catch (e) { }
@@ -909,7 +912,15 @@ module.exports = function (RED) {
                 const finalAddr = modelAddr + pointOffset;
                 // Write
                 await client.writeRegisters(finalAddr, buffer);
-                node.warn(`[SunSpec Write] Success: Wrote ${value} to ${modelId}:${pointName} (@${finalAddr})`);
+
+                if (node.lastWriteValue !== value) {
+                    node.warn(`[SunSpec State Change] WRITING: ${modelId}:${pointName} at ${ip}:${targetUnitId} switched from ${node.lastWriteValue} to ${value}`);
+                    node.lastWriteValue = value;
+                } else {
+                    // Downgrade to standard log if the value hasn't changed to prevent pm2 log spam
+                    node.log(`[SunSpec Write] Success: Wrote ${value} to ${modelId}:${pointName} (@${finalAddr})`);
+                }
+
                 return true;
 
             } catch (err) {
