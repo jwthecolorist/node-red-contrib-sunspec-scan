@@ -927,7 +927,7 @@ module.exports = function (RED) {
                 // Enrich error message
                 const isTimeout = err.message.toLowerCase().includes('time') || err.code === 'ETIMEDOUT';
                 if (isTimeout) {
-                    connManager.reportError(ip, port, targetUnitId, new Error('ETIMEDOUT'));
+                    connManager.reportError(ip, port, targetUnitId, err);
                     throw new Error(`Timeout: Device ${ip}:${unitId} did not respond to write request.`);
                 }
 
@@ -1190,7 +1190,7 @@ module.exports = function (RED) {
                 const isTimeout = e.message.toLowerCase().includes('time') || e.code === 'ETIMEDOUT';
 
                 if (isTimeout) {
-                    connManager.reportError(ip, port, unitId, new Error('ETIMEDOUT'));
+                    connManager.reportError(ip, port, unitId, e);
                     throw new Error(`Timeout: Device ${ip}:${unitId} did not respond to read request.`);
                 }
 

@@ -151,7 +151,7 @@ class ConnectionManager {
     }
 
     _isFatalError(error) {
-        const fatalErrors = ['ECONNRESET', 'EPIPE', 'ETIMEDOUT', 'Port Not Open', 'Transaction timed out'];
+        const fatalErrors = ['ECONNRESET', 'EPIPE', 'ETIMEDOUT', 'Port Not Open'];
         return fatalErrors.some(e => error.message && error.message.includes(e));
     }
 
@@ -160,7 +160,7 @@ class ConnectionManager {
         if (this._isFatalError(error)) {
             // TCP died entirely. Invalidate whole socket.
             this.invalidate(ip, port);
-        } else if (error.message && (error.message.includes('Slave device failure') || error.message.includes('Gateway target device failed'))) {
+        } else if (error.message && (error.message.includes('Slave device failure') || error.message.includes('Gateway target device failed') || error.message.includes('Transaction timed out'))) {
             // Physical RS485 device died behind a working TCP Gateway.
             // Blacklist the UnitID for 60s so it stops clogging the TCP queue.
             this.setBlacklist(ip, port, unitId, 60000); 
