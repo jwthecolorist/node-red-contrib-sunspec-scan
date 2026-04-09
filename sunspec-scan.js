@@ -28,6 +28,8 @@ module.exports = function (RED) {
     const path = require('path');
     const ConnectionManager = require('./connection-manager');
     const connManager = new ConnectionManager();
+    global.microgridConnectionManager = connManager; // Share the unified TCP queue across disparate nodes
+
     const discovery = require('./discovery');
     const CONST = require('./constants');
     const utils = require('./utils');
