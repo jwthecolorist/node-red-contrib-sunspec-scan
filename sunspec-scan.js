@@ -814,6 +814,9 @@ module.exports = function (RED) {
     // --- Write Functionality ---
     async function writeSinglePoint(node, models, ip, port, unitId, modelId, pointName, value, timeout) {
         return await connManager.request(ip, port, unitId, async (client) => {
+            // Declared here (outside try) so catch block can reference it for error reporting
+            let targetUnitId = unitId;
+
             try {
                 // Look up Point Definition to check for Unit ID Override
                 let pointDef = null;
@@ -822,7 +825,6 @@ module.exports = function (RED) {
                 }
 
                 // Handle Override or Default Unit ID
-                let targetUnitId = unitId;
                 if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
 
                 // Client ID is set by connManager, but if override exists:
