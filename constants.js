@@ -25,18 +25,22 @@ module.exports = {
     FLOAT32_NOT_IMPL: NaN,           // float32 "not implemented" value
 
     // Default Timeouts (ms)
-    DEFAULT_TIMEOUT: 6000,           // Standard Modbus timeout
-    DEFAULT_SCAN_TIMEOUT: 5000,      // Full device scan timeout
-    DEFAULT_PORT_CHECK_TIMEOUT: 300, // Quick port availability check
-    CONNECTION_TIMEOUT: 5000,        // TCP connection timeout
+    // NOTE: Tailscale VPN adds ~100-200ms RTT per hop. Timeouts must exceed this.
+    DEFAULT_TIMEOUT: 8000,           // Standard Modbus timeout (raised from 6000 for Tailscale paths)
+    DEFAULT_SCAN_TIMEOUT: 8000,      // Full device scan timeout
+    DEFAULT_PORT_CHECK_TIMEOUT: 500, // Quick port availability check (raised for Tailscale)
+    CONNECTION_TIMEOUT: 6000,        // TCP connection timeout (must beat Tailscale RTT + device latency)
+    MIN_EFFECTIVE_TIMEOUT: 4000,     // Hard floor - any configured timeout below this is unsafe on Tailscale
 
     // Default Ports
     DEFAULT_MODBUS_PORT: 502,        // Standard Modbus TCP port
 
     // Retry Configuration
     MIN_PACING_INTERVAL: 1,          // Minimum auto-read interval (seconds)
-    MAX_RETRY_DELAY: 30000,          // Maximum retry backoff (ms)
-    BASE_RETRY_DELAY: 1000,          // Initial retry delay (ms)
+    MIN_WRITE_PACING_INTERVAL: 30,   // Minimum write-node pacing (seconds) - prevents gateway saturation
+    MAX_RETRY_DELAY: 60000,          // Maximum retry backoff (ms) - 1 minute cap (raised from 30s)
+    BASE_RETRY_DELAY: 2000,          // Initial retry delay (ms) - raised from 1s to reduce burst
+    CONNECT_COOLDOWN: 10000,         // Min ms between TCP connect attempts to same dead host
 
     // Common Model IDs
     MODEL_COMMON: 1,                 // Common model (always present)

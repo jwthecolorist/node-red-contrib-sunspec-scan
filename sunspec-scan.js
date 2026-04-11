@@ -465,7 +465,14 @@ module.exports = function (RED) {
 
         node.ip = config.ip || "";
         node.port = parseInt(config.port) || CONST.DEFAULT_MODBUS_PORT;
-        node.timeout = parseInt(config.timeout) || CONST.DEFAULT_TIMEOUT;
+        // Enforce minimum effective timeout — values below this are unsafe on Tailscale paths
+        const rawTimeout = parseInt(config.timeout) || CONST.DEFAULT_TIMEOUT;
+        if (rawTimeout < CONST.MIN_EFFECTIVE_TIMEOUT) {
+            node.warn(`Configured timeout ${rawTimeout}ms is below minimum ${CONST.MIN_EFFECTIVE_TIMEOUT}ms for Tailscale paths. Clamping up.`);
+            node.timeout = CONST.MIN_EFFECTIVE_TIMEOUT;
+        } else {
+            node.timeout = rawTimeout;
+        }
         node.unitId = parseInt(config.unitId);
         node.scanIds = config.scanIds;
 
@@ -738,24 +745,15 @@ module.exports = function (RED) {
         if (node.pacing && node.pacing > 0 && isConfigured()) {
             node.log(`Auto-read enabled: ${node.pacing}s`);
 
-            // const MAX_RETRIES = 10; // REMOVED: In favor of infinite retry
-
             const executeRead = () => {
                 triggerScan({})
                     .then(() => {
-                        // Success - reset error counter
                         if (node.connectionState.consecutiveErrors > 0) {
                             node.log(`Auto-read recovered after ${node.connectionState.consecutiveErrors} failures`);
                         }
                         node.connectionState.consecutiveErrors = 0;
                         node.connectionState.lastSuccess = new Date();
 
-                        // Reschedule normal interval if needed? 
-                        // Check if interval is running. 
-                        // If we are in "Retry Mode" (intervalId is null), we should switch back to normal interval?
-                        // Actually, my interval logic below sets intervalId.
-                        // But if we entered retry loop, intervalId was cleared.
-                        // So we must restart interval here if it's null.
                         if (!intervalId) {
                             intervalId = setInterval(executeRead, node.pacing * 1000);
                         }
@@ -767,34 +765,32 @@ module.exports = function (RED) {
                         // Exponential backoff (max 60s)
                         const delay = Math.min(
                             node.connectionState.retryDelay * Math.pow(2, node.connectionState.consecutiveErrors - 1),
-                            60000 // Cap at 60s
+                            CONST.MAX_RETRY_DELAY
                         );
 
-                        // node.warn(`Auto-read failed (${node.connectionState.consecutiveErrors}): ${err.message}. Retrying in ${delay / 1000}s...`);
                         node.status({ fill: "red", shape: "ring", text: `retrying (${node.connectionState.consecutiveErrors}x)...` });
 
-                        // Clear regular interval during error recovery
                         if (intervalId) {
                             clearInterval(intervalId);
                             intervalId = null;
                         }
 
-                        // Schedule retry (Infinite)
                         retryTimeoutId = setTimeout(() => {
                             retryTimeoutId = null;
-                            executeRead(); // Recursive retry
+                            executeRead();
                         }, delay);
                     });
             };
 
-
-
-
-            // Initial read
-            executeRead();
-
-            // Regular interval
-            intervalId = setInterval(executeRead, node.pacing * 1000);
+            // Staggered startup: spread initial connections across a 0-3s window.
+            // Prevents all auto-read nodes from simultaneously connecting to the
+            // gateway on a fresh Node-RED deploy, which can saturate its TCP stack.
+            const startupJitter = Math.random() * 3000;
+            retryTimeoutId = setTimeout(() => {
+                retryTimeoutId = null;
+                executeRead();
+                intervalId = setInterval(executeRead, node.pacing * 1000);
+            }, startupJitter);
         } else if (node.pacing > 0 && !isConfigured()) {
             node.warn('Auto-read disabled: Node configuration incomplete. Please configure device, model, and point.');
         }
@@ -944,31 +940,23 @@ module.exports = function (RED) {
         }, timeout);
     }
     // --- Optimized Multi-Read ---
+    // Routes through ConnectionManager to prevent TCP socket collisions with
+    // concurrent single-read or write operations on the same device.
     async function readMultiplePoints(node, models, ip, port, unitId, items, timeout) {
-        const client = new ModbusRTU();
-        const results = [];
-
-        try {
-            await client.connectTCP(ip, { port: port });
-            client.setID(unitId);
-            client.setTimeout(timeout || 2000);
-
+        return await connManager.request(ip, port, unitId, async (client) => {
             // 1. Locate SunSpec Base
             let base = 40002;
             try {
-                let m = await client.readHoldingRegisters(40000, 2);
+                const m = await client.readHoldingRegisters(40000, 2);
                 if (m.data[0] === 0x5375) base = 40002;
-            } catch (e) { }
+            } catch (e) { /* Use default base on error */ }
 
-            // 2. Map Model Locations (Cache for this connection)
-            const modelAddresses = {}; // Map<ModelID, StartAddr>
-
+            // 2. Map Model Locations
+            const modelAddresses = {};
             let addr = base;
             while (true) {
-                let h = await client.readHoldingRegisters(addr, 2);
+                const h = await client.readHoldingRegisters(addr, 2);
                 if (h.data[0] === 0xFFFF) break;
-                // Store model address
-                // Note: Device might have multiple of same model? Only first supported for now.
                 if (!modelAddresses[h.data[0]]) {
                     modelAddresses[h.data[0]] = addr + 2;
                 }
@@ -976,28 +964,20 @@ module.exports = function (RED) {
             }
 
             // 3. Process Items
+            const results = [];
             for (const item of items) {
                 const mid = parseInt(item.model);
                 const mAddr = modelAddresses[mid];
-
                 if (!mAddr) {
                     results.push({ index: item.originalIndex, value: null });
                     continue;
                 }
-
-                // Read Point Logic (Reuse from readSinglePoint but simplified params)
-                // We need to fetch point definition
                 const val = await fetchPointValue(client, models, mid, mAddr, item.point);
                 results.push({ index: item.originalIndex, value: val });
             }
 
             return results;
-
-        } catch (e) {
-            throw e;
-        } finally {
-            client.close();
-        }
+        }, timeout);
     }
 
     // Extracted Helper for reading value with open client

@@ -1,21 +1,27 @@
 const ModbusRTU = require("modbus-serial");
+const CONST = require('./constants');
 
 /**
  * Manages a pool of Modbus TCP connections.
- * 
+ *
  * Goals:
  * 1. Reuse existing connections to reduce handshake overhead.
  * 2. Limit concurrent connections per device (effectively 1 per IP:Port).
  * 3. Handle idle timeouts to release resources.
- * 4. robust error handling/invalidation.
+ * 4. Robust error handling/invalidation.
+ * 5. Connect-attempt cooldown to prevent hammering dead hosts during outages.
  */
 class ConnectionManager {
     constructor() {
         // Map<"ip:port", { client: ModbusRTU, lastActive: number, queue: Promise }>
         this.pool = new Map();
 
-        // Map<"ip:port:unitId", expirationTimeMs>
+        // Map<"ip:port:unitId", expirationTimeMs> — unit-level backoff
         this.blacklist = new Map();
+
+        // Map<"ip:port", lastAttemptTimeMs> — host-level connect cooldown
+        // Prevents hammering a dead TCP host with rapid reconnect attempts.
+        this.connectAttempts = new Map();
 
         // Timeout in ms before closing an idle connection
         this.IDLE_TIMEOUT = 20000;
@@ -131,21 +137,51 @@ class ConnectionManager {
     }
 
     /**
-     * Internal: Establish new connection
+     * Internal: Establish new connection with cooldown guard and hard timeout.
+     * modbus-serial's connectTCP can hang indefinitely on certain network paths
+     * (e.g., Tailscale routes to unreachable hosts). We race against a hard deadline.
      */
     async _connect(ip, port, timeout) {
+        const key = `${ip}:${port}`;
+        const cooldown = CONST.CONNECT_COOLDOWN || 10000;
+
+        // Cooldown guard: don't attempt TCP connect if we just failed recently
+        const lastAttempt = this.connectAttempts.get(key);
+        if (lastAttempt && (Date.now() - lastAttempt) < cooldown) {
+            throw new Error(`Host ${ip}:${port} is in connect cooldown (last attempt ${Date.now() - lastAttempt}ms ago). Skipping reconnect.`);
+        }
+        this.connectAttempts.set(key, Date.now());
+
         const client = new ModbusRTU();
-        client.setTimeout(timeout);
-        // console.log(`[ConnectionManager] Connecting to ${ip}:${port}...`);
-        await client.connectTCP(ip, { port: port });
+        // Use the larger of the user timeout or the hard connection timeout constant
+        const connectTimeout = Math.max(timeout, CONST.CONNECTION_TIMEOUT || 6000);
+        client.setTimeout(connectTimeout);
+
+        // Race connectTCP against a hard deadline.
+        // modbus-serial can hang indefinitely if the TCP SYN goes into a black hole
+        // (common on Tailscale paths where the remote subnet router is unreachable).
+        const connectPromise = client.connectTCP(ip, { port });
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error(`TCP connect to ${ip}:${port} timed out after ${connectTimeout}ms`)), connectTimeout)
+        );
+
+        try {
+            await Promise.race([connectPromise, timeoutPromise]);
+        } catch (e) {
+            // Ensure the client socket is destroyed if the race was lost
+            try {
+                if (client._port && client._port.socket) client._port.socket.destroy();
+                client.close();
+            } catch (_) { }
+            throw e;
+        }
+
+        // Clear cooldown on successful connect
+        this.connectAttempts.delete(key);
 
         // Handle unexpected closure
-        client.on('error', (err) => {
-            this.invalidate(ip, port);
-        });
-        client.on('close', () => {
-            this.invalidate(ip, port);
-        });
+        client.on('error', () => this.invalidate(ip, port));
+        client.on('close', () => this.invalidate(ip, port));
 
         return client;
     }
@@ -155,15 +191,36 @@ class ConnectionManager {
         return fatalErrors.some(e => error.message && error.message.includes(e));
     }
 
-    // Explicitly invoked by the Node when a Gateway-level serial timeout occurs
+    /**
+     * Explicitly invoked by the Node when a Gateway-level error occurs.
+     * Classifies the error and applies the appropriate recovery mechanism:
+     *   - Fatal TCP errors   → Invalidate the whole socket immediately.
+     *   - RS485 slave errors → Blacklist the specific UnitID for 60s.
+     *   - Modbus timeouts    → Blacklist the UnitID for 15s (short cooldown).
+     *     This prevents a timed-out device from clogging the queue with
+     *     back-to-back retry attempts, which is the root cause of the
+     *     timeout storm that crashed the Conext gateway on 7 Apr.
+     */
     reportError(ip, port, unitId, error) {
         if (this._isFatalError(error)) {
-            // TCP died entirely. Invalidate whole socket.
+            // TCP died entirely — invalidate the whole socket.
             this.invalidate(ip, port);
-        } else if (error.message && (error.message.includes('Slave device failure') || error.message.includes('Gateway target device failed') || error.message.includes('Transaction timed out'))) {
-            // Physical RS485 device died behind a working TCP Gateway.
+        } else if (error.message && (
+            error.message.includes('Slave device failure') ||
+            error.message.includes('Gateway target device failed') ||
+            error.message.includes('Transaction timed out')
+        )) {
+            // Physical RS485 device died behind a working TCP gateway.
             // Blacklist the UnitID for 60s so it stops clogging the TCP queue.
-            this.setBlacklist(ip, port, unitId, 60000); 
+            this.setBlacklist(ip, port, unitId, 60000);
+        } else if (error.message && (
+            error.message.toLowerCase().includes('timed out') ||
+            error.message.toLowerCase().includes('timeout') ||
+            error.code === 'ETIMEDOUT'
+        )) {
+            // Generic Modbus request timeout (e.g. high Tailscale RTT causing read to expire).
+            // Short 15s blacklist prevents rapid retry storms from saturating the TCP queue.
+            this.setBlacklist(ip, port, unitId, 15000);
         }
     }
 
