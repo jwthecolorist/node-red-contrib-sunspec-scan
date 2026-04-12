@@ -8,6 +8,7 @@
             port: { value: "502", required: true, validate: RED.validators.number() },
             timeout: { value: "2000", required: true, validate: RED.validators.number() },
             pacing: { value: "2", validate: RED.validators.regex(/^[0-9.]*$/) }, // New Pacing Field (Default 2s)
+            triggerMode: { value: "auto" },
             unitId: { value: "", required: false },
             scanIds: { value: true },
 
@@ -85,6 +86,17 @@
                 });
                 // B5 FIX: Trigger initial mode display on editor open
                 setTimeout(function() { $("#node-input-readMode").trigger("change"); }, 100);
+
+                // Trigger Mode Select Handler
+                $("#node-input-triggerMode").on("change", function () {
+                    const tMode = $(this).val();
+                    if (tMode === "inject") {
+                        $("#pacing-row").hide();
+                    } else {
+                        $("#pacing-row").show();
+                    }
+                });
+                setTimeout(function() { $("#node-input-triggerMode").trigger("change"); }, 100);
 
                 // Auto-toggle Scan All based on Unit ID input
                 // Deprecated: Logic now handled by parsing Unit ID string directly
@@ -806,6 +818,13 @@
             </ul>
         </div>
         <div class="form-row">
+            <label for="node-input-triggerMode"><i class="fa fa-cogs"></i> Schedule</label>
+            <select id="node-input-triggerMode" style="width: 70%;">
+                <option value="auto">Auto-Read Interval</option>
+                <option value="inject">Inject Only (No Polling)</option>
+            </select>
+        </div>
+        <div class="form-row" id="pacing-row">
             <label for="node-input-pacing"><i class="fa fa-refresh"></i> Auto-Read (s)</label>
             <input type="text" id="node-input-pacing" placeholder="0 or empty to disable">
         </div>

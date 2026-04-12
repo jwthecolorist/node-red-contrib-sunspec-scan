@@ -493,12 +493,17 @@ module.exports = function (RED) {
         node.roundDecimals = config.roundDecimals !== undefined ? config.roundDecimals : true;
 
         // Pacing config with validation
+        node.triggerMode = config.triggerMode || 'auto';
+
         let rawPacing = parseFloat(config.pacing);
-        if (!isNaN(rawPacing) && rawPacing > 0 && rawPacing < CONST.MIN_PACING_INTERVAL) {
+        if (node.triggerMode === 'inject') {
+            rawPacing = 0;
+        } else if (!isNaN(rawPacing) && rawPacing > 0 && rawPacing < CONST.MIN_PACING_INTERVAL) {
             node.warn(`Auto-read interval ${rawPacing}s is too fast. Enforcing minimum ${CONST.MIN_PACING_INTERVAL}s.`);
             rawPacing = CONST.MIN_PACING_INTERVAL;
         }
         node.pacing = rawPacing;
+
 
         // Persistent model address cache (survives Node-RED restarts)
         const cacheKey = `modelAddressCache_${node.id}`;
@@ -512,8 +517,12 @@ module.exports = function (RED) {
             retryDelay: CONST.BASE_RETRY_DELAY
         };
 
-        // Track last written value to reduce log spam on continuous injects
-        node.lastWriteValue = undefined;
+        // Track last written value across restarts via persistent context
+        // Without this, every restart causes a forced write on first pacing tick,
+        // which triggers a deep scan that blocks the ConnectionManager queue for ~30s
+        // and causes 3x consecutive write failures before the value actually lands.
+        const writeValueKey = `lastWriteValue_${node.id}`;
+        node.lastWriteValue = node.context().get(writeValueKey); // undefined if never written
 
         const modelsPath = path.join(__dirname, 'models', 'index.json');
         let models = {};
@@ -840,7 +849,8 @@ module.exports = function (RED) {
                 } else if (node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
                     modelAddr = node.modelAddressCache[cacheKey][modelId];
                 } else {
-                    // Cache miss - use utility function
+                    // Cache miss — must walk the SunSpec model chain (expensive: ~5-10 Modbus reads)
+                    node.log(`[SunSpec] Cache miss for model ${modelId} on ${ip}:${unitId} — performing model walk`);
                     modelAddr = await utils.findModelAddress(client, modelId);
 
                     if (modelAddr !== -1) {
@@ -916,8 +926,10 @@ module.exports = function (RED) {
                 if (node.lastWriteValue !== value) {
                     node.warn(`[SunSpec State Change] WRITING: ${modelId}:${pointName} at ${ip}:${targetUnitId} switched from ${node.lastWriteValue} to ${value}`);
                     node.lastWriteValue = value;
+                    // Persist across restarts so next startup skips the forced re-write
+                    const writeValueKey = `lastWriteValue_${node.id}`;
+                    node.context().set(writeValueKey, value);
                 } else {
-                    // Downgrade to standard log if the value hasn't changed to prevent pm2 log spam
                     node.log(`[SunSpec Write] Success: Wrote ${value} to ${modelId}:${pointName} (@${finalAddr})`);
                 }
 
