@@ -55,6 +55,8 @@
                     $.getJSON('sunspec-scan/devices', function (devs) {
                         savedDevices = devs || [];
                         populateDeviceSelect();
+                        // FIX: Re-trigger mode visibility after async device load
+                        setTimeout(function() { $("#node-input-readMode").trigger("change"); }, 50);
                     });
                 });
 
@@ -85,7 +87,7 @@
                     else if (mode === "list") $(".list-mode-only").show();
                 });
                 // B5 FIX: Trigger initial mode display on editor open
-                setTimeout(function() { $("#node-input-readMode").trigger("change"); }, 100);
+                setTimeout(function() { $("#node-input-readMode").trigger("change"); }, 300);
 
                 // Trigger Mode Select Handler
                 $("#node-input-triggerMode").on("change", function () {
@@ -862,7 +864,7 @@
         <hr>
 
         <!-- PARAMETER SELECTION -->
-        <fieldset class="param-mode-only list-mode-only mode-group">
+        <fieldset class="param-mode-only list-mode-only">
             <legend>Parameter Selection</legend>
             <div class="form-tips">Use "Scan Network" above to populate, then select params.</div>
             <br>
