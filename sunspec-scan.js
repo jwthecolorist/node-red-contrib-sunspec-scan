@@ -342,13 +342,14 @@ module.exports = function (RED) {
                 if (mid === 0xFFFF) break;
 
                 foundModels[mid] = { start: addr, len: len };
-                const dataAddr = addr + 2; // data starts after the 2-register model header
 
                 // Scan for implemented points (FAST BLOCK SCAN)
-                // FIX: pass dataAddr (addr+2) so point offsets land on actual data registers
+                // NOTE: pass addr (the header address) because model JSON definitions
+                // include ID and L as their first two points (offsets 0 and 1), so
+                // the block read from headerAddr aligns correctly with the model schema.
                 if (models && models[mid]) {
                     try {
-                        const implementedPoints = await scanImplementedPoints(client, models, mid, dataAddr, len);
+                        const implementedPoints = await scanImplementedPoints(client, models, mid, addr, len);
                         foundModels[mid].implementedPoints = implementedPoints;
                     } catch (e) {
                         console.log(`Error scanning points for model ${mid}:`, e.message);
@@ -356,12 +357,13 @@ module.exports = function (RED) {
                 }
 
                 // Read Common Model Info
-                // FIX: pass dataAddr so fetchPointValue offsets start at actual data
+                // NOTE: pass addr (headerAddr) — fetchPointValue offsets include ID+L
+                // in the running total, so headerAddr + offset lands correctly.
                 if (mid === 1 && models) {
                     try {
-                        const mn = await fetchPointValue(client, models, 1, dataAddr, 'Mn');
-                        const md = await fetchPointValue(client, models, 1, dataAddr, 'Md');
-                        const sn = await fetchPointValue(client, models, 1, dataAddr, 'SN');
+                        const mn = await fetchPointValue(client, models, 1, addr, 'Mn');
+                        const md = await fetchPointValue(client, models, 1, addr, 'Md');
+                        const sn = await fetchPointValue(client, models, 1, addr, 'SN');
                         foundModels.info = {
                             Mn: mn,
                             Md: md,
@@ -854,10 +856,12 @@ module.exports = function (RED) {
                 } else {
                     // Cache miss — must walk the SunSpec model chain (expensive: ~5-10 Modbus reads)
                     node.log(`[SunSpec] Cache miss for model ${modelId} on ${ip}:${unitId} — performing model walk`);
-                    const headerAddr = await utils.findModelAddress(client, modelId);
+                    modelAddr = await utils.findModelAddress(client, modelId);
 
-                    if (headerAddr !== -1) {
-                        modelAddr = headerAddr + 2; // FIX: offset past ID+len header to data block
+                    if (modelAddr !== -1) {
+                        // Store the header address. All model JSON definitions include ID and L
+                        // as the first two points (offsets 0+1), so fetchPointValue's running
+                        // offset total naturally skips them: headerAddr + pointOffset is correct.
                         if (!node.modelAddressCache[cacheKey]) node.modelAddressCache[cacheKey] = {};
                         node.modelAddressCache[cacheKey][modelId] = modelAddr;
                         // Persist
@@ -1156,18 +1160,18 @@ module.exports = function (RED) {
                 let modelAddr = -1;
 
                 // Address Caching Logic
-                // NOTE: findModelAddress returns the HEADER address. All callers of
-                // fetchPointValue must add +2 to skip the ID+len header registers and
-                // land on the actual data block where point offsets are relative to.
+                // Model JSON definitions include ID and L as the first two points (offsets 0+1).
+                // The offset accumulation in fetchPointValue naturally accounts for them, so
+                // headerAddr + pointOffset correctly resolves to the right register without
+                // needing a manual +2 adjustment.
                 if (modelId === 'sma_edmm' || modelId === 'conext_xw_503') {
                     modelAddr = 0;
                 } else if (node.modelAddressCache[cacheKey] && node.modelAddressCache[cacheKey][modelId]) {
                     modelAddr = node.modelAddressCache[cacheKey][modelId];
                 } else {
-                    // Cache miss: find the header address, then store data address (+2)
-                    const headerAddr = await utils.findModelAddress(client, modelId);
-                    if (headerAddr !== -1) {
-                        modelAddr = headerAddr + 2; // FIX: offset past ID+len header
+                    // Cache miss: store the header address returned by findModelAddress.
+                    modelAddr = await utils.findModelAddress(client, modelId);
+                    if (modelAddr !== -1) {
                         if (!node.modelAddressCache[cacheKey]) node.modelAddressCache[cacheKey] = {};
                         node.modelAddressCache[cacheKey][modelId] = modelAddr;
                         const persistKey = `modelAddressCache_${node.id}`;
