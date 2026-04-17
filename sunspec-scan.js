@@ -782,6 +782,7 @@ module.exports = function (RED) {
                     .catch(err => {
                         node.connectionState.consecutiveErrors++;
                         node.connectionState.lastError = new Date();
+                        node.error(`[SunSpec Auto-Read Error] ${node.name}: ${err.message}`);
 
                         // Exponential backoff (max 60s)
                         const delay = Math.min(
@@ -845,8 +846,12 @@ module.exports = function (RED) {
                 if (pointDef && pointDef.unitId) targetUnitId = pointDef.unitId;
 
                 // Client ID is set by connManager, but if override exists:
+                // Allow targeting downstream inverters (>2) using the SMA EDMM model profile
+                // without getting forcefully redirected to the gateway aggregate (ID 2).
                 if (pointDef && pointDef.unitId) {
-                    await client.setID(pointDef.unitId);
+                    if (client.getID() <= 2) {
+                        await client.setID(pointDef.unitId);
+                    }
                 }
 
                 // 1. Resolve Model Address
@@ -1159,8 +1164,11 @@ module.exports = function (RED) {
                 // Handle Override or Default Unit ID (Note: client ID is already set by connManager)
                 // However, internal logic of fetchPointValue assumes it can use the client logic
                 // Double check target ID if overridden by pointDef
+                // Allow targeting downstream inverters (>2) using the SMA EDMM model profile
                 if (pointDef && pointDef.unitId) {
-                    await client.setID(pointDef.unitId);
+                    if (client.getID() <= 2) {
+                        await client.setID(pointDef.unitId);
+                    }
                 }
 
                 const cacheKey = `${ip}:${unitId}`;
