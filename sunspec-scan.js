@@ -432,13 +432,13 @@ module.exports = function (RED) {
                 const byteOffset = offset * 2; // registers to bytes
 
                 // Check for NOT IMPLEMENTED sentinel values
-                if (p.type === 'int16') {
+                if (p.type === 'int16' || p.type === 'sint16') {
                     const val = fullBuf.readInt16BE(byteOffset);
                     if (val === -32768) isImplemented = false;
                 } else if (p.type === 'uint16' || p.type === 'enum16') {
                     const val = fullBuf.readUInt16BE(byteOffset);
                     if (val === 65535) isImplemented = false;
-                } else if (p.type === 'int32' || p.type === 'acc32') {
+                } else if (p.type === 'int32' || p.type === 'sint32' || p.type === 'acc32') {
                     const val = fullBuf.readInt32BE(byteOffset);
                     if (val === -2147483648) isImplemented = false;
                 } else if (p.type === 'uint32') {
@@ -588,8 +588,12 @@ module.exports = function (RED) {
                         const parts = node.selectedDevice.split(':');
                         const id = parts.pop();   // Last part is always UNITID
                         if (parts.length > 1) parts.pop(); // Discard PORT if present
-                        targetIp = parts.join(':');
-                        targetId = parseInt(id);
+                        
+                        const extractedIp = parts.join(':');
+                        // Prevent the dropdown from permanently overriding a manually typed IP
+                        if (!targetIp || targetIp.trim() === '' || targetIp === extractedIp) {
+                            targetIp = extractedIp;
+                        }
                     }
 
                     if (node.selectedId) {
@@ -684,8 +688,11 @@ module.exports = function (RED) {
                 const parts = node.selectedDevice.split(':');
                 const id = parts.pop();   // Last part is always UNITID
                 if (parts.length > 1) parts.pop(); // Discard PORT if present
-                targetIp = parts.join(':');
-                targetId = parseInt(id);
+                
+                const extractedIp = parts.join(':');
+                if (!targetIp || targetIp.trim() === '' || targetIp === extractedIp) {
+                    targetIp = extractedIp;
+                }
             }
 
             if (node.selectedId) {
@@ -1040,7 +1047,7 @@ module.exports = function (RED) {
         const buf = valBlock.buffer;
 
         // Decoding & Not Implemented Check
-        if (pointDef.type === 'int16') {
+        if (pointDef.type === 'int16' || pointDef.type === 'sint16') {
             raw = buf.readInt16BE(0);
             if (raw === -32768) return null; // 0x8000
         }
@@ -1048,7 +1055,7 @@ module.exports = function (RED) {
             raw = buf.readUInt16BE(0);
             if (raw === 65535) return null; // 0xFFFF
         }
-        else if (pointDef.type === 'int32') {
+        else if (pointDef.type === 'int32' || pointDef.type === 'sint32' || pointDef.type === 'acc32') {
             raw = buf.readInt32BE(0);
             if (raw === -2147483648) return null; // 0x80000000
         }
