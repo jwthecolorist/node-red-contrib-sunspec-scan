@@ -24,3 +24,22 @@ describe('parseIpRange', () => {
         expect(parseIpRange('10.0.0.0/8').length).toBeLessThanOrEqual(1000);
     });
 });
+
+const { looksLikeDeviceName, decodeDeviceName } = require('../discovery');
+
+describe('Conext 503 device-name validation', () => {
+    test('decodes a real device name, stripping NUL/non-printable padding', () => {
+        const buf = Buffer.from('XW Pro 6848 NA\x00\x00', 'latin1');
+        expect(decodeDeviceName(buf)).toBe('XW Pro 6848 NA');
+    });
+    test('accepts a plausible device name', () => {
+        expect(looksLikeDeviceName(Buffer.from('XW Pro 6848 NA', 'latin1'))).toBe(true);
+        expect(looksLikeDeviceName(Buffer.from('cb-BC2221000287', 'latin1'))).toBe(true);
+    });
+    test('rejects a zeroed block (no false positive on a silent device)', () => {
+        expect(looksLikeDeviceName(Buffer.alloc(16))).toBe(false);
+    });
+    test('rejects a non-printable/binary block', () => {
+        expect(looksLikeDeviceName(Buffer.from([0,1,0,2,0,3,0,4]))).toBe(false);
+    });
+});

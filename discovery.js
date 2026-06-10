@@ -31,6 +31,25 @@ async function checkPort(ip, port = 502, timeout = 300) {
 }
 
 /**
+ * Decode a Modbus register buffer as a printable ASCII device-name string.
+ * Strips NUL padding and any non-printable bytes.
+ */
+function decodeDeviceName(buffer) {
+    return buffer.toString('latin1').replace(/[^\x20-\x7E]/g, '').trim();
+}
+
+/**
+ * Heuristic: does this register block look like a real device name (as opposed to
+ * a zeroed/binary block from a non-Conext device that merely answered the read)?
+ * Requires at least 3 alphanumeric characters in the decoded string.
+ */
+function looksLikeDeviceName(buffer) {
+    const s = decodeDeviceName(buffer);
+    const alnum = (s.match(/[A-Za-z0-9]/g) || []).length;
+    return alnum >= 3;
+}
+
+/**
  * Scan a single IP for valid SunSpec Unit IDs
  */
 async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride, shouldStop) {
@@ -43,11 +62,13 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
         idsToCheck = idsToCheckOverride;
     } else {
         if (port == 503) {
-            // Conext Default Range 10-29. Add a buffer.
-            idsToCheck = [];
+            // Conext (Schneider) on the proprietary 503 map.
+            // Gateway/aggregate sits at 1-2; XW/MPPT inverters appear across a wide
+            // range depending on install. Previously only 10-35 (+1,2,201) was probed,
+            // which MISSED common ids like 126 (XW Pro). Cover the realistic set.
+            idsToCheck = [1, 2];
             for (let i = 10; i <= 35; i++) idsToCheck.push(i);
-            // Also check standard ones just in case
-            idsToCheck.push(1, 2, 201);
+            idsToCheck.push(126, 201, 230);
         } else {
             // SunSpec/Standard Order
             idsToCheck = [1, 126, 2, 3, 4, 100, 200];
@@ -95,22 +116,20 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
                 } catch (e) { }
             }
 
-            // 3. Check Conext (Port 503 usually)
+            // 3. Check Conext (proprietary Port 503 map).
+            // Reg 0 holds the Device Name (string). Rather than accept ANY
+            // successful read (which false-positives on non-Conext devices and on
+            // empty/zeroed blocks), validate that the block decodes to a plausible
+            // ASCII device name (e.g. "XW Pro 6848", "Conext Gateway").
             if (port == 503) {
                 try {
-                    // Reg 0 is Device Name (str16). Read 8 registers (16 chars).
                     const data = await client.readHoldingRegisters(0, 8);
-                    // Check if it looks like a string (ASCII range)
-                    // First char should be alphanumeric?
-                    // Conext devices start with "XW", "MPPT", "Gateway"?
-                    // Or check "Device Name" existence.
-                    // Let's just assume valid read of Reg 0-7 implies Conext if on Port 503?
-                    // Or check specific substring?
-                    // The buffer will allow us to check.
-                    // For now, if read succeeds on Port 503 Reg 0, we assume Conext.
-                    foundIds.push({ id: id, type: 'conext_xw_503' });
-                    if (statusCallback) statusCallback(`Found Conext ID ${id} at ${ip}`);
-                    continue;
+                    if (looksLikeDeviceName(data.buffer)) {
+                        const name = decodeDeviceName(data.buffer);
+                        foundIds.push({ id: id, type: 'conext_xw_503', name: name });
+                        if (statusCallback) statusCallback(`Found Conext "${name}" (ID ${id}) at ${ip}`);
+                        continue;
+                    }
                 } catch (e) { }
             }
         }
@@ -251,5 +270,7 @@ function parseIpRange(ipStr) {
 module.exports = {
     checkPort,
     scanUnitIds,
-    parseIpRange
+    parseIpRange,
+    decodeDeviceName,
+    looksLikeDeviceName
 };
