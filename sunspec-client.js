@@ -64,7 +64,15 @@ function pointOffset(model, pointName) {
     if (!model || !model.group || !model.group.points) return -1;
     let offset = 0;
     for (const p of model.group.points) {
-        if (p.name === pointName) return offset;
+        if (p.name === pointName) {
+            // Absolute-addressed vendor models (SMA EDMM, Conext XW) declare an
+            // explicit per-point register offset and are read with modelAddr = 0,
+            // so the offset IS the absolute register. Standard SunSpec models omit
+            // `offset` and rely on positional accumulation (which already includes
+            // the ID+L header). Honour an explicit offset when present.
+            if (p.offset !== undefined && p.offset !== null) return p.offset;
+            return offset;
+        }
         offset += registerSize(p);
     }
     return -1;

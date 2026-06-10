@@ -177,3 +177,55 @@ describe('writePoint', () => {
         await expect(client.writePoint(fake, model, 0, 'X', 1)).rejects.toThrow(/not supported/i);
     });
 });
+
+// ---------------------------------------------------------------------------
+// Tests against the REAL shipped model definitions (models/index.json), so the
+// addressing claims are validated against production data, not a synthetic model.
+// ---------------------------------------------------------------------------
+const realModels = require('../models/index.json');
+
+describe('addressing against real models/index.json', () => {
+    test('standard model 103: first data point A sits at header+2 (= ID+L)', () => {
+        // Per SunSpec, A is the first data point so its true register is dataStart,
+        // i.e. headerAddr + 2. Accumulated offset must therefore be 2.
+        expect(client.pointOffset(realModels['103'], 'A')).toBe(2);
+        expect(client.pointOffset(realModels['103'], 'AphA')).toBe(3);
+    });
+
+    test('standard model 1 (common): Md sits after the 16-register Mn string', () => {
+        // ID(1)+L(1)+Mn(16) = 18
+        expect(client.pointOffset(realModels['1'], 'Md')).toBe(18);
+    });
+
+    test('vendor sma_edmm: explicit absolute offsets are honoured (read with modelAddr=0)', () => {
+        expect(client.pointOffset(realModels['sma_edmm'], 'DeviceClass')).toBe(30051);
+        expect(client.pointOffset(realModels['sma_edmm'], 'SmaModbusProfileRevision')).toBe(30001);
+    });
+
+    test('vendor conext_xw_503: explicit offsets honoured, not accumulated', () => {
+        expect(client.pointOffset(realModels['conext_xw_503'], 'DeviceName')).toBe(0);
+        expect(client.pointOffset(realModels['conext_xw_503'], 'FGANumber')).toBe(10);
+    });
+
+    test('end-to-end: single-read base (header) and the OLD list base (header+2) disagree', async () => {
+        // Demonstrates the bug concretely on the real model 103 schema.
+        const HEADER = 40072;
+        // Sparse map; unmapped registers read as 0 (so every scale factor = 10^0 = 1).
+        const regs = {
+            [HEADER]: 103, [HEADER + 1]: 50, // header (ID, L)
+            [HEADER + 2]: 111,               // A      (first data point)
+            [HEADER + 4]: 333,               // AphB   (what a header+2 base hits when asked for 'A')
+        };
+        const fake = {
+            async readHoldingRegisters(a, len) {
+                const data = []; const buf = Buffer.alloc(len * 2);
+                for (let i = 0; i < len; i++) { const x = regs[a + i] || 0; data.push(x); buf.writeUInt16BE(x, i * 2); }
+                return { data, buffer: buf };
+            },
+        };
+        const correct = await client.readPoint(fake, realModels['103'], HEADER, 'A', {});
+        const buggy = await client.readPoint(fake, realModels['103'], HEADER + 2, 'A', {});
+        expect(correct).toBe(111);   // header base -> reads A
+        expect(buggy).toBe(333);     // header+2 base -> reads AphB (the off-by-2 symptom)
+    });
+});
