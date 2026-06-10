@@ -23,7 +23,6 @@
 
 module.exports = function (RED) {
     const ModbusRTU = require("modbus-serial");
-    const defaultBrowserId = require("default-browser-id");
     const fs = require('fs-extra');
     const path = require('path');
     const ConnectionManager = require('./connection-manager');
@@ -31,6 +30,7 @@ module.exports = function (RED) {
     global.microgridConnectionManager = connManager; // Share the unified TCP queue across disparate nodes
 
     const discovery = require('./discovery');
+    const sunspecClient = require('./sunspec-client');
     const CONST = require('./constants');
     const utils = require('./utils');
     const errors = require('./errors');
@@ -286,101 +286,78 @@ module.exports = function (RED) {
 
 
 
-        const client = new ModbusRTU();
         const foundModels = {};
         try {
-            await client.connectTCP(ip, { port: port });
-            client.setID(unitId);
-            client.setTimeout(timeout || 2000);
+            // Routed through the shared ConnectionManager (no raw socket) so editor
+            // scans can't collide with runtime reads on the same gateway, and so
+            // they inherit the hard connect-timeout + cooldown protections.
+            const early = await connManager.request(ip, port, unitId, async (client) => {
+                client.setTimeout(timeout || 2000);
 
-            let baseAddr = 40000;
-            try {
-                let data = await client.readHoldingRegisters(baseAddr, 2);
-                if (data.data[0] === 0x5375) baseAddr = 40002;
-                else {
-                    // SunSpec Header Not Found. Check for SMA?
-                    // Probe 30051 (Device Class) for SMA Signature (8128)
+                let baseAddr = 40000;
+                try {
+                    let data = await client.readHoldingRegisters(baseAddr, 2);
+                    if (data.data[0] === 0x5375) baseAddr = 40002;
+                    else {
+                        // SunSpec header not found — probe 30051 for an SMA signature.
+                        try {
+                            const smaData = await client.readHoldingRegisters(30051, 2);
+                            const smaVal = (smaData.data[0] << 16) | smaData.data[1];
+                            if (smaVal === 8128 || smaVal === 9397 || smaVal === 19135) {
+                                console.log(`[SunSpec] Fallback: Detected SMA Device at ${ip}:${unitId} during scan.`);
+                                return { 'sma_edmm': { start: 0, len: 0 }, 'info': { Mn: 'SMA', Md: 'Data Manager' } };
+                            }
+                        } catch (e2) { /* ignore */ }
+                        return {};
+                    }
+                } catch (e) {
                     try {
                         const smaData = await client.readHoldingRegisters(30051, 2);
                         const smaVal = (smaData.data[0] << 16) | smaData.data[1];
                         if (smaVal === 8128 || smaVal === 9397 || smaVal === 19135) {
-                            console.log(`[SunSpec] Fallback: Detected SMA Device at ${ip}:${unitId} during scan.`);
-                            return {
-                                'sma_edmm': { start: 0, len: 0 },
-                                'info': { Mn: 'SMA', Md: 'Data Manager' }
-                            };
+                            console.log(`[SunSpec] Fallback: Detected SMA Device at ${ip}:${unitId} during scan (after SunSpec fail).`);
+                            return { 'sma_edmm': { start: 0, len: 0 }, 'info': { Mn: 'SMA', Md: 'Data Manager' } };
                         }
-                    } catch (e2) {
-                        // Ignore
-                    }
+                    } catch (e3) { /* ignore */ }
                     return {};
                 }
-            } catch (e) {
-                // Read Failed. Only check SMA if read error was NOT timeout?
-                // Or just try SMA anyway if SunSpec failed.
-                try {
-                    const smaData = await client.readHoldingRegisters(30051, 2);
-                    const smaVal = (smaData.data[0] << 16) | smaData.data[1];
-                    if (smaVal === 8128 || smaVal === 9397 || smaVal === 19135) {
-                        console.log(`[SunSpec] Fallback: Detected SMA Device at ${ip}:${unitId} during scan (after SunSpec fail).`);
-                        return {
-                            'sma_edmm': { start: 0, len: 0 },
-                            'info': { Mn: 'SMA', Md: 'Data Manager' }
-                        };
+
+                let addr = baseAddr;
+                while (true) {
+                    const head = await client.readHoldingRegisters(addr, 2);
+                    const mid = head.data[0];
+                    const len = head.data[1];
+                    if (mid === 0xFFFF) break;
+
+                    foundModels[mid] = { start: addr, len: len };
+
+                    // addr is the HEADER address; model JSON points include ID+L so
+                    // a block read from the header aligns with the schema.
+                    if (models && models[mid]) {
+                        try {
+                            foundModels[mid].implementedPoints = await scanImplementedPoints(client, models, mid, addr, len);
+                        } catch (e) {
+                            console.log(`Error scanning points for model ${mid}:`, e.message);
+                        }
                     }
-                } catch (e3) { }
 
-                return {};
-            }
-
-            let addr = baseAddr;
-            while (true) {
-                const head = await client.readHoldingRegisters(addr, 2);
-                const mid = head.data[0];
-                const len = head.data[1];
-
-                if (mid === 0xFFFF) break;
-
-                foundModels[mid] = { start: addr, len: len };
-
-                // Scan for implemented points (FAST BLOCK SCAN)
-                // NOTE: pass addr (the header address) because model JSON definitions
-                // include ID and L as their first two points (offsets 0 and 1), so
-                // the block read from headerAddr aligns correctly with the model schema.
-                if (models && models[mid]) {
-                    try {
-                        const implementedPoints = await scanImplementedPoints(client, models, mid, addr, len);
-                        foundModels[mid].implementedPoints = implementedPoints;
-                    } catch (e) {
-                        console.log(`Error scanning points for model ${mid}:`, e.message);
+                    if (mid === 1 && models) {
+                        try {
+                            const mn = await fetchPointValue(client, models, 1, addr, 'Mn');
+                            const md = await fetchPointValue(client, models, 1, addr, 'Md');
+                            const sn = await fetchPointValue(client, models, 1, addr, 'SN');
+                            foundModels.info = { Mn: mn, Md: md, SN: sn };
+                        } catch (e) { console.log("Meta read error", e); }
+                        if (fastMode) break;
                     }
+
+                    addr += 2 + len;
                 }
-
-                // Read Common Model Info
-                // NOTE: pass addr (headerAddr) — fetchPointValue offsets include ID+L
-                // in the running total, so headerAddr + offset lands correctly.
-                if (mid === 1 && models) {
-                    try {
-                        const mn = await fetchPointValue(client, models, 1, addr, 'Mn');
-                        const md = await fetchPointValue(client, models, 1, addr, 'Md');
-                        const sn = await fetchPointValue(client, models, 1, addr, 'SN');
-                        foundModels.info = {
-                            Mn: mn,
-                            Md: md,
-                            SN: sn
-                        };
-                    } catch (e) { console.log("Meta read error", e); }
-
-                    // FAST MODE EXIT
-                    if (fastMode) break;
-                }
-
-                addr += 2 + len;
-            }
-        } catch (e) { console.log("Scan Model Error", e); } finally {
-            client.close();
-        }
-        console.log(`[SunSpec-Dubgger] Scan Result for ${ip}:${port}: ${Object.keys(foundModels).length} models found.`);
+                return null; // normal path -> caller uses foundModels
+            }, timeout);
+            if (early) return early;
+        } catch (e) { console.log("Scan Model Error", e); }
+        console.log(`[SunSpec] Scan Result for ${ip}:${port}: ${Object.keys(foundModels).length} models found.`);
         return foundModels;
     }
 
@@ -868,7 +845,7 @@ module.exports = function (RED) {
                 } else {
                     // Cache miss — must walk the SunSpec model chain (expensive: ~5-10 Modbus reads)
                     node.log(`[SunSpec] Cache miss for model ${modelId} on ${ip}:${unitId} — performing model walk`);
-                    modelAddr = await utils.findModelAddress(client, modelId);
+                    modelAddr = await sunspecClient.findModelHeader(client, modelId);
 
                     if (modelAddr !== -1) {
                         // Store the header address. All model JSON definitions include ID and L
@@ -886,62 +863,14 @@ module.exports = function (RED) {
                     throw new Error(`Model ${modelId} not found on device`);
                 }
 
-                // 2. Get Point Definition
+                // 2-5. Resolve definition, apply reverse scaling, encode + write.
+                //      All addressing/encoding lives in the protocol module so the
+                //      write target matches what reads use (header + point offset).
                 if (!models[modelId]) throw new Error(`Model definition for ${modelId} missing`);
-                const modelDef = models[modelId].group;
                 if (!pointDef) throw new Error(`Point ${pointName} not found in model`);
 
-                // Calculate Offset Dynamically (if missing from def)
-                let pointOffset = 0;
-                if (pointDef.offset !== undefined) {
-                    pointOffset = pointDef.offset;
-                } else {
-                    for (const p of modelDef.points) {
-                        if (p.name === pointName) break;
-
-                        let size = p.size || 1;
-                        if (!p.size) {
-                            if (p.type.includes('32')) size = 2;
-                            if (p.type.includes('64')) size = 4;
-                            if (p.type === 'sunssf') size = 1;
-                        }
-                        pointOffset += size;
-                    }
-                }
-
-                // 3. Apply Reverse Scaling
-                // Support staticScale
-                let val = value;
-                if (pointDef.staticScale) {
-                    val = val / pointDef.staticScale;
-                }
-
-                val = Math.round(val); // Modbus registers are integers
-
-                // 4. Serialize Data
-                let buffer;
-                const type = pointDef.type;
-
-                if (type === 'uint16' || type === 'enum16' || type === 'bitfield16') {
-                    buffer = Buffer.alloc(2);
-                    buffer.writeUInt16BE(val);
-                } else if (type === 'int16' || type === 'sint16') {
-                    buffer = Buffer.alloc(2);
-                    buffer.writeInt16BE(val);
-                } else if (type === 'uint32') {
-                    buffer = Buffer.alloc(4);
-                    buffer.writeUInt32BE(val);
-                } else if (type === 'int32' || type === 'sint32') {
-                    buffer = Buffer.alloc(4);
-                    buffer.writeInt32BE(val);
-                } else {
-                    throw new Error(`Write not supported for type: ${type}`);
-                }
-
-                // 5. Execute Write
-                const finalAddr = modelAddr + pointOffset;
-                // Write
-                await client.writeRegisters(finalAddr, buffer);
+                const finalAddr = modelAddr + sunspecClient.pointOffset(models[modelId], pointName);
+                await sunspecClient.writePoint(client, models[modelId], modelAddr, pointName, value);
 
                 if (node.lastWriteValue !== value) {
                     node.warn(`[SunSpec State Change] WRITING: ${modelId}:${pointName} at ${ip}:${targetUnitId} switched from ${node.lastWriteValue} to ${value}`);
@@ -974,166 +903,40 @@ module.exports = function (RED) {
     // --- Optimized Multi-Read ---
     // Routes through ConnectionManager to prevent TCP socket collisions with
     // concurrent single-read or write operations on the same device.
+    // --- Optimized Multi-Read (Custom List mode) ---
+    // Routes through ConnectionManager to avoid TCP socket collisions, and uses
+    // the unified protocol module so addressing + rounding match the single-read
+    // path exactly. (Previously this used the model DATA address (header+2) while
+    // fetchPointValue's offsets already include the header -> every list value
+    // was read 2 registers too high.)
     async function readMultiplePoints(node, models, ip, port, unitId, items, timeout) {
         return await connManager.request(ip, port, unitId, async (client) => {
-            // 1. Locate SunSpec Base
-            let base = 40002;
-            try {
-                const m = await client.readHoldingRegisters(40000, 2);
-                if (m.data[0] === 0x5375) base = 40002;
-            } catch (e) { /* Use default base on error */ }
+            const modelMap = await sunspecClient.walkModels(client);
 
-            // 2. Map Model Locations
-            const modelAddresses = {};
-            let addr = base;
-            while (true) {
-                const h = await client.readHoldingRegisters(addr, 2);
-                if (h.data[0] === 0xFFFF) break;
-                if (!modelAddresses[h.data[0]]) {
-                    modelAddresses[h.data[0]] = addr + 2;
-                }
-                addr += 2 + h.data[1];
-            }
-
-            // 3. Process Items
             const results = [];
             for (const item of items) {
                 const mid = parseInt(item.model);
-                const mAddr = modelAddresses[mid];
-                if (!mAddr) {
+                const entry = modelMap[mid];
+                if (!entry) {
                     results.push({ index: item.originalIndex, value: null });
                     continue;
                 }
-                const val = await fetchPointValue(client, models, mid, mAddr, item.point);
+                // Pass the HEADER address and `node` (for roundDecimals).
+                const val = await fetchPointValue(client, models, mid, entry.header, item.point, node);
                 results.push({ index: item.originalIndex, value: val });
             }
-
             return results;
         }, timeout);
     }
 
-    // Extracted Helper for reading value with open client
+    // Reads + decodes a single point via the unified protocol module.
+    // `modelAddr` is the model HEADER address (see sunspec-client.js).
     async function fetchPointValue(client, models, modelId, modelAddr, pointName, node) {
-        const mDef = models[modelId];
-        if (!mDef) return null;
-
-        const points = mDef.group.points;
-        const pointDef = points.find(p => p.name === pointName);
-        if (!pointDef) return null;
-
-        // Calculate Offset
-        let offset = 0;
-        if (pointDef.offset !== undefined) {
-            offset = pointDef.offset;
-        } else {
-            // Standard SunSpec Summation Logic
-            for (const p of points) {
-                if (p.name === pointName) break;
-                let size = p.size || 1;
-                if (!p.size) {
-                    if (p.type.includes('32')) size = 2;
-                    if (p.type.includes('64')) size = 4;
-                    if (p.type === 'sunssf') size = 1;
-                }
-                offset += size;
-            }
-        }
-
-        let size = pointDef.size || 1;
-        if (!pointDef.size) {
-            if (pointDef.type.includes('32')) size = 2;
-            if (pointDef.type.includes('64')) size = 4;
-            if (pointDef.type === 'sunssf') size = 1;
-        }
-
-        const valBlock = await client.readHoldingRegisters(modelAddr + offset, size);
-
-        let raw = 0;
-        const buf = valBlock.buffer;
-
-        // Decoding & Not Implemented Check
-        if (pointDef.type === 'int16' || pointDef.type === 'sint16') {
-            raw = buf.readInt16BE(0);
-            if (raw === -32768) return null; // 0x8000
-        }
-        else if (pointDef.type === 'uint16' || pointDef.type === 'enum16') {
-            raw = buf.readUInt16BE(0);
-            if (raw === 65535) return null; // 0xFFFF
-        }
-        else if (pointDef.type === 'int32' || pointDef.type === 'sint32' || pointDef.type === 'acc32') {
-            raw = buf.readInt32BE(0);
-            if (raw === -2147483648) return null; // 0x80000000
-        }
-        else if (pointDef.type === 'uint32') {
-            raw = buf.readUInt32BE(0);
-            if (raw === 4294967295) return null; // 0xFFFFFFFF
-        }
-        else if (pointDef.type === 'sunssf') {
-            raw = buf.readInt16BE(0);
-            if (raw === -32768) return null; // 0x8000
-        }
-        else if (pointDef.type === 'string') {
-            // String decoding with trim
-            let s = buf.toString();
-            // Strict Whitelist: Allow only Alphanumeric, Space, Dot, Dash, Underscore.
-            // Removes ~ (0x7E), Control codes, Unicode replacements, etc.
-            raw = s.replace(/[^a-zA-Z0-9\-\.\_ ]/g, '').trim();
-        }
-        else {
-            raw = buf.readUInt16BE(0); // fallback
-        }
-
-        let val = raw;
-
-        // Skip scaling if value is a string or null
-        if (typeof val === 'string' || val === null) return val;
-
-        // Scaling
-        if (pointDef.staticScale && typeof val === 'number') {
-            val = val * pointDef.staticScale;
-        } else if (pointDef.sf && typeof val === 'number') {
-            // FIX: Removed special-case skip for W and VA — all points with an sf
-            // reference must have their scale factor applied per SunSpec spec.
-            // Previously W/VA were returned raw, causing incorrect power readings.
-            if (false) {
-                // (Legacy skip removed)
-            } else {
-                let sfOffset = 0;
-                let foundSF = false;
-                for (const p of points) {
-                    if (p.name === pointDef.sf) { foundSF = true; break; }
-                    let s = p.size || 1;
-                    if (!p.size) {
-                        if (p.type.includes('32')) s = 2;
-                        if (p.type.includes('64')) s = 4;
-                        if (p.type === 'sunssf') s = 1;
-                    }
-                    sfOffset += s;
-                }
-                if (foundSF) {
-                    const sfBlock = await client.readHoldingRegisters(modelAddr + sfOffset, 1);
-                    const sf = sfBlock.buffer.readInt16BE(0);
-
-                    // Check if SF itself is implemented
-                    if (sf !== -32768) {
-                        const scale = Math.pow(10, sf);
-                        const original = val;
-                        val = val * scale;
-                    }
-                    // If SF is not implemented, we probably shouldn't return a value either, 
-                    // OR return raw value? SunSpec says if SF is unimpl, the value is unimpl.
-                    // But we already checked value unimpl. If value is there but SF isnt, maybe just raw?
-                    // Let's assume raw if SF missing.
-                }
-            }
-        }
-
-        // Round to 2 decimals if enabled
-        if (node && node.roundDecimals && typeof val === 'number') {
-            val = Number(val.toFixed(2));
-        }
-
-        return val;
+        const model = models[modelId];
+        if (!model) return null;
+        return sunspecClient.readPoint(client, model, modelAddr, pointName, {
+            round: !!(node && node.roundDecimals),
+        });
     }
 
     /**
@@ -1185,7 +988,7 @@ module.exports = function (RED) {
                     modelAddr = node.modelAddressCache[cacheKey][modelId];
                 } else {
                     // Cache miss: store the header address returned by findModelAddress.
-                    modelAddr = await utils.findModelAddress(client, modelId);
+                    modelAddr = await sunspecClient.findModelHeader(client, modelId);
                     if (modelAddr !== -1) {
                         if (!node.modelAddressCache[cacheKey]) node.modelAddressCache[cacheKey] = {};
                         node.modelAddressCache[cacheKey][modelId] = modelAddr;
@@ -1231,34 +1034,32 @@ module.exports = function (RED) {
         }, timeout);
     }
 
-    // Copy of read logic (no change)
+    // Reads the full model chain for a device, routed through the shared
+    // ConnectionManager (no raw socket) so it can't collide with runtime reads.
+    // NOTE: the previous version built `deviceMap` but never returned it, so
+    // Mode 0 (full scan) always resolved to undefined and produced empty results.
     async function readSunSpecDevice(ip, port, unitId, models, node) {
-        const client = new ModbusRTU();
         try {
-            await client.connectTCP(ip, { port: port });
-            client.setID(unitId);
-            client.setTimeout(5000);
-            let baseAddr = 40000;
-            try {
-                let data = await client.readHoldingRegisters(baseAddr, 2);
-                if (data.data[0] === 0x5375 && data.data[1] === 0x6e53) baseAddr = 40002;
-                else return null;
-            } catch (e) { return null; }
+            return await connManager.request(ip, port, unitId, async (client) => {
+                const modelMap = await sunspecClient.walkModels(client);
+                if (Object.keys(modelMap).length === 0) return null;
 
-            const deviceMap = {};
-            let addr = baseAddr;
-            while (true) {
-                const header = await client.readHoldingRegisters(addr, 2);
-                const modelId = header.data[0];
-                const length = header.data[1];
-                if (modelId === 0xFFFF) break;
-                const content = await client.readHoldingRegisters(addr + 2, length);
-                let decoded = { id: modelId, length: length, raw: content.data };
-                if (models[modelId]) decoded.name = models[modelId].group.label || models[modelId].group.name;
-                deviceMap[modelId] = decoded;
-                addr += 2 + length;
-            }
-        } catch (e) { return null; } finally { client.close(); }
+                const deviceMap = {};
+                for (const midStr of Object.keys(modelMap)) {
+                    const mid = parseInt(midStr);
+                    const { header, len } = modelMap[midStr];
+                    const content = await client.readHoldingRegisters(header + 2, len);
+                    const decoded = { id: mid, length: len, raw: content.data };
+                    if (models[mid] && models[mid].group) {
+                        decoded.name = models[mid].group.label || models[mid].group.name;
+                    }
+                    deviceMap[mid] = decoded;
+                }
+                return deviceMap;
+            }, (node && node.timeout) || 5000);
+        } catch (e) {
+            return null;
+        }
     }
 
     RED.nodes.registerType("sunspec-scan", SunSpecScanNode);
@@ -1284,45 +1085,4 @@ function loadModels(RED) {
         console.error("[SunSpec] Failed to load models:", e.message);
         global.globalModelDefinitions = {};
     }
-}
-
-
-// Helper to find model address (Shared)
-async function findModelAddress(client, modelId, node, cacheKey) {
-    // 1. Absolute Addressing
-    if (modelId === 'sma_edmm' || modelId === 'conext_xw_503') {
-        return 0;
-    }
-
-    // 2. SunSpec Scan
-    let baseAddr = 40000;
-    try {
-        let data = await client.readHoldingRegisters(baseAddr, 2);
-        if (data.data[0] === 0x5375 && data.data[1] === 0x6e53) baseAddr = 40002;
-        else return -1;
-    } catch (e) { return -1; }
-
-    let addr = baseAddr;
-    while (true) {
-        // Read Header (ID + Length)
-        const header = await client.readHoldingRegisters(addr, 2);
-        const mid = header.data[0];
-        const len = header.data[1];
-
-        if (mid === 0xFFFF) break; // End of chain
-
-        // Update Cache?
-        if (node && node.modelAddressCache && cacheKey) {
-            if (!node.modelAddressCache[cacheKey]) node.modelAddressCache[cacheKey] = {};
-            node.modelAddressCache[cacheKey][mid] = addr + 2;
-        }
-
-        if (String(mid) === String(modelId)) {
-            return addr + 2; // Point Data starts after ID+Len
-        }
-
-        addr += 2 + len;
-    }
-
-    return -1;
 }
