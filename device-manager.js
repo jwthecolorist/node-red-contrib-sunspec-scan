@@ -69,7 +69,16 @@ class DeviceManager {
             d.port === port
         );
 
-        if (existing) return existing;
+        if (existing) {
+            // Backfill a real name once discovered (devices are first saved with a
+            // default "Device <ip>" name before the Common model is read).
+            const isDefault = !existing.name || /^Device\s/.test(existing.name);
+            if (device.name && device.name.trim() && (isDefault || !existing.name)) {
+                existing.name = device.name.trim();
+                this.save();
+            }
+            return existing;
+        }
         return this.add(device);
     }
 

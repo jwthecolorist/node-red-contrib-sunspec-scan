@@ -58,7 +58,14 @@ async function scanUnitIds(ip, port, timeout, statusCallback, idsToCheckOverride
     }
 
     try {
-        await client.connectTCP(ip, { port: port });
+        // Race the TCP connect against a hard deadline; modbus-serial can otherwise
+        // hang indefinitely on unreachable routes (e.g. Tailscale black holes).
+        const connectMs = Math.max(parseInt(timeout, 10) || 2000, 4000);
+        await Promise.race([
+            client.connectTCP(ip, { port: port }),
+            new Promise((_, reject) => setTimeout(
+                () => reject(new Error(`TCP connect to ${ip}:${port} timed out`)), connectMs)),
+        ]);
         client.setTimeout(timeout);
 
         for (const id of idsToCheck) {
@@ -142,8 +149,9 @@ function getSubnetRange(ip, netmask) {
     const broadcast = base | (~maskInt >>> 0);
 
     const ips = [];
-    // Start from base+1 to broadcast-1
+    // Start from base+1 to broadcast-1 (capped — a /16 would otherwise expand to ~65k hosts)
     for (let i = base + 1; i < broadcast; i++) {
+        if (ips.length >= 1000) break; // Safety cap
         const p1 = (i >>> 24) & 0xFF;
         const p2 = (i >>> 16) & 0xFF;
         const p3 = (i >>> 8) & 0xFF;

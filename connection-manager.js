@@ -114,12 +114,18 @@ class ConnectionManager {
                 throw e;
             }
 
-            // C. Execute the Action
+            // C. Execute the Action.
+            // Refresh lastActive immediately before AND after so the idle reaper
+            // (which only saw the enqueue timestamp) can't close a socket that is
+            // mid-operation during a long-running scan.
             try {
+                entry.lastActive = Date.now();
                 const res = await action(client);
+                entry.lastActive = Date.now();
                 await new Promise(r => setTimeout(r, 100));
                 return res;
             } catch (e) {
+                entry.lastActive = Date.now();
                 // If action failed, check if it was a connection death
                 if (this._isFatalError(e)) {
                     this.invalidate(ip, port);
