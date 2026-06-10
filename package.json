@@ -17,7 +17,7 @@
     "storage"
   ],
   "author": "JW The Colorist",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "files": [
     "sunspec-scan.js",

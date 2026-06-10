@@ -1,6 +1,6 @@
 # node-red-contrib-sunspec-scan
 
-A professional-grade Node-RED node for discovering, scanning, and reading SunSpec-compliant devices via Modbus TCP.
+A professional-grade Node-RED node for discovering, scanning, reading and writing SunSpec-compliant devices via Modbus TCP.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node-RED](https://img.shields.io/badge/Node--RED-v4.x-red)](https://nodered.org)
@@ -12,11 +12,12 @@ A professional-grade Node-RED node for discovering, scanning, and reading SunSpe
 - 🔍 **Network Discovery**: Automatic SunSpec device detection across IP ranges
 - 📊 **Three Operation Modes**:
   - Full Scan: Discover all devices and models
-  - Single Parameter: Read specific point with auto-refresh
-  - Custom List: Batch read multiple parameters
+  - Single Parameter: Read **or write** a specific point, with auto-refresh
+  - Custom List: Batch read multiple parameters into an array
+- 🧩 **Unified Protocol Module**: One addressing/decode/encode/scale implementation (`sunspec-client.js`) shared by every read, write and scan path
 - 🔌 **Proprietary Device Support**:
-  - **Schneider Conext XW Pro**: Native support via Port 503 (SunSpec-like mapping)
-  - **SMA Data Manager M (EDMM)**: HTML-scraped register mapping
+  - **Schneider Conext XW Pro**: Standard SunSpec on Port 502 (recommended) **and** the proprietary Port 503 absolute map
+  - **SMA Data Manager M (EDMM)**: Absolute register map (Port 502)
 - ⚡ **Performance Optimized**:
   - Model address caching (85% traffic reduction)
   - Persistent cache across Node-RED restarts
@@ -31,8 +32,23 @@ A professional-grade Node-RED node for discovering, scanning, and reading SunSpe
 - **Connection Recovery**: Exponential backoff retry (1s → 2s → 4s → 8s → 16s → 30s max)
 - **Lazy Loading**: Models fetched only when needed
 - **Unit ID Parsing**: Support for singles, ranges, and lists (`1`, `1-10`, `1,5,10-20`)
+- **Read & Write**: Send a value to a writable point (e.g. a power-limit setpoint) in Single Parameter mode
 - **Human-Readable Output**: `msg.label` and `msg.units` added to output.
 - **Custom Error Types**: Better debugging with specific error classes
+
+## What's New in 1.4.0
+
+- **Correctness**: Fixed custom-list reads that were off by 2 registers, a full-scan
+  mode that returned nothing, and list-mode rounding. All read/write/scan paths now
+  share one addressing convention (`sunspec-client.js`).
+- **Validated on real hardware**: GoodWe, SMA Sunny Boy, SMA EDMM and a Conext
+  XW Pro 6848 (see [`VALIDATION.md`](VALIDATION.md)).
+- **Port-503 scanning**: now reaches higher unit IDs (e.g. 126) and validates the
+  Conext device-name block instead of accepting any successful read.
+- **Single source of truth + tests**: consolidated on one JavaScript codebase with a
+  39-test Jest suite; removed an unused dependency and added a publish allowlist.
+
+See [`CHANGELOG.md`](CHANGELOG.md) for the full list.
 
 ## Installation
 
@@ -120,7 +136,7 @@ Add multiple parameters to list, output as array:
 | ---------- | --------- | --------------------------------- |
 | IP Address | `0.0.0.0` | Target IP or CIDR range           |
 | Port       | `502`     | Modbus TCP port                   |
-| Timeout    | `6000` ms | Connection timeout                |
+| Timeout    | `8000` ms | Connection timeout (min effective 4000 ms) |
 | Auto-Read  | `0` (off) | Read interval in seconds (min 1s) |
 
 ### UI Tabs
@@ -135,7 +151,7 @@ Add multiple parameters to list, output as array:
 #### Settings Tab
 
 - **Port**: Modbus TCP port (usually 502)
-- **Timeout**: Communication timeout (Default increased to 6000ms for stability)
+- **Timeout**: Communication timeout (default 8000 ms; values below 4000 ms are clamped up)
 - **Auto-Read**: Automatic refresh interval
 
 ## Operation Modes
@@ -223,20 +239,35 @@ The node automatically:
 
 ```
 node-red-contrib-sunspec-scan/
+├── sunspec-client.js     # SunSpec protocol module (addressing, decode, encode, scale)
 ├── connection-manager.js # Connection pooling & request queuing
 ├── constants.js          # Protocol constants and config
 ├── utils.js              # Reusable utility functions
 ├── errors.js             # Custom error classes
-├── sunspec-scan.js       # Main node implementation
+├── sunspec-scan.js       # Main node implementation (Node-RED runtime + admin API)
 ├── sunspec-scan.html     # Editor UI
 ├── discovery.js          # Network scanning utilities
 ├── device-manager.js     # Saved device profile management
 ├── models/               # SunSpec model definitions
 │   └── index.json        # Model metadata
+├── test/                 # Jest unit tests
 └── package.json
 ```
 
 ### Key Modules
+
+#### `sunspec-client.js`
+
+**New in v1.4.0** — the single source of truth for the SunSpec protocol. Owns:
+
+- Base-address detection and model-chain walking
+- Point offset calculation (header-address convention; honours explicit absolute
+  offsets for vendor models such as SMA EDMM / Conext)
+- Value decode (not-implemented sentinels, `float32`, 32/64-bit types, strings)
+- Write encoding and scale-factor application
+
+Every read, custom-list read, write and scan path routes through this module, so
+addressing and decoding exist in exactly one place.
 
 #### `connection-manager.js`
 
@@ -368,9 +399,12 @@ npm link node-red-contrib-sunspec-scan
 ### Testing
 
 ```bash
-# Manual testing in Node-RED
-# Automated tests coming soon
+npm test   # Jest unit suite (39 tests): offset math, decode/scale, the
+           # off-by-2 regression on real model JSON, vendor offsets, parsing
 ```
+
+Live-hardware validation results (GoodWe, SMA, Conext) are documented in
+[`VALIDATION.md`](VALIDATION.md).
 
 ### Code Quality
 
@@ -388,7 +422,7 @@ npm link node-red-contrib-sunspec-scan
 {
   ip: "192.168.1.0/24",      // IP range
   port: 502,                  // Modbus TCP port
-  timeout: 6000,              // Timeout (ms)
+  timeout: 8000,              // Timeout (ms)
   pacing: 2,                  // Auto-read interval (seconds)
   unitId: "1",                // Unit ID specification
   readMode: "parameter",      // scan | parameter | list
@@ -404,12 +438,17 @@ npm link node-red-contrib-sunspec-scan
 
 ### HTTP Endpoints
 
-```javascript
-GET / sunspec - scan / models; // Get model definitions
-POST / sunspec - scan / discover; // Trigger network scan
-POST / sunspec - scan / scan - models; // Deep scan single device
-POST / sunspec - scan / stop; // Stop active scan
-GET / sunspec - scan / status; // Get scan status
+```
+GET    /sunspec-scan/models        # Get model definitions
+GET    /sunspec-scan/network       # Cached network map
+POST   /sunspec-scan/discover      # Trigger network scan
+POST   /sunspec-scan/scan-models   # Deep scan a single device
+POST   /sunspec-scan/stop          # Stop active scan
+GET    /sunspec-scan/status        # Get scan status
+GET    /sunspec-scan/devices       # List saved devices
+POST   /sunspec-scan/devices       # Add a saved device
+PUT    /sunspec-scan/devices/:id   # Update a saved device
+DELETE /sunspec-scan/devices/:id   # Delete a saved device
 ```
 
 ## Roadmap
@@ -417,8 +456,9 @@ GET / sunspec - scan / status; // Get scan status
 - [x] Connection pooling & Concurrency Fixes (v1.1.0)
 - [x] Human-Readable Naming (v1.2.0)
 - [x] Error UX Improvements (v1.2.0)
-- [ ] Unit tests for utilities
-- [ ] TypeScript migration
+- [x] Unified protocol module & addressing fixes, hardware-validated (v1.4.0)
+- [x] Jest unit tests (v1.4.0)
+- [x] Single-source-of-truth consolidation (JavaScript) (v1.4.0)
 - [ ] Export/import scan results
 - [ ] Connection health UI
 - [ ] npm publication
@@ -455,6 +495,6 @@ Built for professional SunSpec monitoring and control applications.
 
 ---
 
-**Version**: 1.2.0  
-**Last Updated**: 2026-01-31  
+**Version**: 1.4.0  
+**Last Updated**: 2026-06-09  
 **Maintainability**: A (Professional Grade)

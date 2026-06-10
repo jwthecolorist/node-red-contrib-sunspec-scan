@@ -49,6 +49,9 @@ All notable changes to this project will be documented in this file.
 - Added a `files` allowlist so `npm publish` ships only the runtime (no debug scripts,
   Python tooling, or committed tarballs); removed the committed `*.tgz` from the repo.
 - Removed the dead, conflicting second `findModelAddress` implementation.
+- Corrected the package `license` field to MIT to match the LICENSE file.
+- Updated the README for 1.4.0 (read/write support, the protocol module, the Jest
+  suite, the full admin endpoint list, and the 8000 ms default timeout).
 
 ## [1.2.0] - 2026-01-31
 
