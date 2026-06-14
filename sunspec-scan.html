@@ -27,7 +27,8 @@
             outputList: { value: [] },
 
             // Output Formatting
-            roundDecimals: { value: true }
+            roundDecimals: { value: true },
+            filterImplemented: { value: true }
         },
         inputs: 1,
         outputs: 1,
@@ -99,6 +100,25 @@
                     }
                 });
                 setTimeout(function() { $("#node-input-triggerMode").trigger("change"); }, 100);
+
+                // "Usable only" defaults on, including for nodes saved before this option existed
+                if (node.filterImplemented === undefined) $("#node-input-filterImplemented").prop("checked", true);
+                $("#node-input-filterImplemented").on("change", function () {
+                    if ($("#node-input-selectedModel").val()) $("#node-input-selectedModel").trigger("change");
+                });
+
+                // Collapsible "scan range / manual address" — open by default in Scan mode
+                $("#ss-adv-toggle").on("click", function () {
+                    $("#ss-adv-body").slideToggle(120);
+                    $(this).find(".ss-chev").toggleClass("open");
+                });
+                function ssSyncAdvanced() {
+                    const isScan = $("#node-input-readMode").val() === "scan";
+                    $("#ss-adv-body").toggle(isScan);
+                    $("#ss-adv-toggle .ss-chev").toggleClass("open", isScan);
+                }
+                $("#node-input-readMode").on("change", ssSyncAdvanced);
+                setTimeout(ssSyncAdvanced, 320);
 
                 // Auto-toggle Scan All based on Unit ID input
                 // Deprecated: Logic now handled by parsing Unit ID string directly
@@ -539,6 +559,7 @@
 
                         const mDef = allModels[mid];
                         if (mDef) {
+                            const filterOn = $("#node-input-filterImplemented").is(":checked");
                             // Sort Points Alphabetically
                             const sortedPoints = mDef.group.points.sort((a, b) => (a.label || a.name).localeCompare(b.label || b.name));
                             let filteredCount = 0;
@@ -551,7 +572,7 @@
                                 totalCount++;
 
                                 // Filter out unimplemented points if we have scan data
-                                if (implementedPoints && !implementedPoints.includes(p.name)) {
+                                if (filterOn && implementedPoints && !implementedPoints.includes(p.name)) {
                                     filteredCount++;
                                     return;
                                 }
@@ -805,6 +826,19 @@
 </script>
 
 <script type="text/html" data-template-name="sunspec-scan">
+<style>
+@keyframes progress-indeterminate { 0% { transform: translateX(-100%);} 100% { transform: translateX(200%);} }
+.ss-step{background:var(--red-ui-secondary-background);border:1px solid var(--red-ui-form-input-border-color,#ccc);border-radius:6px;padding:10px 14px;margin-bottom:14px;}
+.ss-step-h{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-weight:bold;color:var(--red-ui-primary-text);}
+.ss-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#4a90d9;color:#fff;font-size:12px;font-weight:bold;}
+.ss-help{font-size:0.8em;color:var(--red-ui-secondary-text);margin:2px 0 8px 0;}
+.ss-tip{position:relative;display:inline-block;margin-left:4px;color:var(--red-ui-secondary-text);cursor:help;}
+.ss-tip .ss-bub{visibility:hidden;opacity:0;position:absolute;z-index:1000;left:18px;top:-4px;width:240px;background:var(--red-ui-popover-background,#1a1a1a);color:var(--red-ui-popover-color,#fff);border:1px solid var(--red-ui-border-color,#444);border-radius:4px;padding:6px 9px;font-size:0.78em;font-weight:normal;line-height:1.45;white-space:normal;transition:opacity .1s;}
+.ss-tip:hover .ss-bub{visibility:visible;opacity:1;}
+.ss-adv-h{cursor:pointer;color:var(--red-ui-secondary-text);font-size:0.85em;user-select:none;padding:4px 0;}
+.ss-chev{transition:transform .12s;}
+.ss-chev.open{transform:rotate(90deg);}
+</style>
     <!-- TABS -->
 <div class="form-row">
     <ul style="background: #fff; min-width: 600px; margin-bottom: 20px;" id="node-input-sunspec-tabs"></ul>
@@ -820,120 +854,124 @@
         </div>
 
         <div class="form-row">
-            <label for="node-input-readMode"><i class="fa fa-cogs"></i> Mode</label>
+            <label for="node-input-readMode"><i class="fa fa-cogs"></i> Mode
+                <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">Read a single value, read a list of values as an array, or scan the network to discover devices.</span></span>
+            </label>
             <select id="node-input-readMode">
-                <option value="scan">Full Scan (All Models)</option>
-                <option value="parameter">Read Single Parameter</option>
-                <option value="list">Read Custom List (Array)</option>
+                <option value="parameter">Read a single value</option>
+                <option value="list">Read a list of values</option>
+                <option value="scan">Scan the network for devices</option>
             </select>
         </div>
 
-        <!-- SCAN CONTROLS -->
-        <div class="form-row">
-            <label for="node-input-ip"><i class="fa fa-globe"></i> IP Address</label>
-            <input type="text" id="node-input-ip" placeholder="0.0.0.0 (Empty = Scan Local)">
-        </div>
-        <div class="form-row">
-            <label for="node-input-unitId"><i class="fa fa-bookmark"></i> Unit ID</label>
-            <input type="text" id="node-input-unitId" placeholder="1, 126 or 1-10 (Empty = All)">
-        </div>
-        <div class="form-tips">
-            <strong>Unit ID Scan Logic:</strong>
-            <ul>
-                <li><strong>Empty:</strong> Scan 1-247</li>
-                <li><strong>Single:</strong> <code>126</code></li>
-                <li><strong>List:</strong> <code>1, 50, 126</code></li>
-                <li><strong>Range:</strong> <code>1-10</code></li>
-            </ul>
-        </div>
-        <div class="form-row">
-            <label for="node-input-triggerMode"><i class="fa fa-cogs"></i> Schedule</label>
-            <select id="node-input-triggerMode" style="width: 70%;">
-                <option value="auto">Auto-Read Interval</option>
-                <option value="inject">Inject Only (No Polling)</option>
-            </select>
-        </div>
-        <div class="form-row" id="pacing-row">
-            <label for="node-input-pacing"><i class="fa fa-refresh"></i> Auto-Read (s)</label>
-            <input type="text" id="node-input-pacing" placeholder="0 or empty to disable">
-        </div>
-
-        <!-- DISCOVERY BUTTON -->
-        <div class="form-row">
-            <label>&nbsp;</label>
-            <div style="display:inline-block;">
-                <button id="btn-scan-network" class="red-ui-button"><i class="fa fa-search"></i> Scan Network</button>
-                <button id="btn-stop-scan" class="red-ui-button"
-                    style="margin-left:10px; background-color:#ad1625; color:white; display:none;"><i
-                        class="fa fa-stop"></i> Stop</button>
-            </div>
-        </div>
-        <!-- Progress Bar -->
-        <style>
-            @keyframes progress-indeterminate {
-                0%   { transform: translateX(-100%); }
-                100% { transform: translateX(200%); }
-            }
-        </style>
-        <div class="form-row" id="scan-progress-bar" style="display:none;">
-            <label>&nbsp;</label>
-            <div style="display:inline-block; width:70%;">
-                <div style="width:100%; background-color:#ddd; height:20px; border-radius:3px; overflow:hidden;">
-                    <div
-                        style="width:100%; height:100%; background-color:#5bc0de; animation: progress-indeterminate 2s infinite linear; transform-origin: 0% 50%;">
-                    </div>
-                </div>
-                <div id="scan-status-text" style="font-size:0.8em; color:#666; text-align:center; margin-top:2px;">
-                    Initializing scan...</div>
-            </div>
-        </div>
-
-        <hr>
-
-        <!-- PARAMETER SELECTION -->
-        <fieldset class="param-mode-only list-mode-only">
-            <legend>Parameter Selection</legend>
-            <div class="form-tips">Use "Scan Network" above to populate, then select params.</div>
-            <br>
+        <!-- STEP 1: FIND DEVICE -->
+        <div class="ss-step">
+            <div class="ss-step-h"><span class="ss-num">1</span> Find your device</div>
             <div class="form-row">
-                <label for="node-input-selectedDevice"><i class="fa fa-server"></i> Device</label>
+                <label>&nbsp;</label>
+                <div style="display:inline-block;">
+                    <button id="btn-scan-network" class="red-ui-button"><i class="fa fa-search"></i> Scan Network</button>
+                    <button id="btn-stop-scan" class="red-ui-button" style="margin-left:10px; background-color:#ad1625; color:white; display:none;"><i class="fa fa-stop"></i> Stop</button>
+                </div>
+            </div>
+            <div class="form-row" id="scan-progress-bar" style="display:none;">
+                <label>&nbsp;</label>
+                <div style="display:inline-block; width:70%;">
+                    <div style="width:100%; background-color:#ddd; height:20px; border-radius:3px; overflow:hidden;">
+                        <div style="width:100%; height:100%; background-color:#5bc0de; animation: progress-indeterminate 2s infinite linear; transform-origin: 0% 50%;"></div>
+                    </div>
+                    <div id="scan-status-text" style="font-size:0.8em; color:#666; text-align:center; margin-top:2px;">Initializing scan...</div>
+                </div>
+            </div>
+            <p class="ss-help">Discovers SunSpec devices on your network and lists them below.</p>
+
+            <div class="form-row param-mode-only list-mode-only mode-group">
+                <label for="node-input-selectedDevice"><i class="fa fa-server"></i> Device
+                    <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">Pick a device found by a scan. The gear button manages your saved devices.</span></span>
+                </label>
                 <div style="display:inline-block; width:70%;">
                     <select id="node-input-selectedDevice" style="width:calc(100% - 40px);">
                         <option value="">(Scan to populate)</option>
                     </select>
-                    <button id="btn-manage-devices" class="red-ui-button" title="Manage Saved Devices"
-                        style="width:35px; margin-left:5px;"><i class="fa fa-cog"></i></button>
+                    <button id="btn-manage-devices" class="red-ui-button" title="Manage Saved Devices" style="width:35px; margin-left:5px;"><i class="fa fa-cog"></i></button>
                 </div>
             </div>
-            <!-- Explicit ID Field for Single Parameter Mode -->
-            <!-- Hidden ID Field for Single Parameter Mode (Auto-populated) -->
             <input type="hidden" id="node-input-selectedId">
 
+            <div class="ss-adv-h" id="ss-adv-toggle"><i class="fa fa-caret-right ss-chev"></i> Network scan range / manual address</div>
+            <div id="ss-adv-body" style="display:none; padding-top:6px;">
+                <div class="form-row">
+                    <label for="node-input-ip"><i class="fa fa-globe"></i> IP Address
+                        <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">A single IP, a range (192.168.1.10-20), CIDR (192.168.1.0/24), or empty to scan your local subnet.</span></span>
+                    </label>
+                    <input type="text" id="node-input-ip" placeholder="0.0.0.0 (Empty = Scan Local)">
+                </div>
+                <div class="form-row">
+                    <label for="node-input-unitId"><i class="fa fa-bookmark"></i> Unit ID
+                        <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">Modbus address behind a gateway. Empty = scan 1-247. Single: 126. List: 1, 50, 126. Range: 1-10.</span></span>
+                    </label>
+                    <input type="text" id="node-input-unitId" placeholder="1, 126 or 1-10 (Empty = All)">
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: CHOOSE READING -->
+        <div class="ss-step param-mode-only list-mode-only mode-group">
+            <div class="ss-step-h"><span class="ss-num">2</span> Choose what to read</div>
+            <p class="ss-help">Run a scan first to populate these.</p>
             <div class="form-row">
-                <label for="node-input-selectedModel"><i class="fa fa-cube"></i> Model</label>
+                <label for="node-input-selectedModel"><i class="fa fa-cube"></i> SunSpec model
+                    <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">A group of related readings defined by SunSpec, e.g. Inverter, Meter or Battery.</span></span>
+                </label>
                 <select id="node-input-selectedModel" style="width:70%;">
                     <option value="">-- Select Model --</option>
                 </select>
             </div>
             <div class="form-row">
-                <label for="node-input-selectedPoint"><i class="fa fa-crosshairs"></i> Point</label>
+                <label for="node-input-selectedPoint"><i class="fa fa-crosshairs"></i> Reading
+                    <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">A single value within the model, e.g. AC Power (W), Frequency (Hz) or Voltage (V).</span></span>
+                </label>
                 <select id="node-input-selectedPoint" style="width:70%;">
                     <option value="">-- Select Point --</option>
                 </select>
             </div>
             <div class="form-row">
-                <label for="node-input-roundDecimals"><i class="fa fa-calculator"></i> Round Output</label>
-                <input type="checkbox" id="node-input-roundDecimals" style="width:auto; margin-left:0;">
-                <label for="node-input-roundDecimals" style="width:auto; margin-left:8px;">Round to 2 decimal
-                    places</label>
+                <label for="node-input-filterImplemented" style="width:auto;"><i class="fa fa-filter"></i> Usable only
+                    <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">Only show readings this device actually reports, hiding unimplemented/placeholder registers. Needs a scan first.</span></span>
+                </label>
+                <input type="checkbox" id="node-input-filterImplemented" style="width:auto; margin-left:0;">
+                <label for="node-input-filterImplemented" style="width:auto; margin-left:8px;">Only show readings this device actually reports</label>
             </div>
-
-            <!-- ADD BUTTON (List Mode Only) -->
             <div class="form-row list-mode-only mode-group">
                 <label>&nbsp;</label>
                 <button id="btn-add-to-list" class="red-ui-button"><i class="fa fa-plus"></i> Add to List</button>
             </div>
-        </fieldset>
+        </div>
+
+        <!-- STEP 3: OPTIONS -->
+        <div class="ss-step">
+            <div class="ss-step-h"><span class="ss-num">3</span> Options</div>
+            <div class="form-row">
+                <label for="node-input-triggerMode"><i class="fa fa-cogs"></i> Schedule
+                    <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">Auto-read on a fixed interval, or read only when a message arrives at the input.</span></span>
+                </label>
+                <select id="node-input-triggerMode" style="width: 70%;">
+                    <option value="auto">Auto-Read Interval</option>
+                    <option value="inject">Inject Only (No Polling)</option>
+                </select>
+            </div>
+            <div class="form-row" id="pacing-row">
+                <label for="node-input-pacing"><i class="fa fa-refresh"></i> Auto-read every
+                    <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">Seconds between reads. 0 or empty disables polling (read only on input).</span></span>
+                </label>
+                <input type="text" id="node-input-pacing" placeholder="0 = disable" style="width:110px;"> <span style="color:var(--red-ui-secondary-text);">seconds</span>
+            </div>
+            <div class="form-row param-mode-only list-mode-only mode-group">
+                <label for="node-input-roundDecimals"><i class="fa fa-calculator"></i> Round output</label>
+                <input type="checkbox" id="node-input-roundDecimals" style="width:auto; margin-left:0;">
+                <label for="node-input-roundDecimals" style="width:auto; margin-left:8px;">Round to 2 decimal places</label>
+            </div>
+        </div>
 
         <!-- OUTPUT LIST (List Mode Only) -->
         <fieldset class="list-mode-only mode-group">
@@ -948,24 +986,18 @@
     <!-- TAB: SETTINGS (Advanced) -->
     <div id="sunspec-tab-settings" style="display:none">
         <div class="form-row">
-            <label for="node-input-port"><i class="fa fa-random"></i> Port</label>
+            <label for="node-input-port"><i class="fa fa-random"></i> Port
+                <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">Modbus TCP port. 502 is standard SunSpec; some gateways (e.g. Schneider Conext) expose a proprietary map on 503.</span></span>
+            </label>
             <input type="number" id="node-input-port" placeholder="502">
         </div>
         <div class="form-row">
-            <label for="node-input-timeout"><i class="fa fa-clock-o"></i> Timeout (ms)</label>
-            <input type="number" id="node-input-timeout" placeholder="2000">
+            <label for="node-input-timeout"><i class="fa fa-clock-o"></i> Timeout (ms)
+                <span class="ss-tip"><i class="fa fa-question-circle"></i><span class="ss-bub">How long to wait for a device reply. Default 8000 ms; values below 4000 ms are raised automatically.</span></span>
+            </label>
+            <input type="number" id="node-input-timeout" placeholder="8000">
         </div>
-
-        <!-- Removed Scan All Checkbox - Logic is now inferred from Unit ID field -->
-        <div class="form-tips">
-            <strong>Unit ID Logic:</strong>
-            <ul>
-                <li><strong>Empty:</strong> Scans all IDs (1-247).</li>
-                <li><strong>Single:</strong> <code>126</code></li>
-                <li><strong>List:</strong> <code>1, 126</code></li>
-                <li><strong>Range:</strong> <code>1-10</code></li>
-            </ul>
-        </div>
+        <div class="form-tips">Tip: the device, model and reading are chosen on the Scanner tab. Hover any <i class="fa fa-question-circle"></i> for help.</div>
     </div>
 </div>
 
