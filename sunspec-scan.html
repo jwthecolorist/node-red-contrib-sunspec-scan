@@ -165,7 +165,7 @@
                             // Refresh Saved Devices list (as auto-save may have occurred)
                             $.getJSON('sunspec-scan/devices', function (devs) {
                                 if (devs) savedDevices = devs;
-                                populateDeviceSelect(results);
+                                populateDeviceSelect(results, port);
                                 RED.notify("Network scan complete. Found " + Object.keys(results).length + " devices.", "success");
                             });
                         },
@@ -272,15 +272,18 @@
                     }
                 }
 
-                function populateDeviceSelect(scanResults) {
+                function populateDeviceSelect(scanResults, scanPort) {
                     const $dev = $("#node-input-selectedDevice");
                     const currentVal = $dev.val();
                     $dev.empty().append('<option value="">-- Select Device --</option>');
 
-                    // Update Local Map from Scan Results
+                    // Update Local Map from Scan Results.
+                    // The server keys its network map as "IP:PORT"; key fresh discover
+                    // results the same way so the change-handler lookup stays consistent.
                     if (scanResults) {
+                        const sp = scanPort || node.port || 502;
                         for (const ip in scanResults) {
-                            currentNetworkMap[ip] = scanResults[ip];
+                            currentNetworkMap[`${ip}:${sp}`] = scanResults[ip];
                         }
                     }
 
@@ -303,15 +306,26 @@
                     const netGroup = $('<optgroup label="Network Scan">');
                     let hasNet = false;
 
-                    Object.keys(currentNetworkMap).forEach(function (ip) {
-                        const idMap = currentNetworkMap[ip];
+                    Object.keys(currentNetworkMap).forEach(function (mapKey) {
+                        const idMap = currentNetworkMap[mapKey];
                         if (!idMap) return;
 
+                        // Server keys entries as "IP:PORT". Derive ip + port from the key
+                        // (tolerating a bare "IP" key). Re-using node.port here was the bug:
+                        // for an "IP:PORT" key it built malformed 4-part device values like
+                        // "192.168.5.29:502:502:1", breaking the model lookup and deep-scanning
+                        // a bad IP -> empty Model dropdown.
+                        let ip = mapKey;
+                        let port = node.port || 502;
+                        const li = mapKey.lastIndexOf(':');
+                        if (li > -1 && /^\d+$/.test(mapKey.slice(li + 1))) {
+                            ip = mapKey.slice(0, li);
+                            port = mapKey.slice(li + 1);
+                        }
+
                         Object.keys(idMap).forEach(function (id) {
-                            // Check if already in saved (by IP/ID)
-                            const isSaved = savedDevices.some(s => s.ip === ip && s.unitId == id);
-                            // Optional: Hide from network list if saved? Or show both?
-                            // Showing both is confusing. Let's filter.
+                            // Already in saved devices? (match IP + port + unit id)
+                            const isSaved = savedDevices.some(s => s.ip === ip && s.unitId == id && (s.port || 502) == port);
                             if (isSaved) return;
 
                             const models = idMap[id];
@@ -324,18 +338,14 @@
                                 if (mn || md) label = `${mn} ${md}`;
                             }
 
-                            // Fallback Label logic...
                             if (!label) label = `Unknown Device`;
 
-                            // Models list
                             if (models) {
                                 const mList = Object.keys(models).filter(m => m !== 'info').join(', ');
                                 if (mList) combinedModel = `(Models: ${mList})`;
                             }
 
                             const text = `${ip}:${id} - ${label} ${combinedModel}`;
-                            // B3 FIX: Use 3-part format (IP:PORT:UNITID) consistent with saved devices
-                            const port = node.port || 502;
                             netGroup.append($('<option>', { value: `${ip}:${port}:${id}`, text: text }));
                             hasNet = true;
                         });
@@ -437,6 +447,23 @@
                                     // MERGE into cache
                                     if (!cache[deviceKey]) cache[deviceKey] = {};
                                     cache[deviceKey][id] = fullModels;
+
+                                    const modelKeys = fullModels
+                                        ? Object.keys(fullModels).filter(m => m !== 'info')
+                                        : [];
+                                    if (modelKeys.length === 0) {
+                                        // Deep scan found nothing (device offline/busy or wrong
+                                        // unit id). Keep the saved selection as a ghost and prompt
+                                        // a re-scan instead of showing an empty dropdown.
+                                        $mod.empty().append('<option value="">-- Select Model --</option>');
+                                        if (node.selectedModel) {
+                                            const ghostLabel = node.selectedModelLabel || node.selectedModel;
+                                            $mod.append($('<option>', { value: node.selectedModel, text: ghostLabel, selected: true }));
+                                            $mod.val(node.selectedModel).trigger('change');
+                                        }
+                                        $mod.append('<option value="" disabled>No models found — device offline? Click "Scan Network" to refresh</option>');
+                                        return;
+                                    }
                                     populateModelsDropdown(fullModels, currentMod);
                                 },
                                 error: function () {
